@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rv-site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/tmp/rv_serve.py"],
+      "port": 4321
+    }
+  ]
+}

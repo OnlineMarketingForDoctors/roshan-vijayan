@@ -1,0 +1,10 @@
+Assets
+serve.py
+.claude
+.DS_Store
+
+# Source PNGs — site serves optimized versions from site/images/web/
+site/images/*.png
+!site/images/iwgc-logo.png
+!site/images/logo-black.png
+!site/images/logo-white.png
