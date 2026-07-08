@@ -185,9 +185,8 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .phil-portrait img{border-radius:230px 230px 22px 22px;position:relative;z-index:1;
   border:1px solid rgba(138,112,60,.55);
   box-shadow:var(--shadow),0 0 0 7px var(--ivory),0 0 0 8px rgba(138,112,60,.34),0 0 40px rgba(60,46,26,.12)}
-.portrait-tag{position:absolute;z-index:2;bottom:34px;left:-30px;background:var(--ivory);
-  padding:.7rem 1.3rem;border-radius:30px;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-deep);box-shadow:var(--shadow)}
+.phil-sign{position:absolute;z-index:2;bottom:46px;left:34px;width:158px;height:auto;
+  filter:brightness(0) invert(1);opacity:.92;pointer-events:none}
 .phil-copy{position:relative;z-index:1;max-width:30rem}
 .lead-quote{font-size:clamp(1.5rem,2.9vw,2.3rem);color:var(--charcoal);margin-bottom:1.8rem;line-height:1.25}
 .phil-copy p{margin-bottom:1.1rem;color:var(--ink)}
