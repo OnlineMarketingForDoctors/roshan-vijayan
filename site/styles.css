@@ -188,6 +188,14 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .phil-portrait img.phil-sign{position:absolute;z-index:2;bottom:46px;left:34px;width:158px;height:auto;
   border:0;border-radius:0;box-shadow:none;
   filter:brightness(0) invert(1);opacity:.92;pointer-events:none}
+/* reusable white signature mark */
+.sig{display:block;height:auto;filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,.35));pointer-events:none}
+/* signature, bottom-right of the dark Difference section */
+.diff-copy .diff-sign{width:190px;margin:2.4rem 0 0 auto;opacity:.85}
+/* signature, bottom-left of the About intro portrait (overrides .feature-media img) */
+.feature-media img.fm-sign{position:absolute;left:1.6rem;bottom:1.6rem;width:168px;height:auto;
+  max-height:none;object-fit:contain;border-radius:0;box-shadow:none;z-index:2;
+  filter:brightness(0) invert(1);opacity:.92;pointer-events:none}
 .phil-copy{position:relative;z-index:1;max-width:30rem}
 .lead-quote{font-size:clamp(1.5rem,2.9vw,2.3rem);color:var(--charcoal);margin-bottom:1.8rem;line-height:1.25}
 .phil-copy p{margin-bottom:1.1rem;color:var(--ink)}
