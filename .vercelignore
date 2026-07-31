@@ -2,7 +2,7 @@ Assets
 serve.py
 .claude
 .DS_Store
-studio
+/studio
 
 # Source PNGs — site serves optimized versions from site/images/web/
 site/images/*.png

@@ -10,6 +10,9 @@ export default defineConfig({
   projectId: 'xtpxp7mw',
   dataset: 'production',
 
+  // Hosted inside the static site at roshan-vijayan.vercel.app/studio
+  basePath: '/studio',
+
   plugins: [
     structureTool({
       structure: (S) =>

@@ -2,6 +2,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/static/:path*", "destination": "/site/studio/static/:path*" },
+    { "source": "/studio", "destination": "/site/studio/index.html" },
+    { "source": "/studio/:path*", "destination": "/site/studio/index.html" },
     { "source": "/", "destination": "/site" },
     { "source": "/:path*", "destination": "/site/:path*" }
   ]
