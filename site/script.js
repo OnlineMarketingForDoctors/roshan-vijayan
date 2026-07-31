@@ -34,14 +34,19 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 // reviews carousel (multi-card + read more)
-(function () {
+// Exposed as window.setupReviews() so the Sanity layer can re-init it after
+// it swaps the review cards. Safe to call multiple times (uses .onclick, not
+// stacked addEventListener, and re-reads the slides each time).
+let _revTimer, _revResizeHandler;
+window.setupReviews = function () {
   const track = document.getElementById('revTrack');
   if (!track) return;
   const slides = Array.from(track.children);
+  if (!slides.length) return;
   const dotsWrap = document.getElementById('revDots');
   const prevBtn = document.getElementById('revPrev');
   const nextBtn = document.getElementById('revNext');
-  let i = 0, maxIndex = 0, step = 0, timer;
+  let i = 0, maxIndex = 0, step = 0;
 
   function setupReadMore() {
     slides.forEach(s => {
@@ -71,11 +76,12 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
   function buildDots() {
+    if (!dotsWrap) return;
     dotsWrap.innerHTML = '';
     for (let n = 0; n <= maxIndex; n++) {
       const b = document.createElement('button');
       b.type = 'button';
-      b.addEventListener('click', () => { go(n); reset(); });
+      b.onclick = () => { go(n); reset(); };
       dotsWrap.appendChild(b);
     }
   }
@@ -83,34 +89,40 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   function go(n) {
     i = Math.max(0, Math.min(n, maxIndex));
     track.style.transform = `translateX(${-i * step}px)`;
-    Array.from(dotsWrap.children).forEach((d, k) => d.classList.toggle('active', k === i));
+    if (dotsWrap) Array.from(dotsWrap.children).forEach((d, k) => d.classList.toggle('active', k === i));
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === maxIndex;
   }
   function next() { go(i >= maxIndex ? 0 : i + 1); }
   function prev() { go(i <= 0 ? maxIndex : i - 1); }
-  function reset() { clearInterval(timer); timer = setInterval(next, 7000); }
+  function reset() { clearInterval(_revTimer); _revTimer = setInterval(next, 7000); }
 
   function build() { measure(); buildDots(); go(Math.min(i, maxIndex)); }
 
-  nextBtn.addEventListener('click', () => { next(); reset(); });
-  prevBtn.addEventListener('click', () => { prev(); reset(); });
+  if (nextBtn) nextBtn.onclick = () => { next(); reset(); };
+  if (prevBtn) prevBtn.onclick = () => { prev(); reset(); };
 
+  if (_revResizeHandler) window.removeEventListener('resize', _revResizeHandler);
   let rt;
-  window.addEventListener('resize', () => {
+  _revResizeHandler = () => {
     clearTimeout(rt);
     rt = setTimeout(() => { setupReadMore(); build(); }, 150);
-  });
+  };
+  window.addEventListener('resize', _revResizeHandler);
 
   setupReadMore();
   build();
   reset();
-  window.addEventListener('load', () => { setupReadMore(); build(); });
-})();
+};
+window.setupReviews();
+window.addEventListener('load', () => window.setupReviews());
 
-// before/after sliders + result tabs
-(function () {
+// before/after sliders — exposed as window.bindBASliders() so the Sanity
+// layer can bind cases it injects. Only binds sliders not already bound.
+window.bindBASliders = function () {
   document.querySelectorAll('.ba-slider').forEach(slider => {
+    if (slider.dataset.bound) return;
+    slider.dataset.bound = '1';
     const set = (clientX) => {
       const r = slider.getBoundingClientRect();
       let pct = ((clientX - r.left) / r.width) * 100;
@@ -127,7 +139,11 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     slider.addEventListener('pointerup', () => { dragging = false; });
     slider.addEventListener('pointercancel', () => { dragging = false; });
   });
+};
+window.bindBASliders();
 
+// result tabs (static markup, bound once)
+(function () {
   const tabs = Array.from(document.querySelectorAll('.ba-tab'));
   const panels = Array.from(document.querySelectorAll('.ba-panel'));
   tabs.forEach(tab => {
