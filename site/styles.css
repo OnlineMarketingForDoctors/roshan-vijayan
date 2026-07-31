@@ -424,6 +424,31 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:1.6rem;
   font-size:.78rem;letter-spacing:.06em;color:rgba(246,240,230,.5)}
 
+/* ---------- at a glance ---------- */
+.glance-grid{max-width:940px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;
+  gap:0 clamp(2rem,5vw,4.5rem)}
+.glance-item{display:flex;align-items:center;gap:1.1rem;padding:1.2rem .2rem;
+  border-top:1px solid var(--line)}
+.glance-item .gi{width:30px;height:30px;flex:none;color:var(--gold-deep)}
+.glance-item h4{margin:0;font-family:var(--sans);font-size:1rem;font-weight:600;letter-spacing:0;
+  color:var(--charcoal);text-transform:none}
+.glance-item p{margin:.12rem 0 0;color:var(--soft);font-size:.92rem}
+@media(max-width:640px){.glance-grid{grid-template-columns:1fr;gap:0}}
+
+/* ---------- related procedures ---------- */
+.related-grid{max-width:1080px;margin:0 auto;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem}
+.related-card{position:relative;display:block;background:var(--ivory);border:1px solid var(--line);
+  border-radius:14px;padding:1.5rem 1.6rem 3.2rem;box-shadow:var(--shadow);
+  transition:transform .4s var(--ease),border-color .4s var(--ease)}
+.related-card:hover{transform:translateY(-4px);border-color:rgba(151,124,69,.5)}
+.related-card h3{font-family:var(--serif);font-weight:400;font-size:1.32rem;margin:0 0 .5rem;
+  color:var(--charcoal);letter-spacing:-.01em}
+.related-card p{margin:0;color:var(--soft);font-size:.94rem;line-height:1.55}
+.related-card .arrow{position:absolute;left:1.6rem;bottom:1.35rem;color:var(--gold-deep);
+  font-size:1.1rem;transition:transform .4s var(--ease)}
+.related-card:hover .arrow{transform:translateX(6px)}
+
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(34px);transition:1s var(--ease)}
 .reveal.in{opacity:1;transform:none}
