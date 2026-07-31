@@ -449,6 +449,23 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   font-size:1.1rem;transition:transform .4s var(--ease)}
 .related-card:hover .arrow{transform:translateX(6px)}
 
+/* ---------- techniques split list ---------- */
+.tech-list{list-style:none;margin:1.7rem 0 0;padding:0;display:flex;flex-direction:column;gap:1.15rem}
+.tech-list li{padding-left:1.1rem;border-left:2px solid var(--gold)}
+.tech-list li strong{display:block;font-family:var(--serif);font-weight:400;font-size:1.12rem;
+  color:var(--charcoal);margin-bottom:.15rem;letter-spacing:-.01em}
+.tech-list li span{color:var(--soft);font-size:.94rem;line-height:1.5}
+
+/* ---------- why choose us card grid ---------- */
+.why-grid{max-width:1080px;margin:0 auto;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem}
+.why-card{background:var(--ivory);border:1px solid var(--line);border-radius:14px;
+  padding:1.7rem 1.6rem;box-shadow:var(--shadow)}
+.why-card .wc-icon{width:38px;height:38px;color:var(--gold-deep);margin-bottom:1rem;display:block}
+.why-card h4{font-family:var(--serif);font-weight:400;font-size:1.18rem;margin:0 0 .45rem;
+  color:var(--charcoal);letter-spacing:-.01em;text-transform:none}
+.why-card p{margin:0;color:var(--soft);font-size:.93rem;line-height:1.55}
+
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(34px);transition:1s var(--ease)}
 .reveal.in{opacity:1;transform:none}
