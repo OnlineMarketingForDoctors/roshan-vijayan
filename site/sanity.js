@@ -441,20 +441,29 @@
       'recovery[]{stage,description},' +
       'risksIntro,risks[]{title,description},' +
       'surgeonQuote,costFrom,costIntro,costIncludes,' +
-      'faqs[]{question,answer},hiddenSections,seoTitle,seoDescription}';
+      'faqs[]{question,answer},seoTitle,seoDescription,' +
+      'showResults,showOverview,showGlance,showCandidates,showTechniques,' +
+      'showProcedure,showRecovery,showRisks,showSurgeon,showWhy,showCost,showFaqs,showRelated}';
 
     query(groq, { slug: slug }).then(function (p) {
       if (!p) return; // no procedure doc yet — keep static page
 
-      // Hide any sections the editor has switched off (and their sub-nav links)
-      if (p.hiddenSections && p.hiddenSections.length) {
-        p.hiddenSections.forEach(function (id) {
+      // Hide any section whose "Show" toggle has been switched off (only when
+      // explicitly false — undefined/absent means shown). Also drop its sub-nav link.
+      var SECTION_TOGGLES = {
+        results: 'showResults', overview: 'showOverview', glance: 'showGlance',
+        candidates: 'showCandidates', techniques: 'showTechniques', procedure: 'showProcedure',
+        recovery: 'showRecovery', risks: 'showRisks', surgeon: 'showSurgeon',
+        why: 'showWhy', cost: 'showCost', faq: 'showFaqs', related: 'showRelated'
+      };
+      Object.keys(SECTION_TOGGLES).forEach(function (id) {
+        if (p[SECTION_TOGGLES[id]] === false) {
           var sec = document.getElementById(id);
           if (sec && sec.tagName === 'SECTION') sec.style.display = 'none';
           var link = document.querySelector('.proc-subnav a[href="#' + id + '"]');
           if (link) link.style.display = 'none';
-        });
-      }
+        }
+      });
 
       // SEO
       if (p.seoTitle) document.title = p.seoTitle;
