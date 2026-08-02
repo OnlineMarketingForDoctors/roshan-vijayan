@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {GenerateImageInput} from '../components/GenerateImageInput'
 
 const GLANCE_ICONS = ['clock', 'briefcase', 'home', 'droplet', 'walk', 'activity', 'heart', 'moon', 'check', 'navigation', 'shield', 'chat', 'clipboard']
 
@@ -28,7 +29,18 @@ export default defineType({
     defineField({name: 'showOverview', title: "Show 'Overview' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'overviewHeading', title: 'Overview heading', type: 'string', group: 'content'}),
     defineField({name: 'overviewBody', title: 'Overview body', type: 'array', of: [{type: 'block'}], group: 'content'}),
-    defineField({name: 'overviewImage', title: 'Overview image', type: 'image', options: {hotspot: true}, group: 'content'}),
+    defineField({
+      name: 'overviewImage', title: 'Overview image', type: 'image', group: 'content',
+      components: {input: GenerateImageInput},
+      options: {
+        hotspot: true,
+        generate: {
+          size: '1536x2048', label: 'overview', needLabel: 'the Overview heading / body',
+          contentFields: ['title', 'overviewHeading', 'overviewBody'],
+          scene: 'A poised, elegant woman in a calm, softly lit interior — refined editorial lifestyle portrait, understated and natural',
+        },
+      },
+    }),
 
     // ---- At a glance ----
     defineField({name: 'showGlance', title: "Show 'At a glance' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -56,7 +68,18 @@ export default defineType({
     defineField({name: 'candidatesIntro', title: 'Candidates intro', type: 'text', rows: 3, group: 'content'}),
     defineField({name: 'candidates', title: 'Good-candidate signs', type: 'array', of: [{type: 'string'}], group: 'content'}),
     defineField({name: 'candidatesOutro', title: 'Candidates outro', type: 'text', rows: 3, group: 'content'}),
-    defineField({name: 'candidatesImage', title: 'Candidates image', type: 'image', options: {hotspot: true}, group: 'content'}),
+    defineField({
+      name: 'candidatesImage', title: 'Candidates image', type: 'image', group: 'content',
+      components: {input: GenerateImageInput},
+      options: {
+        hotspot: true,
+        generate: {
+          size: '1536x2048', label: 'candidates', needLabel: 'the Candidates intro / list',
+          contentFields: ['title', 'candidatesIntro', 'candidates'],
+          scene: 'A confident, natural woman by a window in soft daylight — serene editorial portrait, calm and reassuring',
+        },
+      },
+    }),
 
     // ---- Techniques ----
     defineField({name: 'showTechniques', title: "Show 'Techniques' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -85,7 +108,18 @@ export default defineType({
     defineField({name: 'showProcedure', title: "Show 'What happens during surgery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'procedureHeading', title: 'Procedure heading', type: 'string', group: 'content'}),
     defineField({name: 'procedureBody', title: 'Procedure body', type: 'array', of: [{type: 'block'}], group: 'content'}),
-    defineField({name: 'procedureImage', title: 'Procedure background image', type: 'image', options: {hotspot: true}, group: 'content'}),
+    defineField({
+      name: 'procedureImage', title: 'Procedure background image', type: 'image', group: 'content',
+      components: {input: GenerateImageInput},
+      options: {
+        hotspot: true,
+        generate: {
+          size: '2048x1152', label: 'procedure', needLabel: 'the Procedure heading / body',
+          contentFields: ['title', 'procedureHeading', 'procedureBody'],
+          scene: 'A calm, luxurious private clinic interior with warm light and no people — soft, reassuring, high-end wide establishing shot',
+        },
+      },
+    }),
 
     // ---- Recovery ----
     defineField({name: 'showRecovery', title: "Show 'Recovery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),

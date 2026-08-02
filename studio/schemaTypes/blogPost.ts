@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {GenerateImageInput} from '../components/GenerateImageInput'
 
 export default defineType({
   name: 'blogPost',
@@ -12,7 +13,15 @@ export default defineType({
       name: 'coverImage',
       title: 'Cover image',
       type: 'image',
-      options: {hotspot: true},
+      components: {input: GenerateImageInput},
+      options: {
+        hotspot: true,
+        generate: {
+          size: '2048x1536', label: 'blog-cover', needLabel: 'the Title / excerpt',
+          contentFields: ['title', 'excerpt'],
+          scene: 'An elegant, editorial lifestyle or still-life scene evoking the article theme — soft, refined and calm',
+        },
+      },
       fields: [{name: 'alt', title: 'Alt text', type: 'string'}],
     }),
     defineField({name: 'publishedAt', title: 'Published at', type: 'datetime', initialValue: () => new Date().toISOString()}),
