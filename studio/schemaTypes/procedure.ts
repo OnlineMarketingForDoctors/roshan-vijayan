@@ -17,6 +17,33 @@ export default defineType({
     defineField({name: 'category', title: 'Category', type: 'string', options: {list: ['Body', 'Face', 'Skin', 'Other']}, initialValue: 'Body', group: 'content'}),
     defineField({name: 'surgical', title: 'Surgical procedure', type: 'boolean', initialValue: true, description: 'Off for in-clinic / non-surgical treatments.', group: 'content'}),
 
+    // ---- Visibility ----
+    defineField({
+      name: 'hiddenSections',
+      title: 'Hide sections',
+      type: 'array',
+      group: 'content',
+      description: 'Tick any sections you want to hide on this page. Everything is shown by default.',
+      of: [{type: 'string'}],
+      options: {
+        list: [
+          {value: 'results', title: 'Before & After'},
+          {value: 'overview', title: 'Overview (what is…)'},
+          {value: 'glance', title: 'At a glance'},
+          {value: 'candidates', title: 'Who may consider'},
+          {value: 'techniques', title: 'Techniques'},
+          {value: 'procedure', title: 'What happens during surgery'},
+          {value: 'recovery', title: 'Recovery'},
+          {value: 'risks', title: 'Risks'},
+          {value: 'surgeon', title: 'Meet your surgeon'},
+          {value: 'why', title: 'Why choose us'},
+          {value: 'cost', title: 'Cost'},
+          {value: 'faq', title: 'FAQs'},
+          {value: 'related', title: 'Related procedures'},
+        ],
+      },
+    }),
+
     // ---- Hero ----
     defineField({name: 'heroPromise', title: 'Hero promise (one line)', type: 'text', rows: 2, group: 'content'}),
     defineField({name: 'benefits', title: 'Key benefits', type: 'array', of: [{type: 'string'}], group: 'content'}),

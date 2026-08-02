@@ -441,10 +441,20 @@
       'recovery[]{stage,description},' +
       'risksIntro,risks[]{title,description},' +
       'surgeonQuote,costFrom,costIntro,costIncludes,' +
-      'faqs[]{question,answer},seoTitle,seoDescription}';
+      'faqs[]{question,answer},hiddenSections,seoTitle,seoDescription}';
 
     query(groq, { slug: slug }).then(function (p) {
       if (!p) return; // no procedure doc yet — keep static page
+
+      // Hide any sections the editor has switched off (and their sub-nav links)
+      if (p.hiddenSections && p.hiddenSections.length) {
+        p.hiddenSections.forEach(function (id) {
+          var sec = document.getElementById(id);
+          if (sec && sec.tagName === 'SECTION') sec.style.display = 'none';
+          var link = document.querySelector('.proc-subnav a[href="#' + id + '"]');
+          if (link) link.style.display = 'none';
+        });
+      }
 
       // SEO
       if (p.seoTitle) document.title = p.seoTitle;
