@@ -1,0 +1,38 @@
+'use client'
+
+import {defineConfig} from 'sanity'
+import {structureTool} from 'sanity/structure'
+import {visionTool} from '@sanity/vision'
+import {apiVersion, dataset, projectId} from './sanity/env'
+import {schemaTypes} from './sanity/schemaTypes'
+
+export default defineConfig({
+  name: 'default',
+  title: 'RV Plastic Surgery',
+  basePath: '/studio',
+  projectId,
+  dataset,
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Content')
+          .items([
+            S.listItem()
+              .title('Site Settings')
+              .id('siteSettings')
+              .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
+            S.divider(),
+            S.documentTypeListItem('procedure').title('Procedures'),
+            S.documentTypeListItem('blogPost').title('Blog posts'),
+            S.documentTypeListItem('review').title('Reviews'),
+            S.documentTypeListItem('beforeAfterCase').title('Before & After'),
+          ]),
+    }),
+    visionTool({defaultApiVersion: apiVersion}),
+  ],
+  schema: {
+    types: schemaTypes,
+    templates: (prev) => prev.filter((t) => t.schemaType !== 'siteSettings'),
+  },
+})
