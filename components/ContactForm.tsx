@@ -10,7 +10,14 @@ const PROCEDURES = [
   'Not sure yet',
 ]
 
-export default function ContactForm() {
+const LOCATIONS = [
+  'One Hatfield Hospital',
+  'One Stop Healthcare, Hemel Hempstead',
+  'London Skin Clinic, St Albans',
+  'No preference',
+]
+
+export default function ContactForm({withLocation = false}: {withLocation?: boolean}) {
   return (
     <form className="contact-form reveal" onSubmit={(e) => e.preventDefault()}>
       <div className="field">
@@ -35,6 +42,16 @@ export default function ContactForm() {
           ))}
         </select>
       </div>
+      {withLocation ? (
+        <div className="field">
+          <label>Preferred location</label>
+          <select name="location">
+            {LOCATIONS.map((l) => (
+              <option key={l}>{l}</option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <div className="field">
         <label>Message</label>
         <textarea name="message" rows={3} placeholder="How can we help?" />
