@@ -12,7 +12,7 @@ export async function GET() {
 
   async function run(key: string, client: ReturnType<typeof createClient>, query: string) {
     try {
-      out[key] = await client.fetch(query)
+      out[key] = await client.fetch(query, {}, {cache: 'no-store'})
     } catch (e) {
       out[key + '_ERR'] = (e as Error)?.message || String(e)
     }
