@@ -50,10 +50,10 @@ const ICONS: Record<string, ReactNode> = {
   ),
 }
 
-export default function GlanceIcon({icon}: {icon?: string}) {
+export default function GlanceIcon({icon, className = 'gi'}: {icon?: string; className?: string}) {
   return (
     <svg
-      className="gi"
+      className={className}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

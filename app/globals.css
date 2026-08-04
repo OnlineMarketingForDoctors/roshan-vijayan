@@ -323,7 +323,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .results-head{max-width:42rem;margin:0 auto clamp(2rem,4vw,2.8rem)}
 .results-head h2{margin:.3rem 0 1.1rem}
 .results-head p{color:var(--ink)}
-.ba-tabs{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.3rem;margin:0 auto clamp(2.2rem,4vw,3rem);
+.ba-tabs{display:flex;width:fit-content;flex-wrap:wrap;justify-content:center;gap:.3rem;margin:0 auto clamp(2.2rem,4vw,3rem);
   background:rgba(255,253,248,.55);border:1px solid var(--line);border-radius:40px;padding:.4rem}
 .ba-tab{font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--soft);background:none;border:none;cursor:pointer;padding:.7rem 1.6rem;border-radius:30px;transition:.4s var(--ease)}
@@ -774,7 +774,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   background:rgba(34,26,16,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:1px solid rgba(220,200,166,.16);box-shadow:0 10px 24px -16px rgba(0,0,0,.5)}
 .proc-subnav-inner{display:flex;align-items:center;gap:clamp(1.1rem,2.6vw,2.4rem);
-  justify-content:center;flex-wrap:nowrap;overflow-x:auto;max-width:1240px;margin:0 auto;
+  justify-content:safe center;flex-wrap:nowrap;overflow-x:auto;max-width:1240px;margin:0 auto;
   padding:.95rem clamp(1.2rem,5vw,3rem);scrollbar-width:none;-ms-overflow-style:none}
 .proc-subnav-inner::-webkit-scrollbar{display:none}
 .proc-subnav a{font-size:.73rem;letter-spacing:.17em;text-transform:uppercase;

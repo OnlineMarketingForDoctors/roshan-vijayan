@@ -355,7 +355,7 @@ export default async function ProcedurePage({params}: Params) {
               ['Early, flexible availability', 'Consultations often within a week or two, with flexible scheduling for surgery itself, so you are never left waiting.'],
             ].map(([h, b]) => (
               <div className="why-card" key={h}>
-                <GlanceIcon icon="check" />
+                <GlanceIcon icon="check" className="wc-icon" />
                 <h4>{h}</h4>
                 <p>{b}</p>
               </div>
