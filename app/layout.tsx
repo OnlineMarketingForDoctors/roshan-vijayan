@@ -21,11 +21,16 @@ const sans = Jost({
   display: 'swap',
 })
 
+// Until go-live, keep search engines out of the staging URL. Flip the switch
+// by setting NEXT_PUBLIC_SITE_LIVE=true in Vercel when the real domain goes live.
+const isLive = process.env.NEXT_PUBLIC_SITE_LIVE === 'true'
+
 export const metadata: Metadata = {
   title: 'RV Plastic Surgery | Mr Roshan Vijayan, Consultant Plastic Surgeon',
   description:
     'Natural, balanced aesthetic and reconstructive surgery, consultant-led, in Hertfordshire, by Mr Roshan Vijayan, MBBS FRCS(Plast).',
   icons: {icon: '/favicon.svg'},
+  robots: isLive ? undefined : {index: false, follow: false},
 }
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
