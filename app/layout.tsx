@@ -2,10 +2,14 @@ import type {Metadata} from 'next'
 import {Fraunces, Jost} from 'next/font/google'
 import './globals.css'
 
+// Load Fraunces as a variable font (no explicit weight) WITH the optical-size
+// axis, so large headings render in its high-contrast display shape — matching
+// the original design. `font-optical-sizing: auto` (CSS default) applies opsz
+// by font-size automatically.
 const serif = Fraunces({
   subsets: ['latin'],
   style: ['normal', 'italic'],
-  weight: ['300', '400', '500', '600'],
+  axes: ['opsz'],
   variable: '--font-serif',
   display: 'swap',
 })
