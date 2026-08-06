@@ -773,10 +773,14 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .proc-subnav{position:sticky;top:96px;z-index:900;
   background:rgba(34,26,16,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:1px solid rgba(220,200,166,.16);box-shadow:0 10px 24px -16px rgba(0,0,0,.5)}
-.proc-subnav-inner{display:flex;align-items:center;gap:clamp(1.1rem,2.6vw,2.4rem);
-  justify-content:safe center;flex-wrap:nowrap;overflow-x:auto;max-width:1240px;margin:0 auto;
-  padding:.95rem clamp(1.2rem,5vw,3rem);scrollbar-width:none;-ms-overflow-style:none}
+.proc-subnav-inner{display:flex;align-items:center;gap:clamp(.9rem,2.1vw,1.9rem);
+  justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;margin:0 auto;
+  padding:.95rem clamp(1.2rem,4vw,2.4rem);scrollbar-width:none;-ms-overflow-style:none}
 .proc-subnav-inner::-webkit-scrollbar{display:none}
+/* Auto margins center the group when it fits, but collapse to 0 on overflow so
+   the first item stays flush-left and fully scrollable (no clipped "B"). */
+.proc-subnav-inner>a:first-child{margin-left:auto}
+.proc-subnav-inner>a:last-child{margin-right:auto}
 .proc-subnav a{font-size:.73rem;letter-spacing:.17em;text-transform:uppercase;
   color:rgba(246,240,230,.78);white-space:nowrap;padding:.25rem 0;position:relative;transition:.3s}
 .proc-subnav a::after{content:"";position:absolute;left:0;bottom:-3px;height:1px;width:0;
