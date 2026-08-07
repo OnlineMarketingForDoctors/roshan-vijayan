@@ -22,6 +22,22 @@ type Params = {params: Promise<{slug: string}>}
 
 const show = (v: unknown) => v !== false
 
+/**
+ * Coerces a list entry to text. These fields hold plain strings, but a document
+ * written against an older schema (risks used to be {title, description}) would
+ * otherwise throw "Objects are not valid as a React child" and fail the build.
+ */
+const asText = (v: unknown): string => {
+  if (typeof v === 'string') return v
+  if (v && typeof v === 'object') {
+    const o = v as Record<string, unknown>
+    return [o.title, o.name, o.stage, o.description]
+      .filter((x): x is string => typeof x === 'string' && x.length > 0)
+      .join(' — ')
+  }
+  return ''
+}
+
 // Section image fallbacks (used until an editor sets images in Sanity)
 const DEF = {
   overview: '/images/web/bl-overview.jpg',
@@ -108,8 +124,8 @@ export default async function ProcedurePage({params}: Params) {
           {p.heroPromise ? <p className="proc-hero-sub">{p.heroPromise}</p> : null}
           {p.heroBullets?.length ? (
             <ul className="proc-benefits">
-              {p.heroBullets.map((b: string, i: number) => (
-                <li key={i}>{b}</li>
+              {p.heroBullets.map((b: unknown, i: number) => (
+                <li key={i}>{asText(b)}</li>
               ))}
             </ul>
           ) : null}
@@ -221,8 +237,8 @@ export default async function ProcedurePage({params}: Params) {
             {p.conditionsIntro ? <p>{p.conditionsIntro}</p> : null}
           </div>
           <ul className="point-grid reveal">
-            {p.conditions.map((c: string, i: number) => (
-              <li key={i}>{c}</li>
+            {p.conditions.map((c: unknown, i: number) => (
+              <li key={i}>{asText(c)}</li>
             ))}
           </ul>
         </section>
@@ -240,8 +256,8 @@ export default async function ProcedurePage({params}: Params) {
               <h2 className="display">{p.benefitsHeading || 'Key benefits'}</h2>
               {p.benefitsIntro ? <p>{p.benefitsIntro}</p> : null}
               <ul className="check-list">
-                {p.benefitsList.map((b: string, i: number) => (
-                  <li key={i}>{b}</li>
+                {p.benefitsList.map((b: unknown, i: number) => (
+                  <li key={i}>{asText(b)}</li>
                 ))}
               </ul>
             </div>
@@ -262,8 +278,8 @@ export default async function ProcedurePage({params}: Params) {
               {p.candidatesIntro ? <p>{p.candidatesIntro}</p> : null}
               {p.candidates?.length ? (
                 <ul className="check-list">
-                  {p.candidates.map((c: string, i: number) => (
-                    <li key={i}>{c}</li>
+                  {p.candidates.map((c: unknown, i: number) => (
+                    <li key={i}>{asText(c)}</li>
                   ))}
                 </ul>
               ) : null}
@@ -312,8 +328,8 @@ export default async function ProcedurePage({params}: Params) {
             {p.risksIntro ? <p>{p.risksIntro}</p> : null}
           </div>
           <ul className="point-grid reveal">
-            {p.risks.map((r: string, i: number) => (
-              <li key={i}>{r}</li>
+            {p.risks.map((r: unknown, i: number) => (
+              <li key={i}>{asText(r)}</li>
             ))}
           </ul>
           <p className="vs-note reveal">
@@ -356,10 +372,10 @@ export default async function ProcedurePage({params}: Params) {
             {p.whyIntro ? <p>{p.whyIntro}</p> : null}
           </div>
           <div className="why-grid reveal">
-            {p.whyPoints.map((point: string, i: number) => (
+            {p.whyPoints.map((point: unknown, i: number) => (
               <div className="why-card" key={i}>
                 <GlanceIcon icon="check" className="wc-icon" />
-                <h4>{point}</h4>
+                <h4>{asText(point)}</h4>
               </div>
             ))}
           </div>
@@ -389,8 +405,8 @@ export default async function ProcedurePage({params}: Params) {
               <>
                 <p className="cost-incl-label">Your fee includes</p>
                 <ul className="cost-incl">
-                  {p.costIncludes.map((c: string, i: number) => (
-                    <li key={i}>{c}</li>
+                  {p.costIncludes.map((c: unknown, i: number) => (
+                    <li key={i}>{asText(c)}</li>
                   ))}
                 </ul>
               </>
