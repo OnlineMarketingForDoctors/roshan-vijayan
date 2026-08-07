@@ -25,8 +25,8 @@ const show = (v: unknown) => v !== false
 // Section image fallbacks (used until an editor sets images in Sanity)
 const DEF = {
   overview: '/images/web/bl-overview.jpg',
+  benefits: '/images/web/decolletage.jpg',
   candidates: '/images/web/bl-candidates.jpg',
-  techniques: '/images/web/bl-techniques-split.png',
   procedure: '/images/web/consultation.jpg',
 }
 
@@ -67,17 +67,19 @@ export default async function ProcedurePage({params}: Params) {
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
   const groups = buildBAGroups(baCases as never)
+  const lower = p.title.toLowerCase()
 
   const subnav: {id: string; label: string; on: boolean}[] = [
     {id: 'results', label: 'Before & After', on: show(p.showResults)},
     {id: 'overview', label: 'Overview', on: show(p.showOverview)},
     {id: 'glance', label: 'At a Glance', on: show(p.showGlance) && !!p.atAGlance?.length},
+    {id: 'concerns', label: 'Concerns', on: show(p.showConditions) && !!p.conditions?.length},
+    {id: 'benefits', label: 'Benefits', on: show(p.showBenefits) && !!p.benefitsList?.length},
     {id: 'candidates', label: 'Candidates', on: show(p.showCandidates)},
-    {id: 'techniques', label: 'Techniques', on: show(p.showTechniques)},
-    {id: 'procedure', label: 'The Procedure', on: show(p.showProcedure)},
-    {id: 'recovery', label: 'Recovery', on: show(p.showRecovery) && !!p.recovery?.length},
-    {id: 'risks', label: 'Risks', on: show(p.showRisks)},
-    {id: 'surgeon', label: 'Your Surgeon', on: show(p.showSurgeon)},
+    {id: 'procedure', label: 'Procedure', on: show(p.showProcedure)},
+    {id: 'journey', label: 'Journey', on: show(p.showJourney) && !!p.journey?.length},
+    {id: 'risks', label: 'Risks', on: show(p.showRisks) && !!p.risks?.length},
+    {id: 'surgeon', label: 'Surgeon', on: show(p.showSurgeon)},
     {id: 'cost', label: 'Cost', on: show(p.showCost)},
     {id: 'faq', label: 'FAQs', on: show(p.showFaqs) && !!p.faqs?.length},
   ]
@@ -102,11 +104,11 @@ export default async function ProcedurePage({params}: Params) {
         <div className="proc-hero-veil" />
         <div className="proc-hero-inner reveal">
           <span className="eyebrow">{p.category} · Surgery</span>
-          <h1 className="display">{p.title}</h1>
+          <h1 className="display">{p.heroHeading || p.title}</h1>
           {p.heroPromise ? <p className="proc-hero-sub">{p.heroPromise}</p> : null}
-          {p.benefits?.length ? (
+          {p.heroBullets?.length ? (
             <ul className="proc-benefits">
-              {p.benefits.map((b: string, i: number) => (
+              {p.heroBullets.map((b: string, i: number) => (
                 <li key={i}>{b}</li>
               ))}
             </ul>
@@ -140,6 +142,18 @@ export default async function ProcedurePage({params}: Params) {
           ))}
         </div>
       </nav>
+
+      {/* INTRO */}
+      {show(p.showIntro) && p.introBody?.length ? (
+        <section className="section center">
+          <div className="narrow reveal">
+            {p.introHeading ? <h2 className="display">{p.introHeading}</h2> : null}
+            <div className="prose intro-prose">
+              <PortableTextBody value={p.introBody} />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* BEFORE & AFTER */}
       {show(p.showResults) ? (
@@ -179,7 +193,7 @@ export default async function ProcedurePage({params}: Params) {
       {show(p.showGlance) && p.atAGlance?.length ? (
         <section className="section bg-ivory2 proc-anchor" id="glance">
           <div className="section-head center reveal">
-            <h2 className="display">{p.title} at a glance</h2>
+            <h2 className="display">{p.glanceHeading || `${p.title} at a glance`}</h2>
             <p>
               A quick snapshot of what to expect. Every plan is individual, so Mr Vijayan confirms your
               own timings at your consultation.
@@ -199,6 +213,42 @@ export default async function ProcedurePage({params}: Params) {
         </section>
       ) : null}
 
+      {/* WHAT IT ADDRESSES */}
+      {show(p.showConditions) && p.conditions?.length ? (
+        <section className="section proc-anchor" id="concerns">
+          <div className="section-head center reveal">
+            <h2 className="display">{p.conditionsHeading || 'What it can address'}</h2>
+            {p.conditionsIntro ? <p>{p.conditionsIntro}</p> : null}
+          </div>
+          <ul className="point-grid reveal">
+            {p.conditions.map((c: string, i: number) => (
+              <li key={i}>{c}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {/* BENEFITS */}
+      {show(p.showBenefits) && p.benefitsList?.length ? (
+        <section className="section bg-cream proc-anchor" id="benefits">
+          <div className="feature-row">
+            <div className="feature-media reveal">
+              <img src={img(p.benefitsImage, DEF.benefits, 900)} alt={p.benefitsHeading || 'Benefits'} />
+              <span className="fm-tag">Benefits</span>
+            </div>
+            <div className="feature-copy reveal">
+              <h2 className="display">{p.benefitsHeading || 'Key benefits'}</h2>
+              {p.benefitsIntro ? <p>{p.benefitsIntro}</p> : null}
+              <ul className="check-list">
+                {p.benefitsList.map((b: string, i: number) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* CANDIDATES */}
       {show(p.showCandidates) ? (
         <section className="section proc-anchor" id="candidates">
@@ -208,7 +258,7 @@ export default async function ProcedurePage({params}: Params) {
               <span className="fm-tag">Is It Right for You?</span>
             </div>
             <div className="feature-copy reveal">
-              <h2 className="display">Who may consider {p.title.toLowerCase()}?</h2>
+              <h2 className="display">{p.candidatesHeading || `Who may consider ${lower}?`}</h2>
               {p.candidatesIntro ? <p>{p.candidatesIntro}</p> : null}
               {p.candidates?.length ? (
                 <ul className="check-list">
@@ -218,32 +268,6 @@ export default async function ProcedurePage({params}: Params) {
                 </ul>
               ) : null}
               {p.candidatesOutro ? <p>{p.candidatesOutro}</p> : null}
-            </div>
-          </div>
-        </section>
-      ) : null}
-
-      {/* TECHNIQUES */}
-      {show(p.showTechniques) && p.techniques?.length ? (
-        <section className="section bg-cream proc-anchor" id="techniques">
-          <div className="feature-row">
-            <div className="feature-media reveal">
-              <img className="tech-illus" src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt="Techniques" />
-            </div>
-            <div className="feature-copy reveal">
-              <h2 className="display">Techniques</h2>
-              {p.techniquesIntro ? <p>{p.techniquesIntro}</p> : null}
-              <ul className="tech-list">
-                {p.techniques.map((t: any, i: number) => (
-                  <li key={i}>
-                    <strong>
-                      {t.name}
-                      {t.tier ? ` · ${t.tier}` : ''}
-                    </strong>
-                    {t.description ? <span>{t.description}</span> : null}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </section>
@@ -262,18 +286,15 @@ export default async function ProcedurePage({params}: Params) {
         </section>
       ) : null}
 
-      {/* RECOVERY */}
-      {show(p.showRecovery) && p.recovery?.length ? (
-        <section className="section proc-anchor" id="recovery">
+      {/* TREATMENT JOURNEY */}
+      {show(p.showJourney) && p.journey?.length ? (
+        <section className="section proc-anchor" id="journey">
           <div className="section-head center reveal">
-            <h2 className="display">
-              A steady, supported
-              <br />
-              recovery.
-            </h2>
+            <h2 className="display">{p.journeyHeading || 'Your treatment journey'}</h2>
+            {p.journeyIntro ? <p>{p.journeyIntro}</p> : null}
           </div>
           <ul className="tl reveal">
-            {p.recovery.map((r: any, i: number) => (
+            {p.journey.map((r: any, i: number) => (
               <li key={i}>
                 <h4>{r.stage}</h4>
                 <p>{r.description}</p>
@@ -287,15 +308,12 @@ export default async function ProcedurePage({params}: Params) {
       {show(p.showRisks) && p.risks?.length ? (
         <section className="section bg-cream proc-anchor" id="risks">
           <div className="section-head center reveal">
-            <h2 className="display">Risks and considerations</h2>
+            <h2 className="display">{p.risksHeading || 'Risks and considerations'}</h2>
             {p.risksIntro ? <p>{p.risksIntro}</p> : null}
           </div>
-          <ul className="risk-grid reveal">
-            {p.risks.map((r: any, i: number) => (
-              <li key={i}>
-                <strong>{r.title}</strong>
-                {r.description}
-              </li>
+          <ul className="point-grid reveal">
+            {p.risks.map((r: string, i: number) => (
+              <li key={i}>{r}</li>
             ))}
           </ul>
           <p className="vs-note reveal">
@@ -314,23 +332,15 @@ export default async function ProcedurePage({params}: Params) {
             <img className="phil-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
           </div>
           <div className="phil-copy reveal">
-            <h2 className="display">Meet your surgeon</h2>
+            <h2 className="display">{p.surgeonHeading || 'Meet your surgeon'}</h2>
             {p.surgeonQuote ? (
               <p className="lead-quote display">
                 <em>“{p.surgeonQuote}”</em>
               </p>
             ) : null}
-            <p>
-              Your {p.title.toLowerCase()} is carried out by Mr Roshan Vijayan, a Consultant Plastic
-              Surgeon who trained across more than twenty teaching hospitals, among them the Queen
-              Victoria in East Grinstead, one of the birthplaces of plastic surgery.
-            </p>
-            <p>
-              He brings an artistic eye and reconstructive precision to <strong>breast and body
-              surgery</strong>, planning each case individually and, for more complex procedures,
-              operating alongside a second consultant surgeon for shorter, safer surgery. From your
-              first call to your final review, your care stays personally with him.
-            </p>
+            <div className="prose">
+              <PortableTextBody value={p.surgeonBody} />
+            </div>
             <Link className="btn btn-text" href="/about">
               More about Mr Vijayan <span className="arrow">→</span>
             </Link>
@@ -338,26 +348,18 @@ export default async function ProcedurePage({params}: Params) {
         </section>
       ) : null}
 
-      {/* WHY CHOOSE US (static, applies to all) */}
-      {show(p.showWhy) ? (
+      {/* WHY CHOOSE US */}
+      {show(p.showWhy) && p.whyPoints?.length ? (
         <section className="section bg-ivory2 proc-anchor" id="why">
           <div className="section-head center reveal">
-            <h2 className="display">Why choose us</h2>
-            <p>Care that is genuinely personal, and surgery that is genuinely safer.</p>
+            <h2 className="display">{p.whyHeading || 'Why choose us'}</h2>
+            {p.whyIntro ? <p>{p.whyIntro}</p> : null}
           </div>
           <div className="why-grid reveal">
-            {[
-              ['Consultant-led aftercare', 'Mr Vijayan personally reviews you, answers emails within a day and calls on day one after surgery, never handed to others.'],
-              ['A bespoke surgical plan', 'Your surgery is studied and drawn up individually, with a thorough written summary so you can reflect, unhurried, before deciding.'],
-              ['A second consultation, included', 'Time to recap, ask anything that has surfaced and confirm, built into the process as standard.'],
-              ['Honest, realistic guidance', 'A frank, expert view of what surgery can and cannot achieve, with no pressure, ever.'],
-              ['Two-surgeon safety on complex cases', 'For more complex procedures, Mr Vijayan operates alongside a second consultant surgeon, for greater precision and an added layer of safety.'],
-              ['Early, flexible availability', 'Consultations often within a week or two, with flexible scheduling for surgery itself, so you are never left waiting.'],
-            ].map(([h, b]) => (
-              <div className="why-card" key={h}>
+            {p.whyPoints.map((point: string, i: number) => (
+              <div className="why-card" key={i}>
                 <GlanceIcon icon="check" className="wc-icon" />
-                <h4>{h}</h4>
-                <p>{b}</p>
+                <h4>{point}</h4>
               </div>
             ))}
           </div>
@@ -373,10 +375,11 @@ export default async function ProcedurePage({params}: Params) {
       {show(p.showCost) ? (
         <section className="section proc-anchor" id="cost">
           <div className="section-head center reveal">
-            <h2 className="display">{p.title} cost</h2>
+            <h2 className="display">{p.costHeading || `${p.title} cost`}</h2>
             {p.costIntro ? <p>{p.costIntro}</p> : null}
           </div>
           <div className="cost-card reveal">
+            {p.costLead ? <p className="cost-lead">{p.costLead}</p> : null}
             {p.costFrom ? <div className="cost-figure">{p.costFrom}</div> : null}
             <p className="cost-sub">
               Indicative guide. Your exact, all-inclusive quote is confirmed in writing after your
@@ -403,7 +406,7 @@ export default async function ProcedurePage({params}: Params) {
       {show(p.showFaqs) && p.faqs?.length ? (
         <section className="section bg-ivory2 proc-anchor" id="faq">
           <div className="section-head center reveal">
-            <h2 className="display">Common questions</h2>
+            <h2 className="display">{p.faqHeading || 'Common questions'}</h2>
           </div>
           <div className="faq-list reveal">
             {p.faqs.map((f: any, i: number) => (
@@ -441,10 +444,10 @@ export default async function ProcedurePage({params}: Params) {
         <img src="/images/web/clinic-interior.jpg" alt="" aria-hidden="true" />
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
-          <h2 className="display">Have a conversation with Mr Vijayan</h2>
+          <h2 className="display">{p.ctaHeading || 'Have a conversation with Mr Vijayan'}</h2>
           <p>
-            Enquiries are answered personally, usually within a day. There is no pressure, only an
-            honest, expert opinion on whether {p.title.toLowerCase()} is right for you.
+            {p.ctaBody ||
+              `Enquiries are answered personally, usually within a day. There is no pressure, only an honest, expert opinion on whether ${lower} is right for you.`}
           </p>
           <Link className="btn btn-pill btn-gold" href="/contact">
             Request a Consultation

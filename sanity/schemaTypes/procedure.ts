@@ -13,17 +13,23 @@ export default defineType({
   ],
   fields: [
     // ---- Identity ----
-    defineField({name: 'title', title: 'Title', type: 'string', validation: (r) => r.required(), group: 'content'}),
+    defineField({name: 'title', title: 'Title (short — used in nav & headings)', type: 'string', validation: (r) => r.required(), group: 'content'}),
     defineField({name: 'slug', title: 'Slug', type: 'slug', options: {source: 'title', maxLength: 96}, validation: (r) => r.required(), group: 'content'}),
     defineField({name: 'category', title: 'Category', type: 'string', options: {list: ['Body', 'Face', 'Skin', 'Other']}, initialValue: 'Body', group: 'content'}),
     defineField({name: 'surgical', title: 'Surgical procedure', type: 'boolean', initialValue: true, description: 'Off for in-clinic / non-surgical treatments.', group: 'content'}),
 
-    // ---- Before & After (section visibility) ----
-    defineField({name: 'showResults', title: "Show 'Before & After' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
-
     // ---- Hero ----
+    defineField({name: 'heroHeading', title: 'Hero heading (H1)', type: 'string', description: 'Falls back to Title if empty.', group: 'content'}),
     defineField({name: 'heroPromise', title: 'Hero promise (one line)', type: 'text', rows: 2, group: 'content'}),
-    defineField({name: 'benefits', title: 'Key benefits', type: 'array', of: [{type: 'string'}], group: 'content'}),
+    defineField({name: 'heroBullets', title: 'Hero bullets', type: 'array', of: [{type: 'string'}], group: 'content'}),
+
+    // ---- Intro ----
+    defineField({name: 'showIntro', title: "Show 'Intro' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'introHeading', title: 'Intro heading', type: 'string', group: 'content'}),
+    defineField({name: 'introBody', title: 'Intro body', type: 'array', of: [{type: 'block'}], group: 'content'}),
+
+    // ---- Before & After ----
+    defineField({name: 'showResults', title: "Show 'Before & After' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
 
     // ---- Overview ----
     defineField({name: 'showOverview', title: "Show 'Overview' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -44,6 +50,7 @@ export default defineType({
 
     // ---- At a glance ----
     defineField({name: 'showGlance', title: "Show 'At a glance' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'glanceHeading', title: 'At a glance heading', type: 'string', description: "Falls back to '<Title> at a glance'.", group: 'content'}),
     defineField({
       name: 'atAGlance',
       title: 'At a glance',
@@ -63,11 +70,36 @@ export default defineType({
       ],
     }),
 
+    // ---- What it addresses ----
+    defineField({name: 'showConditions', title: "Show 'What it addresses' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'conditionsHeading', title: 'What it addresses — heading', type: 'string', group: 'content'}),
+    defineField({name: 'conditionsIntro', title: 'What it addresses — intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({name: 'conditions', title: 'What it addresses — list', type: 'array', of: [{type: 'string'}], group: 'content'}),
+
+    // ---- Benefits ----
+    defineField({name: 'showBenefits', title: "Show 'Benefits' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'benefitsHeading', title: 'Benefits heading', type: 'string', group: 'content'}),
+    defineField({name: 'benefitsIntro', title: 'Benefits intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({name: 'benefitsList', title: 'Benefits list', type: 'array', of: [{type: 'string'}], group: 'content'}),
+    defineField({
+      name: 'benefitsImage', title: 'Benefits image', type: 'image', group: 'content',
+      components: {input: GenerateImageInput},
+      options: {
+        hotspot: true,
+        generate: {
+          size: '1536x2048', label: 'benefits', needLabel: 'the Benefits heading / list',
+          contentFields: ['title', 'benefitsHeading', 'benefitsIntro'],
+          scene: 'A serene woman draped in soft ivory silk in warm natural light — refined editorial portrait conveying poise and quiet confidence',
+        },
+      },
+    }),
+
     // ---- Candidates ----
     defineField({name: 'showCandidates', title: "Show 'Who may consider' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
-    defineField({name: 'candidatesIntro', title: 'Candidates intro', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'candidatesHeading', title: 'Candidates heading', type: 'string', description: "Falls back to 'Who may consider <title>?'.", group: 'content'}),
+    defineField({name: 'candidatesIntro', title: 'Candidates intro', type: 'text', rows: 4, group: 'content'}),
     defineField({name: 'candidates', title: 'Good-candidate signs', type: 'array', of: [{type: 'string'}], group: 'content'}),
-    defineField({name: 'candidatesOutro', title: 'Candidates outro', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'candidatesOutro', title: 'Candidates outro', type: 'text', rows: 4, group: 'content'}),
     defineField({
       name: 'candidatesImage', title: 'Candidates image', type: 'image', group: 'content',
       components: {input: GenerateImageInput},
@@ -79,29 +111,6 @@ export default defineType({
           scene: 'A confident, natural woman by a window in soft daylight — serene editorial portrait, calm and reassuring',
         },
       },
-    }),
-
-    // ---- Techniques ----
-    defineField({name: 'showTechniques', title: "Show 'Techniques' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
-    defineField({name: 'techniquesIntro', title: 'Techniques intro', type: 'text', rows: 3, group: 'content'}),
-    defineField({name: 'techniquesImage', title: 'Techniques image / diagram', type: 'image', options: {hotspot: true}, group: 'content'}),
-    defineField({
-      name: 'techniques',
-      title: 'Techniques',
-      type: 'array',
-      group: 'content',
-      of: [
-        {
-          type: 'object',
-          name: 'technique',
-          fields: [
-            {name: 'name', title: 'Name', type: 'string'},
-            {name: 'tier', title: 'Tier', type: 'string', description: 'e.g. mild sagging'},
-            {name: 'description', title: 'Description', type: 'text', rows: 2},
-          ],
-          preview: {select: {title: 'name', subtitle: 'tier'}},
-        },
-      ],
     }),
 
     // ---- The procedure ----
@@ -121,20 +130,22 @@ export default defineType({
       },
     }),
 
-    // ---- Recovery ----
-    defineField({name: 'showRecovery', title: "Show 'Recovery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    // ---- Treatment journey ----
+    defineField({name: 'showJourney', title: "Show 'Treatment journey' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'journeyHeading', title: 'Journey heading', type: 'string', group: 'content'}),
+    defineField({name: 'journeyIntro', title: 'Journey intro', type: 'text', rows: 4, group: 'content'}),
     defineField({
-      name: 'recovery',
-      title: 'Recovery timeline',
+      name: 'journey',
+      title: 'Journey stages',
       type: 'array',
       group: 'content',
       of: [
         {
           type: 'object',
-          name: 'recoveryStage',
+          name: 'journeyStage',
           fields: [
             {name: 'stage', title: 'Stage', type: 'string'},
-            {name: 'description', title: 'Description', type: 'text', rows: 2},
+            {name: 'description', title: 'Description', type: 'text', rows: 4},
           ],
           preview: {select: {title: 'stage', subtitle: 'description'}},
         },
@@ -143,40 +154,33 @@ export default defineType({
 
     // ---- Risks ----
     defineField({name: 'showRisks', title: "Show 'Risks' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
-    defineField({name: 'risksIntro', title: 'Risks intro', type: 'text', rows: 3, group: 'content'}),
-    defineField({
-      name: 'risks',
-      title: 'Risks',
-      type: 'array',
-      group: 'content',
-      of: [
-        {
-          type: 'object',
-          name: 'risk',
-          fields: [
-            {name: 'title', title: 'Title', type: 'string'},
-            {name: 'description', title: 'Description', type: 'text', rows: 2},
-          ],
-          preview: {select: {title: 'title', subtitle: 'description'}},
-        },
-      ],
-    }),
+    defineField({name: 'risksHeading', title: 'Risks heading', type: 'string', group: 'content'}),
+    defineField({name: 'risksIntro', title: 'Risks intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({name: 'risks', title: 'Risks', type: 'array', of: [{type: 'string'}], group: 'content'}),
 
     // ---- Surgeon ----
     defineField({name: 'showSurgeon', title: "Show 'Meet your surgeon' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'surgeonHeading', title: 'Surgeon heading', type: 'string', group: 'content'}),
     defineField({name: 'surgeonQuote', title: 'Surgeon quote', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'surgeonBody', title: 'Surgeon body', type: 'array', of: [{type: 'block'}], group: 'content'}),
 
     // ---- Why choose us ----
     defineField({name: 'showWhy', title: "Show 'Why choose us' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'whyHeading', title: 'Why choose us — heading', type: 'string', group: 'content'}),
+    defineField({name: 'whyIntro', title: 'Why choose us — intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({name: 'whyPoints', title: 'Why choose us — points', type: 'array', of: [{type: 'string'}], group: 'content'}),
 
     // ---- Cost ----
     defineField({name: 'showCost', title: "Show 'Cost' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'costHeading', title: 'Cost heading', type: 'string', description: "Falls back to '<Title> cost'.", group: 'content'}),
+    defineField({name: 'costIntro', title: 'Cost intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({name: 'costLead', title: 'Cost lead (above the figure)', type: 'text', rows: 3, group: 'content'}),
     defineField({name: 'costFrom', title: 'Cost (from)', type: 'string', description: 'e.g. from £6,500', group: 'content'}),
-    defineField({name: 'costIntro', title: 'Cost intro', type: 'text', rows: 3, group: 'content'}),
     defineField({name: 'costIncludes', title: 'Fee includes', type: 'array', of: [{type: 'string'}], group: 'content'}),
 
     // ---- FAQs ----
     defineField({name: 'showFaqs', title: "Show 'FAQs' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'faqHeading', title: 'FAQ heading', type: 'string', group: 'content'}),
     defineField({
       name: 'faqs',
       title: 'FAQs',
@@ -188,7 +192,7 @@ export default defineType({
           name: 'faq',
           fields: [
             {name: 'question', title: 'Question', type: 'string'},
-            {name: 'answer', title: 'Answer', type: 'text', rows: 3},
+            {name: 'answer', title: 'Answer', type: 'text', rows: 4},
           ],
           preview: {select: {title: 'question'}},
         },
@@ -198,6 +202,10 @@ export default defineType({
     // ---- Related ----
     defineField({name: 'showRelated', title: "Show 'Related procedures' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'related', title: 'Related procedures', type: 'array', of: [{type: 'reference', to: [{type: 'procedure'}]}], group: 'content'}),
+
+    // ---- Closing CTA ----
+    defineField({name: 'ctaHeading', title: 'Closing CTA heading', type: 'string', group: 'content'}),
+    defineField({name: 'ctaBody', title: 'Closing CTA body', type: 'text', rows: 4, group: 'content'}),
 
     // ---- SEO ----
     defineField({name: 'seoTitle', title: 'SEO title', type: 'string', group: 'seo'}),
