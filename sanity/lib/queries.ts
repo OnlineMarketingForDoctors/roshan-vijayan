@@ -41,7 +41,7 @@ export const procedureListQuery = groq`*[_type=="procedure" && defined(slug.curr
 export const procedureSlugsQuery = groq`*[_type=="procedure" && defined(slug.current)]{"slug": slug.current}`
 
 export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][0]{
-  title, category, surgical, heroHeading, heroPromise, heroBullets,
+  title, category, surgical, heroHeading, heroImage, heroPromise, heroBullets,
   showIntro, showResults, showOverview, showGlance, showConditions, showBenefits,
   showCandidates, showTechniques, showProcedure, showJourney, showRecovery,
   showRisks, showSurgeon, showWhy, showCost, showFaqs, showRelated,

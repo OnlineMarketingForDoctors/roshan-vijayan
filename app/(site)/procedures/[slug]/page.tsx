@@ -40,6 +40,7 @@ const asText = (v: unknown): string => {
 
 // Section image fallbacks (used until an editor sets images in Sanity)
 const DEF = {
+  hero: '/images/web/bl-hero.jpg',
   overview: '/images/web/bl-overview.jpg',
   benefits: '/images/web/decolletage.jpg',
   candidates: '/images/web/bl-candidates.jpg',
@@ -119,7 +120,7 @@ export default async function ProcedurePage({params}: Params) {
     <>
       {/* HERO */}
       <section className="proc-hero">
-        <img src="/images/web/bl-hero.jpg" alt="Soft, warm editorial portrait" />
+        <img src={img(p.heroImage, DEF.hero, 2000, 78)} alt="" aria-hidden="true" />
         <div className="proc-hero-veil" />
         <div className="proc-hero-inner reveal">
           <span className="eyebrow">{p.category} · Surgery</span>

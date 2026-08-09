@@ -20,6 +20,18 @@ export default defineType({
 
     // ---- Hero ----
     defineField({name: 'heroHeading', title: 'Hero heading (H1)', type: 'string', description: 'Falls back to Title if empty.', group: 'content'}),
+    defineField({
+      name: 'heroImage', title: 'Hero image', type: 'image', group: 'content',
+      components: {input: GenerateImageInput},
+      options: {
+        hotspot: true,
+        generate: {
+          size: '2048x1152', label: 'hero', needLabel: 'the Hero heading / promise',
+          contentFields: ['title', 'heroHeading', 'heroPromise'],
+          scene: 'A serene woman in soft ivory silk by a tall window in a calm minimal interior — wide cinematic editorial portrait with generous negative space for text',
+        },
+      },
+    }),
     defineField({name: 'heroPromise', title: 'Hero promise (one line)', type: 'text', rows: 2, group: 'content'}),
     defineField({name: 'heroBullets', title: 'Hero bullets', type: 'array', of: [{type: 'string'}], group: 'content'}),
 
