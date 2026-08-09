@@ -59,7 +59,8 @@ const fields = {
   ],
 
   // ---- Before & After ----
-  showResults: true,
+  // Hidden for now: the published cases are not procedure-specific yet.
+  showResults: false,
 
   // ---- Overview ----
   showOverview: true,
@@ -275,8 +276,6 @@ const fields = {
   // ---- Surgeon ----
   showSurgeon: true,
   surgeonHeading: 'Meet Mr Roshan Vijayan',
-  surgeonQuote:
-    'A breast lift is about restoring balance and confidence, with a result that looks entirely, naturally you.',
   surgeonBody: [
     para(
       'sg1',
@@ -308,8 +307,7 @@ const fields = {
   costIntro:
     'The cost of a breast lift depends on the complexity of the mastopexy and whether it is performed alone or combined with another breast procedure. Once Mr Vijayan has assessed your anatomy and recommended a surgical plan, you will receive a complete quotation covering the relevant surgical, hospital and anaesthetic costs.',
   costLead:
-    'Every breast lift is planned individually, so the final price depends on the technique and the complexity of your case. As a guide, breast lift surgery with Mr Vijayan typically starts from:',
-  costFrom: 'from £6,500',
+    'Every breast lift is planned individually, so the final price depends on the technique and the complexity of your case. Once Mr Vijayan has assessed you and agreed a surgical plan, you will receive a complete written quotation covering the relevant surgical, hospital and anaesthetic costs.',
   costIncludes: [
     'Your consultation with Mr Vijayan',
     'A second consultation, included',
@@ -399,7 +397,7 @@ const fields = {
 // Retired by this rewrite: the hero bullets moved to `heroBullets`.
 // Techniques and Recovery are NOT retired — they stay in the schema for other
 // procedures and are simply switched off here (see showTechniques/showRecovery).
-const RETIRED = ['benefits']
+const RETIRED = ['benefits', 'surgeonQuote', 'costFrom']
 
 async function run() {
   const existing: {_id: string} | null = await client.fetch(

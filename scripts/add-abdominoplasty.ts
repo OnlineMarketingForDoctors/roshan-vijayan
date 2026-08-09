@@ -74,7 +74,8 @@ const fields = {
   ],
 
   // ---- Before & After ----
-  showResults: true,
+  // Hidden for now: the published cases are not procedure-specific yet.
+  showResults: false,
 
   // ---- Overview (original: "What is Abdominoplasty?") ----
   showOverview: true,
@@ -249,8 +250,6 @@ const fields = {
   // ---- Surgeon (new) ----
   showSurgeon: true,
   surgeonHeading: 'Meet Mr Roshan Vijayan',
-  surgeonQuote:
-    'Body contouring is about restoring proportion, so the result looks like it was always yours.',
   surgeonBody: [
     para(
       'sg1',
@@ -383,7 +382,7 @@ async function run() {
     return
   }
 
-  await client.patch(id).set(doc).commit()
+  await client.patch(id).set(doc).unset(['surgeonQuote', 'costFrom']).commit()
   console.log(`\nUpdated procedure ${id} (${SLUG}).`)
 }
 

@@ -56,7 +56,7 @@ export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][
   journeyHeading, journeyIntro, journey[]{stage, description},
   recoveryHeading, recoveryIntro, recovery[]{stage, description},
   risksHeading, risksIntro, risks,
-  surgeonHeading, surgeonQuote, surgeonBody,
+  surgeonHeading, surgeonBody,
   whyHeading, whyIntro, whyPoints,
   costHeading, costIntro, costLead, costFrom, costIncludes,
   faqHeading, faqs[]{question, answer},

@@ -405,11 +405,6 @@ export default async function ProcedurePage({params}: Params) {
           </div>
           <div className="phil-copy reveal">
             <h2 className="display">{p.surgeonHeading || 'Meet your surgeon'}</h2>
-            {p.surgeonQuote ? (
-              <p className="lead-quote display">
-                <em>“{p.surgeonQuote}”</em>
-              </p>
-            ) : null}
             <div className="prose">
               <PortableTextBody value={p.surgeonBody} />
             </div>
@@ -454,8 +449,8 @@ export default async function ProcedurePage({params}: Params) {
             {p.costLead ? <p className="cost-lead">{p.costLead}</p> : null}
             {p.costFrom ? <div className="cost-figure">{p.costFrom}</div> : null}
             <p className="cost-sub">
-              Indicative guide. Your exact, all-inclusive quote is confirmed in writing after your
-              consultation, with no hidden costs.
+              {p.costFrom ? 'Indicative guide. ' : ''}Your exact, all-inclusive quote is confirmed in
+              writing after your consultation, with no hidden costs.
             </p>
             {p.costIncludes?.length ? (
               <>

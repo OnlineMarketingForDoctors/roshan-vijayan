@@ -219,7 +219,6 @@ export default defineType({
     // ---- Surgeon ----
     defineField({name: 'showSurgeon', title: "Show 'Meet your surgeon' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'surgeonHeading', title: 'Surgeon heading', type: 'string', group: 'content'}),
-    defineField({name: 'surgeonQuote', title: 'Surgeon quote', type: 'text', rows: 3, group: 'content'}),
     defineField({name: 'surgeonBody', title: 'Surgeon body', type: 'array', of: [{type: 'block'}], group: 'content'}),
 
     // ---- Why choose us ----
