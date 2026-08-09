@@ -113,6 +113,30 @@ export default defineType({
       },
     }),
 
+    // ---- Techniques / procedure types ----
+    defineField({name: 'showTechniques', title: "Show 'Techniques' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'techniquesHeading', title: 'Techniques heading', type: 'string', description: "Falls back to 'Techniques'.", group: 'content'}),
+    defineField({name: 'techniquesIntro', title: 'Techniques intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({name: 'techniquesImage', title: 'Techniques image / diagram', type: 'image', options: {hotspot: true}, group: 'content'}),
+    defineField({
+      name: 'techniques',
+      title: 'Techniques',
+      type: 'array',
+      group: 'content',
+      of: [
+        {
+          type: 'object',
+          name: 'technique',
+          fields: [
+            {name: 'name', title: 'Name', type: 'string'},
+            {name: 'tier', title: 'Tier', type: 'string', description: 'e.g. mild sagging'},
+            {name: 'description', title: 'Description', type: 'text', rows: 3},
+          ],
+          preview: {select: {title: 'name', subtitle: 'tier'}},
+        },
+      ],
+    }),
+
     // ---- The procedure ----
     defineField({name: 'showProcedure', title: "Show 'What happens during surgery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'procedureHeading', title: 'Procedure heading', type: 'string', group: 'content'}),
@@ -146,6 +170,28 @@ export default defineType({
           fields: [
             {name: 'stage', title: 'Stage', type: 'string'},
             {name: 'description', title: 'Description', type: 'text', rows: 4},
+          ],
+          preview: {select: {title: 'stage', subtitle: 'description'}},
+        },
+      ],
+    }),
+
+    // ---- Recovery timeline ----
+    defineField({name: 'showRecovery', title: "Show 'Recovery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
+    defineField({name: 'recoveryHeading', title: 'Recovery heading', type: 'string', group: 'content'}),
+    defineField({name: 'recoveryIntro', title: 'Recovery intro', type: 'text', rows: 4, group: 'content'}),
+    defineField({
+      name: 'recovery',
+      title: 'Recovery timeline',
+      type: 'array',
+      group: 'content',
+      of: [
+        {
+          type: 'object',
+          name: 'recoveryStage',
+          fields: [
+            {name: 'stage', title: 'Stage', type: 'string'},
+            {name: 'description', title: 'Description', type: 'text', rows: 3},
           ],
           preview: {select: {title: 'stage', subtitle: 'description'}},
         },

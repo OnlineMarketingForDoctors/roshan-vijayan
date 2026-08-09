@@ -43,6 +43,7 @@ const DEF = {
   overview: '/images/web/bl-overview.jpg',
   benefits: '/images/web/decolletage.jpg',
   candidates: '/images/web/bl-candidates.jpg',
+  techniques: '/images/web/bl-techniques-split.png',
   procedure: '/images/web/consultation.jpg',
 }
 
@@ -92,8 +93,10 @@ export default async function ProcedurePage({params}: Params) {
     {id: 'concerns', label: 'Concerns', on: show(p.showConditions) && !!p.conditions?.length},
     {id: 'benefits', label: 'Benefits', on: show(p.showBenefits) && !!p.benefitsList?.length},
     {id: 'candidates', label: 'Candidates', on: show(p.showCandidates)},
+    {id: 'techniques', label: 'Techniques', on: show(p.showTechniques) && !!p.techniques?.length},
     {id: 'procedure', label: 'Procedure', on: show(p.showProcedure)},
     {id: 'journey', label: 'Journey', on: show(p.showJourney) && !!p.journey?.length},
+    {id: 'recovery', label: 'Recovery', on: show(p.showRecovery) && !!p.recovery?.length},
     {id: 'risks', label: 'Risks', on: show(p.showRisks) && !!p.risks?.length},
     {id: 'surgeon', label: 'Surgeon', on: show(p.showSurgeon)},
     {id: 'cost', label: 'Cost', on: show(p.showCost)},
@@ -289,6 +292,32 @@ export default async function ProcedurePage({params}: Params) {
         </section>
       ) : null}
 
+      {/* TECHNIQUES / PROCEDURE TYPES */}
+      {show(p.showTechniques) && p.techniques?.length ? (
+        <section className="section bg-cream proc-anchor" id="techniques">
+          <div className="feature-row">
+            <div className="feature-media reveal">
+              <img className="tech-illus" src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={p.techniquesHeading || 'Techniques'} />
+            </div>
+            <div className="feature-copy reveal">
+              <h2 className="display">{p.techniquesHeading || 'Techniques'}</h2>
+              {p.techniquesIntro ? <p>{p.techniquesIntro}</p> : null}
+              <ul className="tech-list">
+                {p.techniques.map((t: any, i: number) => (
+                  <li key={i}>
+                    <strong>
+                      {t.name}
+                      {t.tier ? ` · ${t.tier}` : ''}
+                    </strong>
+                    {t.description ? <span>{t.description}</span> : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* THE PROCEDURE */}
       {show(p.showProcedure) ? (
         <section className="proc-band proc-anchor" id="procedure">
@@ -311,6 +340,32 @@ export default async function ProcedurePage({params}: Params) {
           </div>
           <ul className="tl reveal">
             {p.journey.map((r: any, i: number) => (
+              <li key={i}>
+                <h4>{r.stage}</h4>
+                <p>{r.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {/* RECOVERY */}
+      {show(p.showRecovery) && p.recovery?.length ? (
+        <section className="section proc-anchor" id="recovery">
+          <div className="section-head center reveal">
+            <h2 className="display">
+              {p.recoveryHeading || (
+                <>
+                  A steady, supported
+                  <br />
+                  recovery.
+                </>
+              )}
+            </h2>
+            {p.recoveryIntro ? <p>{p.recoveryIntro}</p> : null}
+          </div>
+          <ul className="tl reveal">
+            {p.recovery.map((r: any, i: number) => (
               <li key={i}>
                 <h4>{r.stage}</h4>
                 <p>{r.description}</p>

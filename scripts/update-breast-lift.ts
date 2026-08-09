@@ -139,6 +139,42 @@ const fields = {
   candidatesOutro:
     'If you want substantially larger breasts, a lift alone may not provide enough additional upper-breast fullness. Conversely, heavy breasts may benefit from reduction as well as lifting. Pregnancy and significant weight changes can compromise the result, making the timing of surgery an important part of your consultation.',
 
+  // ---- Techniques ----
+  // Hidden on this page: the Aug-26 brief drops it in favour of Benefits. The
+  // copy is kept so it can be switched back on from Studio at any time, and so
+  // other procedures have a worked example of the section.
+  showTechniques: false,
+  techniquesIntro:
+    'The right technique depends on how much lift is needed and the quality of your skin. The goal is always the best shape with the least scarring for your case, and Mr Vijayan will recommend the approach that suits you at your consultation.',
+  techniques: keyed('tech', [
+    {
+      _type: 'technique',
+      name: 'Crescent',
+      tier: 'very mild sagging',
+      description:
+        'A small crescent scar along the upper areola, for the subtlest lift or minor nipple asymmetry.',
+    },
+    {
+      _type: 'technique',
+      name: 'Periareolar',
+      tier: 'mild sagging',
+      description: 'The donut lift — a single, discreet scar around the areola, for a modest lift.',
+    },
+    {
+      _type: 'technique',
+      name: 'Vertical',
+      tier: 'moderate sagging',
+      description:
+        'The lollipop lift — around the areola and down to the crease, allowing more reshaping.',
+    },
+    {
+      _type: 'technique',
+      name: 'Inverted-T',
+      tier: 'significant sagging',
+      description: 'The anchor lift — with a discreet crease incision, for the fullest reshaping.',
+    },
+  ]),
+
   // ---- The procedure ----
   showProcedure: true,
   procedureHeading: 'What Does Breast Lift Surgery Involve?',
@@ -182,6 +218,43 @@ const fields = {
       stage: 'Results',
       description:
         'The breasts sit higher after surgery, although swelling and early firmness temporarily affect their appearance. Their shape becomes softer and more settled over the following months. Scars are initially more noticeable but generally become flatter and lighter as they mature.',
+    },
+  ]),
+
+  // ---- Recovery ----
+  // Hidden on this page: the Treatment Journey above covers recovery. Kept for
+  // the same reason as Techniques.
+  showRecovery: false,
+  recovery: keyed('rec', [
+    {
+      _type: 'recoveryStage',
+      stage: 'The first few days',
+      description:
+        'You will go home in a supportive surgical bra. Some swelling, bruising and tightness is normal. Mr Vijayan calls you personally on day one.',
+    },
+    {
+      _type: 'recoveryStage',
+      stage: 'Week one to two',
+      description:
+        'Most discomfort settles quickly. Many patients return to desk-based work within one to two weeks, avoiding any strenuous activity.',
+    },
+    {
+      _type: 'recoveryStage',
+      stage: 'Weeks three to six',
+      description:
+        'Gentle activity is gradually resumed. The supportive bra is worn day and night while the breasts settle into their new shape.',
+    },
+    {
+      _type: 'recoveryStage',
+      stage: 'Six weeks onward',
+      description:
+        'Most normal activity, including exercise, is comfortably resumed. Swelling continues to settle and the contour refines.',
+    },
+    {
+      _type: 'recoveryStage',
+      stage: 'Three to six months',
+      description:
+        'Scars soften and fade considerably, and the final, natural shape becomes clear. Aftercare with Mr Vijayan is unlimited throughout.',
     },
   ]),
 
@@ -323,16 +396,10 @@ const fields = {
     'Considering a breast lift? Learn how mastopexy removes loose skin, reshapes existing tissue and creates a higher, better-supported breast position and shape.',
 }
 
-// Fields retired by this rewrite — removed so they cannot resurface in Studio.
-const RETIRED = [
-  'benefits',
-  'showTechniques',
-  'techniquesIntro',
-  'techniquesImage',
-  'techniques',
-  'showRecovery',
-  'recovery',
-]
+// Retired by this rewrite: the hero bullets moved to `heroBullets`.
+// Techniques and Recovery are NOT retired — they stay in the schema for other
+// procedures and are simply switched off here (see showTechniques/showRecovery).
+const RETIRED = ['benefits']
 
 async function run() {
   const existing: {_id: string} | null = await client.fetch(
