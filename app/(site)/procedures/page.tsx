@@ -1,11 +1,21 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
+import {sanityFetch} from '@/sanity/lib/fetch'
+import {procedureListQuery} from '@/sanity/lib/queries'
+import {procedurePath} from '@/lib/procedurePath'
 
 export const metadata: Metadata = {
   title: 'Procedures | RV Plastic Surgery',
   description:
     'Aesthetic and reconstructive procedures by Mr Roshan Vijayan, Consultant Plastic Surgeon in Hertfordshire — body, breast, face & eyes, and skin & reconstruction.',
 }
+
+/**
+ * A pill in a category band. `slug` names the procedure page it links to; pills
+ * without one describe a service that has no page of its own and stay as plain
+ * labels.
+ */
+type Tag = {label: string; slug?: string}
 
 type Category = {
   id: string
@@ -15,7 +25,7 @@ type Category = {
   body: string
   img: string
   alt: string
-  tags: string[]
+  tags: Tag[]
   cta: string
   flip?: boolean
   bg?: boolean
@@ -30,7 +40,14 @@ const CATEGORIES: Category[] = [
     body: 'A particular focus of the practice: restoring the body after pregnancy or significant weight loss by refining loose, redundant skin and re-defining a natural, proportioned shape.',
     img: '/images/web/body-contour.jpg',
     alt: 'Body contouring surgery',
-    tags: ['Abdominoplasty', 'Arm Lift', 'Thigh Lift', 'Liposuction', 'Post-Weight-Loss Lift', 'Mummy Makeover'],
+    tags: [
+      {label: 'Abdominoplasty', slug: 'abdominoplasty'},
+      {label: 'Arm Lift', slug: 'arm-lift'},
+      {label: 'Thigh Lift', slug: 'thigh-lift'},
+      {label: 'Liposuction', slug: 'liposuction-contouring'},
+      {label: 'Post-Weight-Loss Lift'},
+      {label: 'Mummy Makeover'},
+    ],
     cta: 'Enquire about body surgery',
   },
   {
@@ -41,7 +58,14 @@ const CATEGORIES: Category[] = [
     body: 'From reduction and uplift to augmentation and reconstruction, Mr Vijayan plans breast surgery around your frame and your wishes, for results that feel as natural as they look.',
     img: '/images/web/decolletage.jpg',
     alt: 'Breast surgery',
-    tags: ['Breast Reduction', 'Breast Uplift', 'Breast Augmentation', 'Breast Reconstruction', 'Gynaecomastia', 'Nipple Correction'],
+    tags: [
+      {label: 'Breast Reduction', slug: 'breast-reduction'},
+      {label: 'Breast Uplift', slug: 'breast-lift'},
+      {label: 'Breast Augmentation', slug: 'breast-augmentation'},
+      {label: 'Breast Reconstruction'},
+      {label: 'Gynaecomastia', slug: 'male-gynaecomastia-reduction'},
+      {label: 'Nipple Correction'},
+    ],
     cta: 'Enquire about breast surgery',
     flip: true,
     bg: true,
@@ -54,7 +78,15 @@ const CATEGORIES: Category[] = [
     body: 'Facial and eyelid surgery designed to soften the signs of time while keeping every feature unmistakably yours, subtle, rested and naturally in keeping with your face.',
     img: '/images/web/face-portrait.jpg',
     alt: 'Facial aesthetic surgery',
-    tags: ['Facelift', 'Brow Lift', 'Eyelid Surgery', 'Rhinoplasty', 'Lip Lift', 'Ear Correction'],
+    tags: [
+      {label: 'Facelift', slug: 'facelift'},
+      {label: 'Brow Lift'},
+      {label: 'Eyelid Surgery', slug: 'upper-and-lower-lid-blepharoplasty'},
+      {label: 'Rhinoplasty', slug: 'rhinoplasty'},
+      {label: 'Lip Lift', slug: 'lip-lift'},
+      {label: 'Ear Correction', slug: 'prominent-ear-correction'},
+      {label: 'Split Ear Lobe Correction', slug: 'split-ear-lobe-correction'},
+    ],
     cta: 'Enquire about facial surgery',
   },
   {
@@ -65,7 +97,16 @@ const CATEGORIES: Category[] = [
     body: 'From mole and lesion checks to skin-cancer removal and reconstructive work, Mr Vijayan brings reconstructive precision to results that heal discreetly and beautifully.',
     img: '/images/web/proc-skin.png',
     alt: 'Skin and reconstructive surgery',
-    tags: ['Skin-Cancer Removal', 'Mole & Cyst Removal', 'Lipoma Removal', 'Scar Revision', 'Reconstructive Surgery', 'Dermatoscopy Review'],
+    tags: [
+      {label: 'Skin-Cancer Removal', slug: 'aesthetic-repair-and-reconstruction-after-skin-cancer-removal'},
+      // Split from "Mole & Cyst Removal" so each pill can reach its own page.
+      {label: 'Mole Removal', slug: 'mole-removal'},
+      {label: 'Cyst Removal', slug: 'cyst-removal'},
+      {label: 'Lipoma Removal', slug: 'lipoma-removal'},
+      {label: 'Scar Revision', slug: 'scar-revision-and-correction'},
+      {label: 'Reconstructive Surgery'},
+      {label: 'Dermatoscopy Review'},
+    ],
     cta: 'Enquire about skin surgery',
     flip: true,
     bg: true,
@@ -81,7 +122,16 @@ const STEPS = [
   ['06', 'Aftercare', 'A day-one call and unlimited, consultant-led follow-up.'],
 ]
 
-export default function ProceduresPage() {
+type ProcedureRow = {slug: string; category?: string}
+
+export default async function ProceduresPage() {
+  // Resolve the pills against what is actually published, so a pill only ever
+  // links to a page that exists, and picks up that page's category segment.
+  const procedures = await sanityFetch<ProcedureRow[]>(procedureListQuery, {}, [])
+  const paths = new Map<string, string>(
+    (procedures || []).map((p) => [p.slug, procedurePath(p.category, p.slug)]),
+  )
+
   return (
     <>
       <section className="page-hero">
@@ -132,9 +182,14 @@ export default function ProceduresPage() {
               <h2 className="display">{c.heading}</h2>
               <p>{c.body}</p>
               <ul className="proc-tags">
-                {c.tags.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
+                {c.tags.map((t) => {
+                  const href = t.slug ? paths.get(t.slug) : undefined
+                  return (
+                    <li key={t.label}>
+                      {href ? <Link href={href}>{t.label}</Link> : <span>{t.label}</span>}
+                    </li>
+                  )
+                })}
               </ul>
               <Link className="btn btn-text" href="/contact">
                 {c.cta} <span className="arrow">→</span>

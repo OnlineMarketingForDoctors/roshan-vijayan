@@ -635,7 +635,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .feature-copy p{color:var(--soft);margin-bottom:1rem}
 .proc-tags{list-style:none;display:flex;flex-wrap:wrap;gap:.55rem;margin:1.3rem 0 1.7rem}
 .proc-tags li{font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-deep);
-  border:1px solid var(--line);padding:.45rem .9rem;border-radius:30px;background:rgba(255,255,255,.45)}
+  border:1px solid var(--line);border-radius:30px;background:rgba(255,255,255,.45);
+  transition:background .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease)}
+/* The padding sits on the inner element so a linked pill is clickable edge to edge. */
+.proc-tags li>a,.proc-tags li>span{display:block;padding:.45rem .9rem;color:inherit}
+.proc-tags li:has(a):hover{background:#fff;border-color:var(--gold);transform:translateY(-1px)}
+.proc-tags li>a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:30px}
 
 /* stat band */
 .stat-band{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;max-width:1080px;margin:0 auto;text-align:center}
