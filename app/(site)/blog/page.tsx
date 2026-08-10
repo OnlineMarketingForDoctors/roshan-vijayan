@@ -69,6 +69,11 @@ export default async function BlogPage() {
             Considered guidance on surgery, recovery and aftercare, written to inform and reassure,
             never to sell. Knowledge is the first step of any good decision.
           </p>
+          <div className="page-hero-actions">
+            <Link className="btn btn-pill btn-gold" href="/contact">
+              Request a Consultation
+            </Link>
+          </div>
         </div>
       </section>
 

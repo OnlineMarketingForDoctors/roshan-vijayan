@@ -25,10 +25,16 @@ export default function ContactPage() {
             Tell Mr Vijayan a little about what you’d like to achieve. Enquiries are answered
             personally, usually within a day, with no pressure, only an honest, expert opinion.
           </p>
+          <div className="page-hero-actions">
+            {/* The form is already on this page, so send them to it rather than round the houses. */}
+            <a className="btn btn-pill btn-gold" href="#enquiry">
+              Request a Consultation
+            </a>
+          </div>
         </div>
       </section>
 
-      <section className="contact">
+      <section className="contact" id="enquiry">
         <div className="contact-inner">
           <div className="contact-copy reveal">
             <span className="eyebrow">Get in Touch</span>

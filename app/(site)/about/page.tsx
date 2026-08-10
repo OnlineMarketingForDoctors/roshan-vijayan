@@ -24,6 +24,14 @@ export default function AboutPage() {
             A consultant plastic surgeon who treats every operation as a partnership, honest about what
             is involved, and devoted to a result that looks entirely, naturally you.
           </p>
+          <div className="page-hero-actions">
+            <Link className="btn btn-pill btn-gold" href="/contact">
+              Request a Consultation
+            </Link>
+            <Link className="btn btn-text light" href="/procedures">
+              Explore procedures <span className="arrow">→</span>
+            </Link>
+          </div>
         </div>
       </section>
 

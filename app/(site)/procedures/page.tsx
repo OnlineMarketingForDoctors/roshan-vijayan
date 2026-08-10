@@ -99,6 +99,14 @@ export default function ProceduresPage() {
             seeking expert facial, eyelid and skin-cancer reconstruction, every plan is drawn up
             individually, with Mr Vijayan’s artistry and consultant-led care at its heart.
           </p>
+          <div className="page-hero-actions">
+            <Link className="btn btn-pill btn-gold" href="/contact">
+              Request a Consultation
+            </Link>
+            <a className="btn btn-text light" href="#body">
+              Browse procedures <span className="arrow">→</span>
+            </a>
+          </div>
         </div>
       </section>
 

@@ -105,12 +105,16 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   padding:11px;background:rgba(36,26,16,.5);border:1px solid rgba(255,255,255,.38);border-radius:12px;
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 4px 16px rgba(0,0,0,.28)}
 
+/* The procedure list makes this taller than the screen, so it scrolls in its
+   own right and starts below the header rather than centring. */
 .mobile-menu{position:fixed;inset:0;z-index:999;background:var(--charcoal);color:var(--ivory);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2rem;
-  transform:translateY(-100%);transition:.6s var(--ease);opacity:0}
-.mobile-menu.open{transform:translateY(0);opacity:1}
-.mobile-menu nav{display:flex;flex-direction:column;gap:1.4rem;text-align:center;
-  font-family:var(--serif);font-size:1.9rem}
+  display:flex;flex-direction:column;justify-content:flex-start;align-items:center;gap:1.6rem;
+  padding:6.5rem clamp(1.2rem,5vw,2.4rem) calc(2.5rem + env(safe-area-inset-bottom));
+  overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  transform:translateY(-100%);transition:.6s var(--ease);opacity:0;visibility:hidden}
+.mobile-menu.open{transform:translateY(0);opacity:1;visibility:visible}
+.mobile-menu nav{display:flex;flex-direction:column;gap:1rem;text-align:center;width:100%;
+  max-width:420px;font-family:var(--serif);font-size:1.5rem;line-height:1.25}
 
 /* ---------- HERO ---------- */
 .hero{position:relative;min-height:100svh;display:flex;align-items:center;
@@ -579,15 +583,23 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 
 /* page hero */
 .page-hero{position:relative;min-height:100vh;min-height:100svh;
-  display:flex;align-items:flex-end;overflow:hidden;
-  background:var(--charcoal);padding:9.5rem clamp(1.2rem,5vw,5rem) clamp(3.6rem,7vw,6rem)}
+  display:flex;align-items:center;overflow:hidden;
+  background:var(--charcoal);padding:9.5rem clamp(1.2rem,5vw,5rem)}
 .page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+/* Weighted to the left, where the copy sits, with a light top wash so the
+   header stays legible over a bright image. */
 .page-hero-veil{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to top,rgba(28,20,11,.82),rgba(28,20,11,.22) 55%,rgba(28,20,11,.5))}
+  background:
+    linear-gradient(to right,rgba(28,20,11,.86) 0%,rgba(28,20,11,.66) 38%,rgba(28,20,11,.3) 68%,rgba(28,20,11,.06) 100%),
+    linear-gradient(to bottom,rgba(28,20,11,.44) 0%,transparent 24%)}
 .page-hero-inner{position:relative;z-index:2;max-width:780px;color:var(--ivory)}
 .page-hero-inner .eyebrow{color:var(--champagne)}
 .page-hero-inner h1{margin:.2rem 0 1.1rem;color:var(--ivory)}
 .page-hero-inner p{font-size:1.1rem;max-width:56ch;color:rgba(246,240,230,.92)}
+.page-hero-actions{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap;
+  margin-top:clamp(1.9rem,3vw,2.6rem)}
+/* Targets of the hero jump links, cleared of the fixed header. */
+#body,#face,#skin,#enquiry{scroll-margin-top:110px}
 
 /* generic section */
 .section{padding:clamp(3.4rem,6vw,6.2rem) clamp(1.2rem,5vw,5rem)}
@@ -725,7 +737,11 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .blog-grid{grid-template-columns:repeat(2,1fr)}
   .loc-cards{grid-template-columns:1fr}
   .stat-band{grid-template-columns:repeat(2,1fr);gap:2rem}
-  .page-hero{padding-top:8.5rem}
+  .page-hero{padding:8.5rem clamp(1.2rem,5vw,3.4rem) 3.5rem}
+  /* Narrow screens put the copy across the full width, so wash top-to-bottom
+     rather than left-to-right. */
+  .page-hero-veil{background:
+    linear-gradient(to bottom,rgba(28,20,12,.66) 0%,rgba(28,20,12,.46) 40%,rgba(28,20,12,.62) 100%)}
 }
 @media(max-width:560px){
   .blog-grid{grid-template-columns:1fr}
@@ -789,10 +805,19 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 /* Below 1200px the whole desktop nav is replaced by the mobile menu, so the
    panel never renders there; the grouped list in .mobile-menu covers it. */
 
-/* mobile menu: procedures grouped by category */
-.mm-group{display:contents}
-.mm-head{display:block;margin:1.1rem 0 .2rem;font-family:var(--sans);font-size:.62rem;
+/* mobile menu: procedures grouped by category, collapsed by default so the
+   full list of procedures never buries the rest of the navigation */
+.mm-group{border-top:1px solid rgba(220,200,166,.16)}
+.mm-group:last-of-type{border-bottom:1px solid rgba(220,200,166,.16)}
+.mm-head{display:flex;align-items:center;justify-content:center;gap:.6rem;cursor:pointer;
+  list-style:none;padding:.85rem 0;font-family:var(--sans);font-size:.66rem;
   letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.mm-head::-webkit-details-marker{display:none}
+.mm-head::after{content:"+";font-size:1.1rem;line-height:1;letter-spacing:0;
+  transition:transform .3s var(--ease)}
+.mm-group[open] .mm-head::after{transform:rotate(45deg)}
+.mm-group .mm-items{display:flex;flex-direction:column;gap:.85rem;
+  padding:.2rem 0 1.1rem;font-size:1.06rem;color:rgba(246,240,230,.9)}
 
 /* ============ PROCEDURE PAGE ============ */
 .btn-text.light{color:var(--ivory)}

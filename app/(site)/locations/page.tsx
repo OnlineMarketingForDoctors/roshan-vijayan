@@ -59,6 +59,11 @@ export default function LocationsPage() {
             Mr Vijayan sees patients at four trusted private and NHS settings, each calm, modern and
             easy to reach, with consultations often available within a week or two.
           </p>
+          <div className="page-hero-actions">
+            <Link className="btn btn-pill btn-gold" href="/contact">
+              Request a Consultation
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -61,6 +61,16 @@ export default function Header({settings, procedures}: {settings: Settings; proc
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // The menu scrolls itself, so hold the page still behind it.
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
   const grouped = useMemo(() => {
     const by = (key: string) =>
       procedures.filter((p) => (p.category || 'other').toLowerCase() === key)
@@ -189,21 +199,23 @@ export default function Header({settings, procedures}: {settings: Settings; proc
           <Link href="/about" onClick={close}>About</Link>
           <Link href="/procedures" onClick={close}>Procedures</Link>
           {grouped.map((g) => (
-            <div className="mm-group" key={g.key}>
-              <span className="mm-head">{g.label}</span>
-              {g.items.map((p) => (
-                <Link key={p.slug} href={procedurePath(p.category, p.slug)} onClick={close}>
-                  {p.title}
-                </Link>
-              ))}
-            </div>
+            <details className="mm-group" key={g.key}>
+              <summary className="mm-head">{g.label}</summary>
+              <div className="mm-items">
+                {g.items.map((p) => (
+                  <Link key={p.slug} href={procedurePath(p.category, p.slug)} onClick={close}>
+                    {p.title}
+                  </Link>
+                ))}
+              </div>
+            </details>
           ))}
           <Link href="/gallery" onClick={close}>Before &amp; After</Link>
           <Link href="/locations" onClick={close}>Locations</Link>
           <Link href="/blog" onClick={close}>Blog</Link>
           <Link href="/contact" onClick={close}>Contact</Link>
         </nav>
-        <Link className="btn btn-pill" href="/contact" onClick={close}>
+        <Link className="btn btn-pill btn-gold" href="/contact" onClick={close}>
           Request a Consultation
         </Link>
       </div>
