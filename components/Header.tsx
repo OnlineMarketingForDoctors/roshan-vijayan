@@ -2,8 +2,9 @@
 
 import {useEffect, useState} from 'react'
 import Link from 'next/link'
+import {procedurePath} from '@/lib/procedurePath'
 
-type Procedure = {slug: string; title: string}
+type Procedure = {slug: string; title: string; category?: string}
 type Settings = {phone?: string} | null
 
 function telHref(phone?: string) {
@@ -41,7 +42,7 @@ export default function Header({settings, procedures}: {settings: Settings; proc
             <span className="nav-menu">
               {procedures.length ? (
                 procedures.map((p) => (
-                  <Link key={p.slug} href={`/procedures/${p.slug}`}>
+                  <Link key={p.slug} href={procedurePath(p.category, p.slug)}>
                     {p.title}
                   </Link>
                 ))
@@ -96,7 +97,7 @@ export default function Header({settings, procedures}: {settings: Settings; proc
           <Link href="/about" onClick={close}>About</Link>
           <Link href="/procedures" onClick={close}>Procedures</Link>
           {procedures.map((p) => (
-            <Link key={p.slug} href={`/procedures/${p.slug}`} onClick={close}>
+            <Link key={p.slug} href={procedurePath(p.category, p.slug)} onClick={close}>
               {p.title}
             </Link>
           ))}

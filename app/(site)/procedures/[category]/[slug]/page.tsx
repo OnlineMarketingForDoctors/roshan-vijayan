@@ -17,8 +17,9 @@ import PortableTextBody from '@/components/PortableTextBody'
 import GlanceIcon from '@/components/GlanceIcon'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
+import {categorySegment, procedurePath} from '@/lib/procedurePath'
 
-type Params = {params: Promise<{slug: string}>}
+type Params = {params: Promise<{category: string; slug: string}>}
 
 const show = (v: unknown) => v !== false
 
@@ -55,8 +56,8 @@ function img(src: unknown, fallback: string, w: number, q = 82) {
 
 export async function generateStaticParams() {
   try {
-    const slugs = await client.fetch<{slug: string}[]>(procedureSlugsQuery)
-    return (slugs || []).map((s) => ({slug: s.slug}))
+    const slugs = await client.fetch<{slug: string; category?: string}[]>(procedureSlugsQuery)
+    return (slugs || []).map((s) => ({category: categorySegment(s.category), slug: s.slug}))
   } catch {
     return []
   }
@@ -73,7 +74,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
 }
 
 export default async function ProcedurePage({params}: Params) {
-  const {slug} = await params
+  const {category, slug} = await params
   const [p, reviews, baCases, settings] = await Promise.all([
     sanityFetch<any>(procedureQuery, {slug}, null),
     sanityFetch<Review[]>(reviewsQuery, {}, []),
@@ -82,6 +83,8 @@ export default async function ProcedurePage({params}: Params) {
   ])
 
   if (!p) notFound()
+  // Keep one canonical URL per procedure: /procedures/<its category>/<slug>.
+  if (categorySegment(p.category) !== category) notFound()
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
   const groups = buildBAGroups(baCases as never)
@@ -494,7 +497,7 @@ export default async function ProcedurePage({params}: Params) {
           </div>
           <div className="related-grid reveal">
             {p.related.map((r: any) => (
-              <Link className="related-card" href={`/procedures/${r.slug}`} key={r.slug}>
+              <Link className="related-card" href={procedurePath(r.category, r.slug)} key={r.slug}>
                 <h3>{r.title}</h3>
                 {r.heroPromise ? <p>{r.heroPromise}</p> : null}
                 <span className="arrow" aria-hidden="true">

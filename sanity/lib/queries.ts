@@ -38,7 +38,7 @@ export const procedureListQuery = groq`*[_type=="procedure" && defined(slug.curr
     _id, title, "slug": slug.current, category, surgical, heroPromise, overviewImage
   }`
 
-export const procedureSlugsQuery = groq`*[_type=="procedure" && defined(slug.current)]{"slug": slug.current}`
+export const procedureSlugsQuery = groq`*[_type=="procedure" && defined(slug.current)]{"slug": slug.current, category}`
 
 export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][0]{
   title, category, surgical, heroHeading, heroImage, heroPromise, heroBullets,
@@ -60,7 +60,7 @@ export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][
   whyHeading, whyIntro, whyPoints,
   costHeading, costIntro, costLead, costFrom, costIncludes,
   faqHeading, faqs[]{question, answer},
-  related[]->{title, "slug": slug.current, heroPromise},
+  related[]->{title, "slug": slug.current, category, heroPromise},
   ctaHeading, ctaBody,
   seoTitle, seoDescription
 }`
