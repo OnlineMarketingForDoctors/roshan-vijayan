@@ -1,6 +1,6 @@
 'use client'
 
-import {useEffect, useMemo, useState} from 'react'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import Link from 'next/link'
 import {procedurePath} from '@/lib/procedurePath'
 
@@ -27,6 +27,30 @@ export default function Header({settings, procedures}: {settings: Settings; proc
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [preview, setPreview] = useState<Procedure | null>(null)
+  const [megaOpen, setMegaOpen] = useState(false)
+  // The panel hangs off the bottom of a tall header, so there is dead space
+  // between the trigger and the panel. A short close delay lets the cursor
+  // cross it without the menu vanishing mid-move.
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }
+  const openMega = () => {
+    cancelClose()
+    setMegaOpen(true)
+  }
+  const closeMega = (delay = 380) => {
+    cancelClose()
+    closeTimer.current = setTimeout(() => {
+      setMegaOpen(false)
+      setPreview(null)
+    }, delay)
+  }
+  useEffect(() => cancelClose, [])
   const phone = settings?.phone || '01727 221799'
   const tel = telHref(settings?.phone)
 
@@ -58,7 +82,15 @@ export default function Header({settings, procedures}: {settings: Settings; proc
         <nav className="nav nav-left" aria-label="Primary">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
-          <span className={`nav-drop${grouped.length ? ' has-mega' : ''}`} onMouseLeave={() => setPreview(null)}>
+          <span
+            className={`nav-drop${grouped.length ? ' has-mega' : ''}${megaOpen ? ' open' : ''}`}
+            onMouseEnter={openMega}
+            onMouseLeave={() => closeMega()}
+            onFocus={openMega}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) closeMega(0)
+            }}
+          >
             <Link href="/procedures">
               Procedures<span className="nav-caret" aria-hidden="true">▾</span>
             </Link>
@@ -68,7 +100,7 @@ export default function Header({settings, procedures}: {settings: Settings; proc
                 <div className="mega-inner">
                   {grouped.map((g) => (
                     <div className="mega-col" key={g.key}>
-                      <Link className="mega-head" href={`/procedures/#${g.anchor}`}>
+                      <Link className="mega-head" href={`/procedures/#${g.anchor}`} onClick={() => closeMega(0)}>
                         {g.label}
                       </Link>
                       <ul>
@@ -78,6 +110,7 @@ export default function Header({settings, procedures}: {settings: Settings; proc
                               href={procedurePath(p.category, p.slug)}
                               onMouseEnter={() => setPreview(p)}
                               onFocus={() => setPreview(p)}
+                              onClick={() => closeMega(0)}
                             >
                               {p.title}
                             </Link>
@@ -90,7 +123,11 @@ export default function Header({settings, procedures}: {settings: Settings; proc
                   <div className="mega-feature">
                     <img src={featured?.image || FALLBACK_IMAGE} alt="" aria-hidden="true" />
                     {featured ? (
-                      <Link className="mega-feature-cap" href={procedurePath(featured.category, featured.slug)}>
+                      <Link
+                        className="mega-feature-cap"
+                        href={procedurePath(featured.category, featured.slug)}
+                        onClick={() => closeMega(0)}
+                      >
                         <span className="mega-feature-title">{featured.title}</span>
                         <span className="mega-feature-cta">
                           View procedure <span className="arrow">→</span>
