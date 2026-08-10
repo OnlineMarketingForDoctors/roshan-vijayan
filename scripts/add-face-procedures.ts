@@ -813,6 +813,8 @@ const PROCEDURES: Procedure[] = [
 
       showBenefits: true,
       benefitsHeading: 'Benefits of a Lip Lift',
+      // Image sits left of the copy, so mirror her to face the text.
+      benefitsImageFlip: true,
       benefitsIntro: 'A Lip Lift offers numerous benefits, including:',
       benefitsList: [
         'Enhanced lip definition and contour.',
@@ -1001,6 +1003,8 @@ const PROCEDURES: Procedure[] = [
 
       showOverview: true,
       overviewHeading: 'What is a Facelift?',
+      // Image sits left of the copy, so mirror her to face the text.
+      overviewImageFlip: true,
       overviewBody: [
         para(
           'o1',
