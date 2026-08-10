@@ -28,18 +28,25 @@ const para = (key: string, text: string) => ({
 const keyed = <T extends object>(prefix: string, items: T[]) =>
   items.map((item, i) => ({...item, _key: `${prefix}${i}`}))
 
+/**
+ * Set while the first image set is being replaced: those renders carried a
+ * film-frame border. Flip to false once the new art is in Sanity, so re-runs
+ * stop re-uploading and never overwrite an editor's own images.
+ */
+const REPLACE_EXISTING_IMAGES = true
+
 /** Generated section art, uploaded to Sanity on first run. */
 const IMAGES: Record<string, string> = {
   heroImage:
-    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260809_230837_cc9ec438-1378-4016-acac-dc26815d84d0.png',
+    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260810_000754_ceaf504f-3273-4167-b514-8a3fbe4432a9.png',
   overviewImage:
-    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260809_230837_26a5ffb7-1560-4461-b643-6025edd0cd80.png',
+    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260810_000754_056137f3-8ec1-4583-ba01-a26b56f49fc2.png',
   candidatesImage:
-    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260809_230837_4917a36c-33b2-41b3-8cf6-72e7aeb4a904.png',
+    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260810_000754_37f429ec-f74f-4aac-9538-64a28781582e.png',
   benefitsImage:
-    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260809_230837_426011aa-6bc4-475b-8533-2ccc1cb7c484.png',
+    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260810_000754_5156b16c-346e-41f0-bf8d-9d505ce0e43f.png',
   techniquesImage:
-    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260809_230837_22f8abf6-d996-4661-b611-7ab527b1fba2.png',
+    'https://d8j0ntlcm91z4.cloudfront.net/user_3Ary2g06ZSWzxFoVWIP644Wm9ZG/hf_20260810_000754_492f674d-dba4-459d-b416-71f3a5b57b2c.png',
 }
 
 const fields = {
@@ -357,7 +364,7 @@ async function run() {
   // own uploads are never overwritten and re-runs stay cheap.
   const images: Record<string, unknown> = {}
   for (const [field, url] of Object.entries(IMAGES)) {
-    if (existing?.[field]) {
+    if (existing?.[field] && !REPLACE_EXISTING_IMAGES) {
       console.log(`· ${field}: already set, leaving as is`)
       continue
     }
