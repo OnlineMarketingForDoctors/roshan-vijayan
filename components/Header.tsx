@@ -1,11 +1,20 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import Link from 'next/link'
 import {procedurePath} from '@/lib/procedurePath'
 
-type Procedure = {slug: string; title: string; category?: string}
+type Procedure = {slug: string; title: string; category?: string; image?: string | null}
 type Settings = {phone?: string} | null
+
+/** Menu columns, in display order. Headings link to the matching band on /procedures. */
+const GROUPS = [
+  {key: 'body', label: 'Body & Breast', anchor: 'body'},
+  {key: 'face', label: 'Face & Eyes', anchor: 'face'},
+  {key: 'skin', label: 'Skin & Reconstruction', anchor: 'skin'},
+] as const
+
+const FALLBACK_IMAGE = '/images/web/procedures-hero.png'
 
 function telHref(phone?: string) {
   if (!phone) return 'tel:+441727221799'
@@ -17,6 +26,7 @@ function telHref(phone?: string) {
 export default function Header({settings, procedures}: {settings: Settings; procedures: Procedure[]}) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [preview, setPreview] = useState<Procedure | null>(null)
   const phone = settings?.phone || '01727 221799'
   const tel = telHref(settings?.phone)
 
@@ -27,6 +37,19 @@ export default function Header({settings, procedures}: {settings: Settings; proc
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const grouped = useMemo(() => {
+    const by = (key: string) =>
+      procedures.filter((p) => (p.category || 'other').toLowerCase() === key)
+    // Anything in a category without its own column still needs a home.
+    const known = new Set<string>(GROUPS.map((g) => g.key))
+    const rest = procedures.filter((p) => !known.has((p.category || 'other').toLowerCase()))
+    return GROUPS.map((g) => ({
+      ...g,
+      items: g.key === 'body' ? [...by('body'), ...rest] : by(g.key),
+    })).filter((g) => g.items.length)
+  }, [procedures])
+
+  const featured = preview || grouped[0]?.items.find((p) => p.image) || grouped[0]?.items[0] || null
   const close = () => setOpen(false)
 
   return (
@@ -35,21 +58,53 @@ export default function Header({settings, procedures}: {settings: Settings; proc
         <nav className="nav nav-left" aria-label="Primary">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
-          <span className="nav-drop">
+          <span className={`nav-drop${grouped.length ? ' has-mega' : ''}`} onMouseLeave={() => setPreview(null)}>
             <Link href="/procedures">
               Procedures<span className="nav-caret" aria-hidden="true">▾</span>
             </Link>
-            <span className="nav-menu">
-              {procedures.length ? (
-                procedures.map((p) => (
-                  <Link key={p.slug} href={procedurePath(p.category, p.slug)}>
-                    {p.title}
-                  </Link>
-                ))
-              ) : (
+
+            {grouped.length ? (
+              <div className="mega">
+                <div className="mega-inner">
+                  {grouped.map((g) => (
+                    <div className="mega-col" key={g.key}>
+                      <Link className="mega-head" href={`/procedures/#${g.anchor}`}>
+                        {g.label}
+                      </Link>
+                      <ul>
+                        {g.items.map((p) => (
+                          <li key={p.slug}>
+                            <Link
+                              href={procedurePath(p.category, p.slug)}
+                              onMouseEnter={() => setPreview(p)}
+                              onFocus={() => setPreview(p)}
+                            >
+                              {p.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+
+                  <div className="mega-feature">
+                    <img src={featured?.image || FALLBACK_IMAGE} alt="" aria-hidden="true" />
+                    {featured ? (
+                      <Link className="mega-feature-cap" href={procedurePath(featured.category, featured.slug)}>
+                        <span className="mega-feature-title">{featured.title}</span>
+                        <span className="mega-feature-cta">
+                          View procedure <span className="arrow">→</span>
+                        </span>
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <span className="nav-menu">
                 <Link href="/procedures">All procedures</Link>
-              )}
-            </span>
+              </span>
+            )}
           </span>
           <Link href="/gallery">Before &amp; After</Link>
           <Link href="/locations">Locations</Link>
@@ -96,10 +151,15 @@ export default function Header({settings, procedures}: {settings: Settings; proc
           <Link href="/" onClick={close}>Home</Link>
           <Link href="/about" onClick={close}>About</Link>
           <Link href="/procedures" onClick={close}>Procedures</Link>
-          {procedures.map((p) => (
-            <Link key={p.slug} href={procedurePath(p.category, p.slug)} onClick={close}>
-              {p.title}
-            </Link>
+          {grouped.map((g) => (
+            <div className="mm-group" key={g.key}>
+              <span className="mm-head">{g.label}</span>
+              {g.items.map((p) => (
+                <Link key={p.slug} href={procedurePath(p.category, p.slug)} onClick={close}>
+                  {p.title}
+                </Link>
+              ))}
+            </div>
           ))}
           <Link href="/gallery" onClick={close}>Before &amp; After</Link>
           <Link href="/locations" onClick={close}>Locations</Link>

@@ -1,21 +1,40 @@
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {siteSettingsQuery, procedureListQuery} from '@/sanity/lib/queries'
+import {urlFor} from '@/sanity/lib/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Reveal from '@/components/Reveal'
 
 export const revalidate = 60
 
+type ProcedureRow = {
+  slug: string
+  title: string
+  category?: string
+  overviewImage?: {asset?: unknown}
+}
+
 export default async function SiteLayout({children}: {children: React.ReactNode}) {
   const [settings, procedures] = await Promise.all([
     sanityFetch(siteSettingsQuery, {}, null),
-    sanityFetch<{slug: string; title: string}[]>(procedureListQuery, {}, []),
+    sanityFetch<ProcedureRow[]>(procedureListQuery, {}, []),
   ])
+
+  // Build the menu thumbnails here rather than in the header, so the client
+  // component only ever receives plain strings.
+  const navProcedures = (procedures || []).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    category: p.category,
+    image: p.overviewImage?.asset
+      ? urlFor(p.overviewImage as never).width(560).height(700).quality(70).url()
+      : null,
+  }))
 
   return (
     <>
       <div className="grain" aria-hidden="true" />
-      <Header settings={settings} procedures={procedures || []} />
+      <Header settings={settings} procedures={navProcedures} />
       <main>{children}</main>
       <Footer settings={settings} />
       <Reveal />
