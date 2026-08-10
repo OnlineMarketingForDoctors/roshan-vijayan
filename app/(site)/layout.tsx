@@ -4,6 +4,7 @@ import {urlFor} from '@/sanity/lib/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Reveal from '@/components/Reveal'
+import BackToTop from '@/components/BackToTop'
 
 export const revalidate = 60
 
@@ -38,6 +39,7 @@ export default async function SiteLayout({children}: {children: React.ReactNode}
       <main>{children}</main>
       <Footer settings={settings} />
       <Reveal />
+      <BackToTop />
     </>
   )
 }

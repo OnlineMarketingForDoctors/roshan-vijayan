@@ -950,3 +950,19 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 @media(max-width:560px){
   .cost-incl{grid-template-columns:1fr}
 }
+
+/* ---------- back to top ---------- */
+.to-top{position:fixed;right:clamp(1rem,2.6vw,2.2rem);bottom:clamp(1rem,2.6vw,2.2rem);
+  z-index:900;display:grid;place-items:center;width:46px;height:46px;padding:0;
+  border-radius:50%;cursor:pointer;
+  background:rgba(34,26,16,.9);color:var(--champagne);
+  border:1px solid rgba(220,200,166,.34);
+  box-shadow:0 10px 26px rgba(0,0,0,.3);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(12px);
+  transition:opacity .35s var(--ease),transform .35s var(--ease),visibility .35s,
+    background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
+.to-top.show{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+.to-top:hover{background:var(--gold);color:var(--charcoal);border-color:var(--gold)}
+.to-top:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.to-top{transition:opacity .01s,visibility .01s}}
