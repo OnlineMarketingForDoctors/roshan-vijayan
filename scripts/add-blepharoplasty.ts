@@ -85,8 +85,9 @@ const fields = {
       'This surgery aims to correct droopy eyelids, reduce puffiness, and eliminate under-eye bags, resulting in a more youthful and refreshed appearance.',
     ),
   ],
-  // Image sits left of the copy, so mirror her to face the text.
-  overviewImageFlip: true,
+  // The render already faces right, toward the copy, so no mirroring.
+  // Set explicitly rather than omitted, so a re-run clears the earlier true.
+  overviewImageFlip: false,
 
   showGlance: true,
   atAGlance: keyed('g', [
