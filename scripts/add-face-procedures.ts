@@ -508,7 +508,7 @@ const PROCEDURES: Procedure[] = [
   {
     slug: 'prominent-ear-correction',
     images: {
-      heroImage: `${CDN}hf_20260810_011732_e20a6f4d-4d28-4cc6-a9d2-ccf4fc909157.png`,
+      heroImage: `${CDN}hf_20260810_013446_58a657b2-97f2-4d3a-9bd0-a76d6f614f5a.png`,
       overviewImage: `${CDN}hf_20260810_011732_1ae7f97d-81bf-4a3c-a802-87ac418cd766.png`,
       candidatesImage: `${CDN}hf_20260810_011732_c89c0fa5-c2ca-42dc-a5cd-4ed41d3565b2.png`,
       benefitsImage: `${CDN}hf_20260810_011732_0f41077c-48b2-4fd2-90d2-caa56f784925.png`,
@@ -1201,7 +1201,10 @@ async function seed(proc: Procedure) {
 
   const images: Record<string, unknown> = {}
   for (const [field, url] of Object.entries(proc.images)) {
-    if (existing?.[field]) continue
+    // The Prominent Ear hero was regenerated so the subject faces the copy;
+    // replace that one even if a version is already in Sanity.
+    const replace = proc.slug === 'prominent-ear-correction' && field === 'heroImage'
+    if (existing?.[field] && !replace) continue
     try {
       images[field] = await uploadImage(proc.slug, field, url)
     } catch (err) {

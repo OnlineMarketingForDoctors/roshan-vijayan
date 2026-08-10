@@ -123,7 +123,7 @@ export default async function ProcedurePage({params}: Params) {
     <>
       {/* HERO */}
       <section className="proc-hero">
-        <img src={img(p.heroImage, DEF.hero, 2000, 78)} alt="" aria-hidden="true" />
+        <img src={img(p.heroImage, DEF.hero, 2000, 78)} className={p.heroImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" />
         <div className="proc-hero-veil" />
         <div className="proc-hero-inner reveal">
           <span className="eyebrow">{p.category} · Surgery</span>
@@ -199,7 +199,7 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="overview">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img src={img(p.overviewImage, DEF.overview, 900)} alt={p.title} />
+              <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={p.title} />
               <span className="fm-tag">{p.title}</span>
             </div>
             <div className="feature-copy reveal">
@@ -256,7 +256,7 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="benefits">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img src={img(p.benefitsImage, DEF.benefits, 900)} alt={p.benefitsHeading || 'Benefits'} />
+              <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={p.benefitsHeading || 'Benefits'} />
               <span className="fm-tag">Benefits</span>
             </div>
             <div className="feature-copy reveal">
@@ -277,7 +277,7 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="candidates">
           <div className="feature-row flip">
             <div className="feature-media reveal">
-              <img src={img(p.candidatesImage, DEF.candidates, 900)} alt="Is it right for you?" />
+              <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt="Is it right for you?" />
               <span className="fm-tag">Is It Right for You?</span>
             </div>
             <div className="feature-copy reveal">
@@ -301,7 +301,7 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="techniques">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img className="tech-illus" src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={p.techniquesHeading || 'Techniques'} />
+              <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={p.techniquesHeading || 'Techniques'} />
             </div>
             <div className="feature-copy reveal">
               <h2 className="display">{p.techniquesHeading || 'Techniques'}</h2>
@@ -325,7 +325,7 @@ export default async function ProcedurePage({params}: Params) {
       {/* THE PROCEDURE */}
       {show(p.showProcedure) ? (
         <section className="proc-band proc-anchor" id="procedure">
-          <img src={img(p.procedureImage, DEF.procedure, 1600, 78)} alt="" aria-hidden="true" />
+          <img src={img(p.procedureImage, DEF.procedure, 1600, 78)} className={p.procedureImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" />
           <div className="pb-inner reveal">
             {p.procedureHeading ? <h2 className="display">{p.procedureHeading}</h2> : null}
             <div className="prose">

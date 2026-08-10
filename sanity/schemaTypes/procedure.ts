@@ -32,6 +32,7 @@ export default defineType({
         },
       },
     }),
+    defineField({name: 'heroImageFlip', title: 'Hero image — mirror horizontally', type: 'boolean', initialValue: false, options: {layout: 'switch'}, description: 'Flips the image so the subject faces the text.', group: 'content'}),
     defineField({name: 'heroPromise', title: 'Hero promise (one line)', type: 'text', rows: 2, group: 'content'}),
     defineField({name: 'heroBullets', title: 'Hero bullets', type: 'array', of: [{type: 'string'}], group: 'content'}),
 
@@ -59,6 +60,7 @@ export default defineType({
         },
       },
     }),
+    defineField({name: 'overviewImageFlip', title: 'Overview image — mirror horizontally', type: 'boolean', initialValue: false, options: {layout: 'switch'}, description: 'Flips the image so the subject faces the text.', group: 'content'}),
 
     // ---- At a glance ----
     defineField({name: 'showGlance', title: "Show 'At a glance' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -105,6 +107,7 @@ export default defineType({
         },
       },
     }),
+    defineField({name: 'benefitsImageFlip', title: 'Benefits image — mirror horizontally', type: 'boolean', initialValue: false, options: {layout: 'switch'}, description: 'Flips the image so the subject faces the text.', group: 'content'}),
 
     // ---- Candidates ----
     defineField({name: 'showCandidates', title: "Show 'Who may consider' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -124,6 +127,7 @@ export default defineType({
         },
       },
     }),
+    defineField({name: 'candidatesImageFlip', title: 'Candidates image — mirror horizontally', type: 'boolean', initialValue: false, options: {layout: 'switch'}, description: 'Flips the image so the subject faces the text.', group: 'content'}),
 
     // ---- Techniques / procedure types ----
     defineField({name: 'showTechniques', title: "Show 'Techniques' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -148,6 +152,7 @@ export default defineType({
         },
       ],
     }),
+    defineField({name: 'techniquesImageFlip', title: 'Techniques image — mirror horizontally', type: 'boolean', initialValue: false, options: {layout: 'switch'}, description: 'Flips the image so the subject faces the text.', group: 'content'}),
 
     // ---- The procedure ----
     defineField({name: 'showProcedure', title: "Show 'What happens during surgery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
@@ -165,6 +170,7 @@ export default defineType({
         },
       },
     }),
+    defineField({name: 'procedureImageFlip', title: 'Procedure image — mirror horizontally', type: 'boolean', initialValue: false, options: {layout: 'switch'}, description: 'Flips the image so the subject faces the text.', group: 'content'}),
 
     // ---- Treatment journey ----
     defineField({name: 'showJourney', title: "Show 'Treatment journey' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
