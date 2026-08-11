@@ -49,8 +49,8 @@ export default function ContactPage() {
             </p>
             <ul className="contact-meta">
               <li><span>Call</span> 01727 221799</li>
-              <li><span>Email</span> roshanvijayan@gmail.com</li>
-              <li><span>Practice</span> Leonie Grace Ltd · One Hatfield Hospital</li>
+              <li><span>Email</span> enquiries@vijayan.co.uk</li>
+              <li><span>Practice</span> Hatfield, Hemel Hempstead, St Albans and Stevenage</li>
               <li><span>Hours</span> Mon–Fri, 9am–5pm</li>
             </ul>
           </div>

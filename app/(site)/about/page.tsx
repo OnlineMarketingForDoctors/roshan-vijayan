@@ -21,8 +21,8 @@ export default function AboutPage() {
             <em>meets medicine.</em>
           </h1>
           <p>
-            A consultant plastic surgeon who treats every operation as a partnership, honest about what
-            is involved, and devoted to a result that looks entirely, naturally you.
+            A consultant plastic surgeon who treats every operation as a partnership, is honest about
+            what is involved, and devoted to a result that looks entirely, naturally you.
           </p>
           <div className="page-hero-actions">
             <Link className="btn btn-pill btn-gold" href="/contact">
@@ -49,14 +49,15 @@ export default function AboutPage() {
               doctor’s honesty.
             </h2>
             <p>
-              Qualified as a doctor in 2008, Mr Vijayan has spent eighteen years in medicine and is now
-              in his fifth year as an NHS consultant plastic surgeon, trained extensively across
-              London’s teaching hospitals.
+              Qualified as a doctor in 2008, Mr Vijayan has spent eighteen years in medicine, trained
+              extensively across London’s teaching hospitals, and is now in his fifth year as an NHS
+              consultant plastic surgeon.
             </p>
             <p>
-              Alongside his private practice he holds a wide NHS practice, skin-cancer removal and
-              reconstruction, body contouring, hand surgery and reconstructive work. He has published
-              extensively, presented internationally, and continues to train and mentor surgeons.
+              Alongside his private practice he holds a wide NHS practice consisting of skin-cancer
+              removal and reconstruction, body contouring, hand surgery and complex reconstructive
+              work. He has published extensively, presented internationally, and continues to train and
+              mentor surgeons.
             </p>
             <ul className="cred-chips">
               <li>BSc (Hons), 2006</li>
@@ -93,9 +94,9 @@ export default function AboutPage() {
       <section className="section">
         <div className="stat-band reveal">
           <div className="stat"><strong>18</strong><span>years in medicine</span></div>
-          <div className="stat"><strong>5th yr</strong><span>as an NHS consultant</span></div>
-          <div className="stat"><strong>1,000s</strong><span>of skin cancers treated</span></div>
           <div className="stat"><strong>14</strong><span>years a surgeon</span></div>
+          <div className="stat"><strong>5th yr</strong><span>as an NHS consultant</span></div>
+          <div className="stat"><strong>1,000s</strong><span>of operations performed</span></div>
         </div>
       </section>
 
@@ -133,11 +134,11 @@ export default function AboutPage() {
           <h2 className="display">Care that is genuinely personal</h2>
         </div>
         <ul className="tl reveal">
-          <li><h4>Consultant-led aftercare</h4><p>Mr Vijayan personally reviews you, answers emails within a day, and calls on day one after surgery, never handed to others.</p></li>
-          <li><h4>Highly bespoke plans</h4><p>Each plan is studied and drawn up individually, with a thorough written summary after your consultation.</p></li>
-          <li><h4>A second consultation, included</h4><p>Time to recap, ask anything that has surfaced, and confirm, built into the process as standard.</p></li>
           <li><h4>Early, flexible availability</h4><p>Consultations often within a week or two, with flexible scheduling for surgery itself.</p></li>
-          <li><h4>Two-surgeon safety on complex cases</h4><p>For more complex procedures, Mr Vijayan operates alongside a second consultant surgeon, for greater precision, less time under anaesthetic and an added layer of safety.</p></li>
+          <li><h4>Highly bespoke plans</h4><p>Each plan is studied and drawn up individually, with a thorough written summary after your consultation.</p></li>
+          <li><h4>Two-surgeon safety on complex cases</h4><p>For more complex procedures, Mr Vijayan frequently has a senior surgeon assist him, for greater precision, less time under anaesthetic and an added layer of safety.</p></li>
+          <li><h4>Consultant-led aftercare</h4><p>Mr Vijayan personally reviews you, answers emails within a day, and calls on day one after surgery, never handed to others.</p></li>
+          <li><h4>A second consultation, included</h4><p>Time to recap, ask anything that has surfaced, and confirm, built into the process as standard.</p></li>
         </ul>
       </section>
 

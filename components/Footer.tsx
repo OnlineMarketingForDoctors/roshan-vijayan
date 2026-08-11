@@ -18,7 +18,7 @@ const FALLBACK_LOCATIONS: Location[] = [
 
 export default function Footer({settings}: {settings: Settings}) {
   const phone = settings?.phone || '01727 221799'
-  const email = settings?.email || 'roshanvijayan@gmail.com'
+  const email = settings?.email || 'enquiries@vijayan.co.uk'
   const gmc = settings?.gmcNumber || '7020524'
   const surgeon = settings?.surgeonName || 'Mr Roshan Vijayan'
   const credentials = settings?.credentials || 'MBBS FRCS(Plast)'

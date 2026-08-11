@@ -56,7 +56,7 @@ export default async function Home() {
         <ul className="usp" aria-label="Why patients choose Mr Vijayan">
           <li><span className="usp-no">01</span>Consultant-led care, first call to final review</li>
           <li><span className="usp-no">02</span>Your second consultation, included</li>
-          <li><span className="usp-no">03</span>Unlimited aftercare at no extra cost</li>
+          <li><span className="usp-no">03</span>Unlimited Consultant follow-up at no extra cost</li>
           <li><span className="usp-no">04</span>Appointments often within two weeks</li>
           <li><span className="usp-no">05</span>Honest, no-pressure advice, always</li>
           <li><span className="usp-no">06</span>Two-surgeon safety on more complex cases</li>
@@ -152,11 +152,8 @@ export default async function Home() {
           </h2>
           <ul className="diff-list">
             <li className="reveal">
-              <span>Consultant-led aftercare</span>
-              <p>
-                Mr Vijayan personally reviews you, answers your emails within a day, and calls on day
-                one after surgery, never handed to others.
-              </p>
+              <span>Early, flexible availability</span>
+              <p>Consultations often within a week or two, with flexible scheduling for surgery.</p>
             </li>
             <li className="reveal">
               <span>Highly bespoke plans</span>
@@ -166,14 +163,17 @@ export default async function Home() {
               </p>
             </li>
             <li className="reveal">
-              <span>Early, flexible availability</span>
-              <p>Consultations often within a week or two, with flexible scheduling for surgery.</p>
-            </li>
-            <li className="reveal">
               <span>Two-surgeon safety on complex cases</span>
               <p>
-                For more complex procedures, Mr Vijayan operates alongside a second consultant surgeon,
-                for greater precision, less time under anaesthetic and an added layer of safety.
+                For more complex procedures, Mr Vijayan frequently has a senior surgeon assist him, for
+                greater precision, less time under anaesthetic and an added layer of safety.
+              </p>
+            </li>
+            <li className="reveal">
+              <span>Consultant-led aftercare</span>
+              <p>
+                Mr Vijayan personally reviews you, answers your emails within a day, and calls on day
+                one after surgery, never handed to others.
               </p>
             </li>
           </ul>
@@ -292,8 +292,8 @@ export default async function Home() {
             </p>
             <ul className="contact-meta">
               <li><span>Call</span> 01727 221799</li>
-              <li><span>Email</span> roshanvijayan@gmail.com</li>
-              <li><span>Practice</span> Leonie Grace Ltd · One Hatfield Hospital</li>
+              <li><span>Email</span> enquiries@vijayan.co.uk</li>
+              <li><span>Practice</span> Hatfield, Hemel Hempstead, St Albans and Stevenage</li>
             </ul>
           </div>
           <ContactForm />
