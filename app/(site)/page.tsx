@@ -25,7 +25,7 @@ export default async function Home() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-media">
-          <img src="/images/web/hero-woman.jpg" alt="A poised, confident woman in champagne silk" />
+          <img src="/images/web/hero-2.jpg" alt="A poised, confident woman in champagne silk" />
           <div className="hero-veil" />
         </div>
         <div className="hero-inner">

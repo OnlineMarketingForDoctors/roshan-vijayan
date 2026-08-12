@@ -120,7 +120,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .hero{position:relative;min-height:100svh;display:flex;align-items:center;
   padding:10.5rem clamp(1.2rem,4vw,3.4rem) 9rem}
 .hero-media{position:absolute;inset:0;z-index:-2;background:var(--charcoal)}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center;transform:scaleX(-1)}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center}
 .hero-veil{position:absolute;inset:0;
   background:
     linear-gradient(to left,rgba(40,30,18,.30) 0%,rgba(40,30,18,.04) 30%,rgba(246,240,230,.34) 58%,rgba(246,240,230,.86) 100%),
@@ -521,7 +521,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .brand{height:102px}
   .site-header.scrolled .brand{height:72px}
-  .hero-media img{object-position:30% center}
+  .hero-media img{object-position:70% center}
   .hero{padding:9rem 0 0;align-items:stretch;flex-direction:column;justify-content:flex-start}
   .hero-inner{width:100%;margin:0;padding:0 clamp(1.2rem,5vw,3.4rem) 3rem}
   .hero-copy .eyebrow{color:var(--champagne)}
