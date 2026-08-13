@@ -23,6 +23,16 @@ export default defineConfig({
               .id('siteSettings')
               .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
             S.divider(),
+            // one document each, edited in place rather than listed
+            S.listItem()
+              .title('Contact page')
+              .id('contactPage')
+              .child(S.document().schemaType('contactPage').documentId('contactPage')),
+            S.listItem()
+              .title('Locations page')
+              .id('locationsPage')
+              .child(S.document().schemaType('locationsPage').documentId('locationsPage')),
+            S.divider(),
             S.documentTypeListItem('procedure').title('Procedures'),
             S.documentTypeListItem('blogPost').title('Blog posts'),
             S.documentTypeListItem('review').title('Reviews'),
@@ -33,6 +43,7 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
-    templates: (prev) => prev.filter((t) => t.schemaType !== 'siteSettings'),
+    templates: (prev) =>
+      prev.filter((t) => !['siteSettings', 'contactPage', 'locationsPage'].includes(t.schemaType)),
   },
 })

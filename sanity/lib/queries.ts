@@ -67,3 +67,21 @@ export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][
   ctaHeading, ctaBody,
   seoTitle, seoDescription
 }`
+
+/* ---- Editable pages ---- */
+const HERO = `eyebrow, headingTop, headingEm, body, imageAlt, ctaLabel, ctaHref, "imageUrl": image.asset->url`
+const BAND = `eyebrow, heading, body, ctaLabel, ctaHref, "imageUrl": image.asset->url`
+
+export const contactPageQuery = groq`*[_type=="contactPage"][0]{
+  seo, hero{${HERO}},
+  enquiryEyebrow, enquiryHeadingTop, enquiryHeadingEm, enquiryBody,
+  enquiryMeta[]{label, value},
+  locationsEyebrow, locationsHeading, locationsBody,
+  locationsSummary[]{label, value}, locationsLinkLabel
+}`
+
+export const locationsPageQuery = groq`*[_type=="locationsPage"][0]{
+  seo, hero{${HERO}},
+  cards[]{name, tag, address, description, mapUrl, "imageUrl": image.asset->url},
+  closing{${BAND}}
+}`
