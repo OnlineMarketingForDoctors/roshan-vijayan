@@ -551,7 +551,7 @@ const PROCEDURES: Procedure[] = [
         ),
       ],
 
-      showResults: false,
+      showResults: true,
 
       showOverview: true,
       overviewHeading: 'What is Breast Reduction?',
@@ -783,7 +783,7 @@ const PROCEDURES: Procedure[] = [
         ),
       ],
 
-      showResults: false,
+      showResults: true,
 
       showOverview: true,
       overviewHeading: 'What is a Thigh Lift?',

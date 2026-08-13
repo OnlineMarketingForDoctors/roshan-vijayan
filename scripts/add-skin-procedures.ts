@@ -90,7 +90,7 @@ const PROCEDURES: Procedure[] = [
         ),
       ],
 
-      showResults: false,
+      showResults: true,
 
       showOverview: true,
       overviewHeading: 'What is Aesthetic Repair and Reconstruction?',

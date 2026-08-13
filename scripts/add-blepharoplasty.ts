@@ -71,7 +71,7 @@ const fields = {
     ),
   ],
 
-  showResults: false,
+  showResults: true,
 
   showOverview: true,
   overviewHeading: 'What is Blepharoplasty?',

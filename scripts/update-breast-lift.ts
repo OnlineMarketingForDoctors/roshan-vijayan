@@ -60,7 +60,7 @@ const fields = {
 
   // ---- Before & After ----
   // Hidden for now: the published cases are not procedure-specific yet.
-  showResults: false,
+  showResults: true,
 
   // ---- Overview ----
   showOverview: true,
