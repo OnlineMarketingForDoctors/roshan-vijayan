@@ -263,18 +263,20 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 
 /* ---------- DIFFERENCE ---------- */
 .difference{position:relative;display:grid;grid-template-columns:.95fr 1.05fr;align-items:stretch;
-  background:var(--charcoal);color:var(--ivory);overflow:hidden}
+  min-height:520px;background:var(--charcoal);color:var(--ivory);overflow:hidden}
 /* classical marble bust watermark, full section height, pinned flush to the right margin */
 .difference::after{content:"";position:absolute;top:0;right:0;bottom:0;width:100%;
   background:url("/images/web/bust-watermark.png") right center/auto 100% no-repeat;
   opacity:.1;pointer-events:none;z-index:0}
 .difference>*{position:relative;z-index:1}
 @media(max-width:768px){.difference::after{opacity:.06}}
-.diff-media{position:relative;min-height:520px}
-.diff-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+/* the photograph spans the whole section; the subject sits in its left half and
+   the gradient below carries it into the charcoal the copy sits on */
+.diff-media{position:absolute;inset:0;z-index:0}
+.diff-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 22%}
 .diff-media::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(to right,transparent 60%,var(--charcoal))}
-.diff-copy{padding:clamp(3.5rem,7vw,7rem) clamp(1.5rem,5vw,5rem)}
+  background:linear-gradient(to right,transparent 28%,var(--charcoal) 50%)}
+.diff-copy{grid-column:2;z-index:2;padding:clamp(3.5rem,7vw,7rem) clamp(1.5rem,5vw,5rem)}
 .diff-copy .eyebrow{color:var(--gold)}
 .diff-copy h2{color:var(--ivory);margin-bottom:2.5rem}
 .diff-copy h2 em{color:var(--champagne)}
@@ -540,7 +542,9 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .svc-card.active{flex:0 0 84vw}
   .svc-arrow.prev{left:10px}
   .svc-arrow.next{right:10px}
-  .diff-media{min-height:360px}
+  /* stacked here, so the photograph goes back to being a block above the copy */
+  .diff-media{position:relative;inset:auto;min-height:360px}
+  .diff-copy{grid-column:auto}
   .diff-media::after{background:linear-gradient(to bottom,transparent 60%,var(--charcoal))}
   .about-media{margin-top:1.5rem}
   .gallery-art{height:78vw;max-height:560px;margin-top:1rem}
