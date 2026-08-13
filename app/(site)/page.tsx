@@ -1,20 +1,35 @@
 import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {reviewsQuery, siteSettingsQuery, beforeAfterQuery} from '@/sanity/lib/queries'
+import {reviewsQuery, siteSettingsQuery, beforeAfterQuery, homePageQuery} from '@/sanity/lib/queries'
 import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
+import {mergeContent} from '@/sanity/lib/pages'
+import {HOME_PAGE, type HomePageContent} from '@/lib/pageContent'
+import PortableTextBody from '@/components/PortableTextBody'
+import type {Metadata} from 'next'
 import ServicesCarousel from '@/components/ServicesCarousel'
 import ContactForm from '@/components/ContactForm'
 
 type Settings = {reviewScore?: string; reviewCount?: number; reviewSource?: string} | null
 
+async function getContent(): Promise<HomePageContent> {
+  const cms = await sanityFetch<unknown>(homePageQuery, {}, null)
+  return mergeContent(HOME_PAGE, cms)
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const {seo} = await getContent()
+  return {title: seo.title, description: seo.description}
+}
+
 export default async function Home() {
-  const [reviews, settings, baCases] = await Promise.all([
+  const [reviews, settings, baCases, c] = await Promise.all([
     sanityFetch<Review[]>(reviewsQuery, {}, []),
     sanityFetch<Settings>(siteSettingsQuery, {}, null),
     sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
+    getContent(),
   ])
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
@@ -25,41 +40,34 @@ export default async function Home() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-media">
-          <img src="/images/web/hero-2.jpg" alt="A poised, confident woman in champagne silk" />
+          <img src={c.heroImageUrl} alt={c.heroImageAlt} />
           <div className="hero-veil" />
         </div>
         <div className="hero-inner">
           <div className="hero-copy reveal">
-            <span className="eyebrow">Consultant Plastic Surgeon · Hertfordshire</span>
+            <span className="eyebrow">{c.heroEyebrow}</span>
             <h1 className="display">
-              The quiet art of
+              {c.heroHeadingTop}
               <br />
-              <em>looking like yourself</em>
+              <em>{c.heroHeadingEm}</em>
               <br />
-              again.
+              {c.heroHeadingBottom}
             </h1>
-            <p className="hero-sub">
-              Mr Roshan Vijayan specialises in natural, beautifully balanced body contouring and
-              aesthetic surgery, restoring confidence with safe, tried-and-tested technique, expertly
-              executed.
-            </p>
+            <p className="hero-sub">{c.heroBody}</p>
             <div className="hero-actions">
               <Link className="btn btn-pill btn-gold" href="/contact">
-                Request a Consultation
+                {c.heroCtaLabel}
               </Link>
               <Link className="btn btn-text" href="/procedures">
-                Explore procedures <span className="arrow">→</span>
+                {c.heroLinkLabel} <span className="arrow">→</span>
               </Link>
             </div>
           </div>
         </div>
         <ul className="usp" aria-label="Why patients choose Mr Vijayan">
-          <li><span className="usp-no">01</span>Consultant-led care, first call to final review</li>
-          <li><span className="usp-no">02</span>Your second consultation, included</li>
-          <li><span className="usp-no">03</span>Unlimited Consultant follow-up at no extra cost</li>
-          <li><span className="usp-no">04</span>Appointments often within two weeks</li>
-          <li><span className="usp-no">05</span>Honest, no-pressure advice, always</li>
-          <li><span className="usp-no">06</span>Two-surgeon safety on more complex cases</li>
+          {c.usps.map((u, i) => (
+            <li key={i}><span className="usp-no">{String(i + 1).padStart(2, '0')}</span>{u}</li>
+          ))}
         </ul>
       </section>
 
@@ -75,30 +83,17 @@ export default async function Home() {
       <section className="philosophy" id="ethos">
         <div className="blob blob-1" aria-hidden="true" />
         <div className="phil-portrait reveal">
-          <img src="/images/web/doctor-suit.jpg" alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
+          <img src={c.philImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
           <img className="phil-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
         </div>
         <div className="phil-copy reveal">
-          <span className="eyebrow">Meet Mr Vijayan</span>
+          <span className="eyebrow">{c.philEyebrow}</span>
           <p className="lead-quote display">
-            <em>
-              “I believe in surgery as a partnership, a shared journey, with honesty about what is
-              involved and a result that looks entirely, naturally you.”
-            </em>
+            <em>{c.philQuote}</em>
           </p>
-          <p>
-            For Mr Vijayan, plastic surgery sits where artistry meets medicine. An artistic eye,
-            meticulous attention to detail and a holistic, unhurried approach shape every plan he
-            creates. He is, first and foremost, a doctor, frank about what is safe, advisable and
-            truly in your best interests.
-          </p>
-          <p>
-            His particular interest is <strong>body restoration after pregnancy and weight loss</strong>:
-            refining loose, redundant skin to reveal the physique beneath, and restoring the confidence
-            to live fully again.
-          </p>
+          <PortableTextBody value={c.philBody} />
           <Link className="btn btn-text" href="/about">
-            More about Mr Vijayan <span className="arrow">→</span>
+            {c.philLinkLabel} <span className="arrow">→</span>
           </Link>
         </div>
       </section>
@@ -106,14 +101,11 @@ export default async function Home() {
       {/* RESULTS */}
       <section className="results" id="gallery">
         <div className="results-head reveal">
-          <span className="eyebrow">Before &amp; After</span>
+          <span className="eyebrow">{c.resultsEyebrow}</span>
           <h2 className="display">
-            Results that <em>speak softly.</em>
+            {c.resultsHeadingTop} <em>{c.resultsHeadingEm}</em>
           </h2>
-          <p>
-            Real outcomes from real patients, natural, balanced and beautifully healed. Drag the
-            handle on each case to reveal the journey, before and after.
-          </p>
+          <p>{c.resultsBody}</p>
         </div>
         <BeforeAfter procedures={baProcedures} />
       </section>
@@ -121,20 +113,15 @@ export default async function Home() {
       {/* SERVICES */}
       <section className="services" id="procedures">
         <div className="svc-intro reveal">
-          <span className="eyebrow">Signature Procedures</span>
+          <span className="eyebrow">{c.servicesEyebrow}</span>
           <h2 className="display">
-            Our main
+            {c.servicesHeadingTop}
             <br />
-            <em>services</em>
+            <em>{c.servicesHeadingEm}</em>
           </h2>
-          <p>
-            Whether you are restoring your body after weight loss or pregnancy, refining your shape, or
-            seeking expert facial, eyelid and skin-cancer reconstruction, every plan is studied and
-            drawn up individually, with Mr Vijayan’s artistry, honesty and consultant-led care at its
-            heart.
-          </p>
+          <p>{c.servicesBody}</p>
           <Link className="btn btn-text" href="/procedures">
-            View all services <span className="arrow">→</span>
+            {c.servicesLinkLabel} <span className="arrow">→</span>
           </Link>
         </div>
         <ServicesCarousel />
@@ -143,39 +130,20 @@ export default async function Home() {
       {/* THE DIFFERENCE */}
       <section className="difference" id="difference">
         <div className="diff-media reveal">
-          <img src="/images/web/doctor-scrubs.jpg" alt="Mr Roshan Vijayan in surgical scrubs" />
+          <img src={c.diffImageUrl} alt="Mr Roshan Vijayan in surgical scrubs" />
         </div>
         <div className="diff-copy">
-          <span className="eyebrow">The Vijayan Difference</span>
+          <span className="eyebrow">{c.diffEyebrow}</span>
           <h2 className="display">
-            Surgery that is <em>safer,</em> care that is <em>personal.</em>
+            {c.diffHeadingA}<em>{c.diffHeadingEm1}</em>{c.diffHeadingB}<em>{c.diffHeadingEm2}</em>
           </h2>
           <ul className="diff-list">
-            <li className="reveal">
-              <span>Early, flexible availability</span>
-              <p>Consultations often within a week or two, with flexible scheduling for surgery.</p>
-            </li>
-            <li className="reveal">
-              <span>Highly bespoke plans</span>
-              <p>
-                Each plan is studied and drawn up individually, with a thorough written summary after
-                your consultation.
-              </p>
-            </li>
-            <li className="reveal">
-              <span>Two-surgeon safety on complex cases</span>
-              <p>
-                For more complex procedures, Mr Vijayan frequently has a senior surgeon assist him, for
-                greater precision, less time under anaesthetic and an added layer of safety.
-              </p>
-            </li>
-            <li className="reveal">
-              <span>Consultant-led aftercare</span>
-              <p>
-                Mr Vijayan personally reviews you, answers your emails within a day, and calls on day
-                one after surgery, never handed to others.
-              </p>
-            </li>
+            {c.diffItems.map((item, i) => (
+              <li className="reveal" key={i}>
+                <span>{item.title}</span>
+                <p>{item.body}</p>
+              </li>
+            ))}
           </ul>
           <img className="sig diff-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
         </div>
@@ -185,52 +153,39 @@ export default async function Home() {
       <section className="about" id="about">
         <div className="blob blob-2" aria-hidden="true" />
         <div className="about-copy reveal">
-          <span className="eyebrow">About Mr Vijayan</span>
+          <span className="eyebrow">{c.aboutEyebrow}</span>
           <h2 className="display">
-            Eighteen years a doctor.
+            {c.aboutHeadingTop}
             <br />
-            <em>An artist’s eye.</em>
+            <em>{c.aboutHeadingEm}</em>
           </h2>
-          <p>
-            Qualified in London in 2008 with a first-class intercalated degree in Endocrinology,
-            Mr Vijayan trained across more than twenty teaching hospitals, among them the Queen
-            Victoria, Royal London, Royal Free, Chelsea &amp; Westminster and Guy’s &amp; St Thomas’.
-            Now in his fifth year as an NHS consultant, he has published widely, presented
-            internationally, and visited leading units in South Korea and Taiwan.
-          </p>
-          <p>
-            A creative person at heart, he is drawn to the artistry of plastic surgery: studying a
-            problem holistically, taking time, and crafting a result that is natural and proportioned.
-          </p>
+          <PortableTextBody value={c.aboutBody} />
           <ul className="creds">
-            <li>BSc (Hons) Endocrinology</li>
-            <li>MBBS, Imperial College London</li>
-            <li>MRCS (Eng)</li>
-            <li>FRCS (Plast)</li>
-            <li>Executive MBA</li>
-            <li>PgCert Clinical Education</li>
+            {c.aboutCredentials.map((cred, i) => (
+              <li key={i}>{cred}</li>
+            ))}
           </ul>
-          <p className="gmc">GMC Reg. No. 7020524</p>
+          <p className="gmc">{c.aboutGmcLine}</p>
         </div>
         <div className="about-media reveal">
-          <img src="/images/web/consultation.jpg" alt="Mr Vijayan in consultation with a patient" />
+          <img src={c.aboutImageUrl} alt="Mr Vijayan in consultation with a patient" />
           <div className="about-stat">
-            <strong>20–30</strong>
-            <span>minutes, unhurried, every first consultation</span>
+            <strong>{c.aboutStatValue}</strong>
+            <span>{c.aboutStatLabel}</span>
           </div>
         </div>
       </section>
 
       {/* ACCREDITATIONS */}
       <section className="accred">
-        <p className="accred-label reveal">Registered &amp; accredited</p>
+        <p className="accred-label reveal">{c.accredMembershipsLabel}</p>
         <div className="logo-row memberships reveal">
           <img src="/images/logos/gmc.webp" alt="General Medical Council" />
           <img src="/images/logos/rcs.webp" alt="Royal College of Surgeons" />
           <img src="/images/logos/bapras.webp" alt="BAPRAS" />
           <img src="/images/logos/baaps.webp" alt="BAAPS" />
         </div>
-        <p className="accred-label reveal">Recognised by leading insurers</p>
+        <p className="accred-label reveal">{c.accredInsurersLabel}</p>
         <div className="logo-row insurers reveal">
           <img src="/images/logos/bupa.webp" alt="Bupa" />
           <img src="/images/logos/axa.webp" alt="AXA Health" />
@@ -244,34 +199,37 @@ export default async function Home() {
       {/* JOURNEY */}
       <section className="journey">
         <header className="journey-head reveal">
-          <span className="eyebrow">A Shared Journey</span>
-          <h2 className="display">What to expect</h2>
+          <span className="eyebrow">{c.journeyEyebrow}</span>
+          <h2 className="display">{c.journeyHeading}</h2>
         </header>
         <ol className="steps">
-          <li className="reveal"><span className="step-no">01</span><h4>Enquiry</h4><p>A simple message or call to begin the conversation.</p></li>
-          <li className="reveal"><span className="step-no">02</span><h4>First consultation</h4><p>20–30 unhurried minutes to listen, assess and explore your goals.</p></li>
-          <li className="reveal"><span className="step-no">03</span><h4>Written plan</h4><p>A thorough letter summarising the approach, recovery and risks.</p></li>
-          <li className="reveal"><span className="step-no">04</span><h4>Second consultation</h4><p>Included as standard, to recap, answer questions and confirm.</p></li>
-          <li className="reveal"><span className="step-no">05</span><h4>Surgery</h4><p>Performed by Mr Vijayan with a senior surgical assistant.</p></li>
-          <li className="reveal"><span className="step-no">06</span><h4>Aftercare</h4><p>A day-one call and unlimited, consultant-led follow-up.</p></li>
+          {c.journeySteps.map((step, i) => (
+            <li className="reveal" key={i}>
+              <span className="step-no">{String(i + 1).padStart(2, '0')}</span>
+              <h4>{step.title}</h4>
+              <p>{step.body}</p>
+            </li>
+          ))}
         </ol>
       </section>
 
       {/* LOCATIONS */}
       <section className="locations" id="locations">
         <div className="loc-media reveal">
-          <img src="/images/web/clinic-interior.jpg" alt="A calm, luxurious clinic interior" />
+          <img src={c.locationsImageUrl} alt="A calm, luxurious clinic interior" />
         </div>
         <div className="loc-copy reveal">
-          <span className="eyebrow">Locations</span>
+          <span className="eyebrow">{c.locationsEyebrow}</span>
           <h2 className="display">
-            Across <em>Hertfordshire.</em>
+            {c.locationsHeadingTop}<em>{c.locationsHeadingEm}</em>
           </h2>
           <ul className="loc-list">
-            <li><h4>One Hatfield Hospital</h4><p>3 Hatfield Avenue, Hatfield, AL10 9UA</p></li>
-            <li><h4>One Stop Healthcare</h4><p>One Medical House, Boundary Way, Hemel Hempstead, HP2 7YU</p></li>
-            <li><h4>London Skin Clinic</h4><p>152 London Road, St Albans, AL1 1PQ</p></li>
-            <li><h4>Lister Hospital</h4><p>Coreys Mill Lane, Stevenage, SG1 4AB · NHS</p></li>
+            {c.locationItems.map((l, i) => (
+              <li key={i}>
+                <h4>{l.label}</h4>
+                <p>{l.value}</p>
+              </li>
+            ))}
           </ul>
         </div>
       </section>
@@ -280,20 +238,19 @@ export default async function Home() {
       <section className="contact" id="contact">
         <div className="contact-inner">
           <div className="contact-copy reveal">
-            <span className="eyebrow">Begin</span>
+            <span className="eyebrow">{c.contactEyebrow}</span>
             <h2 className="display">
-              Request a
+              {c.contactHeadingTop}
               <br />
-              <em>consultation.</em>
+              <em>{c.contactHeadingEm}</em>
             </h2>
-            <p>
-              Tell Mr Vijayan a little about what you’d like to achieve. Enquiries are answered
-              personally, usually within a day.
-            </p>
+            <p>{c.contactBody}</p>
             <ul className="contact-meta">
-              <li><span>Call</span> 01727 221799</li>
-              <li><span>Email</span> enquiries@vijayan.co.uk</li>
-              <li><span>Practice</span> Hatfield, Hemel Hempstead, St Albans and Stevenage</li>
+              {c.contactMeta.map((m, i) => (
+                <li key={i}>
+                  <span>{m.label}</span> {m.value}
+                </li>
+              ))}
             </ul>
           </div>
           <ContactForm />

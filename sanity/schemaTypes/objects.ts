@@ -41,6 +41,8 @@ export const pageHero = defineType({
     defineField({name: 'imageAlt', title: 'Image description', type: 'string'}),
     defineField({name: 'ctaLabel', title: 'Button label', type: 'string'}),
     defineField({name: 'ctaHref', title: 'Button link', type: 'string'}),
+    defineField({name: 'ctaSecondaryLabel', title: 'Second link label', type: 'string'}),
+    defineField({name: 'ctaSecondaryHref', title: 'Second link', type: 'string'}),
   ],
   preview: {select: {title: 'headingTop', subtitle: 'eyebrow', media: 'image'}},
 })
@@ -73,6 +75,35 @@ export const labelledItem = defineType({
   fields: [
     defineField({name: 'label', title: 'Label', type: 'string'}),
     defineField({name: 'value', title: 'Value', type: 'string'}),
+  ],
+  preview: {select: {title: 'value', subtitle: 'label'}},
+})
+
+export const richText = defineType({
+  name: 'richText',
+  title: 'Rich text',
+  type: 'array',
+  of: [{type: 'block', styles: [{title: 'Normal', value: 'normal'}], lists: []}],
+})
+
+export const titledItem = defineType({
+  name: 'titledItem',
+  title: 'Item',
+  type: 'object',
+  fields: [
+    defineField({name: 'title', title: 'Title', type: 'string'}),
+    defineField({name: 'body', title: 'Body', type: 'text', rows: 3}),
+  ],
+  preview: {select: {title: 'title', subtitle: 'body'}},
+})
+
+export const statItem = defineType({
+  name: 'statItem',
+  title: 'Statistic',
+  type: 'object',
+  fields: [
+    defineField({name: 'value', title: 'Figure', type: 'string', description: 'e.g. 18 or 1,000s'}),
+    defineField({name: 'label', title: 'Label', type: 'string'}),
   ],
   preview: {select: {title: 'value', subtitle: 'label'}},
 })

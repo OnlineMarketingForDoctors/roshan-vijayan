@@ -85,3 +85,33 @@ export const locationsPageQuery = groq`*[_type=="locationsPage"][0]{
   cards[]{name, tag, address, description, mapUrl, "imageUrl": image.asset->url},
   closing{${BAND}}
 }`
+
+export const aboutPageQuery = groq`*[_type=="aboutPage"][0]{
+  seo, hero{${HERO}, ctaSecondaryLabel, ctaSecondaryHref},
+  profileEyebrow, profileHeadingTop, profileHeadingBottom, profileBody,
+  credentials, gmcLine, "profileImageUrl": profileImage.asset->url,
+  ethosEyebrow, ethosQuote, ethosBody,
+  stats[]{value, label},
+  interestEyebrow, interestHeadingTop, interestHeadingBottom, interestBody,
+  interestLinkLabel, "interestImageUrl": interestImage.asset->url,
+  differenceEyebrow, differenceHeading, differenceItems[]{title, body},
+  closing{${BAND}}
+}`
+
+export const homePageQuery = groq`*[_type=="homePage"][0]{
+  seo,
+  heroEyebrow, heroHeadingTop, heroHeadingEm, heroHeadingBottom, heroBody,
+  heroCtaLabel, heroLinkLabel, heroImageAlt, "heroImageUrl": heroImage.asset->url, usps,
+  philEyebrow, philQuote, philBody, philLinkLabel, "philImageUrl": philImage.asset->url,
+  resultsEyebrow, resultsHeadingTop, resultsHeadingEm, resultsBody,
+  servicesEyebrow, servicesHeadingTop, servicesHeadingEm, servicesBody, servicesLinkLabel,
+  diffEyebrow, diffHeadingA, diffHeadingEm1, diffHeadingB, diffHeadingEm2,
+  diffItems[]{title, body}, "diffImageUrl": diffImage.asset->url,
+  aboutEyebrow, aboutHeadingTop, aboutHeadingEm, aboutBody, aboutCredentials, aboutGmcLine,
+  "aboutImageUrl": aboutImage.asset->url, aboutStatValue, aboutStatLabel,
+  accredMembershipsLabel, accredInsurersLabel,
+  journeyEyebrow, journeyHeading, journeySteps[]{title, body},
+  locationsEyebrow, locationsHeadingTop, locationsHeadingEm,
+  locationItems[]{label, value}, "locationsImageUrl": locationsImage.asset->url,
+  contactEyebrow, contactHeadingTop, contactHeadingEm, contactBody, contactMeta[]{label, value}
+}`
