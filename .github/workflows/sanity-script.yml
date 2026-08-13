@@ -1,0 +1,43 @@
+# Runs one of the scripts in scripts/ against the Sanity dataset.
+#
+# Start it from the Actions tab: "Run a Sanity script" -> Run workflow, pick
+# the branch and the script. Nothing runs on push; this is manual only.
+#
+# Needs a repository secret named SANITY_AUTH_TOKEN, an Editor token from
+# sanity.io/manage -> API -> Tokens. The Sanity CLI reads it from the
+# environment, so no `sanity login` is involved.
+name: Run a Sanity script
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: Path to the script, relative to the repo root
+        required: true
+        default: scripts/add-arm-lift.ts
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # the script path goes through the environment rather than being
+      # interpolated into the command, so its contents cannot run as shell
+      - name: Run the script
+        env:
+          SCRIPT: ${{ inputs.script }}
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: |
+          if [ -z "$SANITY_AUTH_TOKEN" ]; then
+            echo "SANITY_AUTH_TOKEN is not set - add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          npx sanity exec "$SCRIPT" --with-user-token
