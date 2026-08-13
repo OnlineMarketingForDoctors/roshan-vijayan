@@ -93,7 +93,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
   {
     slug: 'upper-and-lower-lid-blepharoplasty',
     title: 'Upper & Lower Lid Blepharoplasty',
-    area: 'Face & Eyes',
+    area: 'Face',
     patients: [
       {
         caption: 'Upper and lower lid blepharoplasty',
@@ -105,7 +105,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
   {
     slug: 'lower-blepharoplasty',
     title: 'Lower Blepharoplasty',
-    area: 'Face & Eyes',
+    area: 'Face',
     patients: [
       {
         caption: 'Lower lid blepharoplasty',

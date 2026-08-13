@@ -7,16 +7,15 @@ import {
   procedureQuery,
   procedureSlugsQuery,
   reviewsQuery,
-  beforeAfterQuery,
   siteSettingsQuery,
 } from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
 import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
-import {buildBAGroups} from '@/sanity/lib/ba'
 import PortableTextBody from '@/components/PortableTextBody'
 import GlanceIcon from '@/components/GlanceIcon'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
+import {BA_PROCEDURES} from '@/lib/baCases'
 import {categorySegment, procedurePath} from '@/lib/procedurePath'
 
 type Params = {params: Promise<{category: string; slug: string}>}
@@ -75,10 +74,9 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
 
 export default async function ProcedurePage({params}: Params) {
   const {category, slug} = await params
-  const [p, reviews, baCases, settings] = await Promise.all([
+  const [p, reviews, settings] = await Promise.all([
     sanityFetch<any>(procedureQuery, {slug}, null),
     sanityFetch<Review[]>(reviewsQuery, {}, []),
-    sanityFetch<unknown[]>(beforeAfterQuery, {}, []),
     sanityFetch<any>(siteSettingsQuery, {}, null),
   ])
 
@@ -87,7 +85,6 @@ export default async function ProcedurePage({params}: Params) {
   if (categorySegment(p.category) !== category) notFound()
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
-  const groups = buildBAGroups(baCases as never)
   const lower = p.title.toLowerCase()
 
   const subnav: {id: string; label: string; on: boolean}[] = [
@@ -190,7 +187,7 @@ export default async function ProcedurePage({params}: Params) {
               natural. Drag the handle on each case to reveal the journey.
             </p>
           </div>
-          <BeforeAfter groups={groups} />
+          <BeforeAfter procedures={BA_PROCEDURES} />
         </section>
       ) : null}
 

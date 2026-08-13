@@ -1,24 +1,22 @@
 import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {reviewsQuery, beforeAfterQuery, siteSettingsQuery} from '@/sanity/lib/queries'
+import {reviewsQuery, siteSettingsQuery} from '@/sanity/lib/queries'
 import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
-import {buildBAGroups} from '@/sanity/lib/ba'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
+import {BA_PROCEDURES} from '@/lib/baCases'
 import ServicesCarousel from '@/components/ServicesCarousel'
 import ContactForm from '@/components/ContactForm'
 
 type Settings = {reviewScore?: string; reviewCount?: number; reviewSource?: string} | null
 
 export default async function Home() {
-  const [reviews, baCases, settings] = await Promise.all([
+  const [reviews, settings] = await Promise.all([
     sanityFetch<Review[]>(reviewsQuery, {}, []),
-    sanityFetch<unknown[]>(beforeAfterQuery, {}, []),
     sanityFetch<Settings>(siteSettingsQuery, {}, null),
   ])
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
-  const groups = buildBAGroups(baCases as never)
 
   return (
     <>
@@ -115,7 +113,7 @@ export default async function Home() {
             handle on each case to reveal the journey, before and after.
           </p>
         </div>
-        <BeforeAfter groups={groups} />
+        <BeforeAfter procedures={BA_PROCEDURES} />
       </section>
 
       {/* SERVICES */}

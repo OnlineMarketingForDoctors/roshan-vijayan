@@ -1,5 +1,8 @@
 import type {Review} from '@/components/ReviewsCarousel'
-import type {BAGroups} from '@/components/BeforeAfter'
+import type {BAPatient} from '@/lib/baCases'
+
+/** shape of the CMS-driven before/after grouping (see sanity/lib/ba.ts) */
+export type BAGroups = {breast: BAPatient[]; body: BAPatient[]; face: BAPatient[]}
 
 export const FALLBACK_REVIEWS: Review[] = [
   {

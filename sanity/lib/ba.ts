@@ -1,6 +1,5 @@
 import {urlFor} from './image'
-import {FALLBACK_BA} from './fallbacks'
-import type {BAGroups} from '@/components/BeforeAfter'
+import {FALLBACK_BA, type BAGroups} from './fallbacks'
 
 type SanityBACase = {
   caption: string
