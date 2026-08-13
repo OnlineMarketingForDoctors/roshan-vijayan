@@ -1,8 +1,4 @@
 import type {Review} from '@/components/ReviewsCarousel'
-import type {BAPatient} from '@/lib/baCases'
-
-/** shape of the CMS-driven before/after grouping (see sanity/lib/ba.ts) */
-export type BAGroups = {breast: BAPatient[]; body: BAPatient[]; face: BAPatient[]}
 
 export const FALLBACK_REVIEWS: Review[] = [
   {
@@ -49,25 +45,3 @@ export const FALLBACK_REVIEWS: Review[] = [
   },
 ]
 
-export const FALLBACK_BA: BAGroups = {
-  breast: [
-    {
-      caption: '5 weeks after bilateral auto-augmentation mastopexy',
-      beforeUrl: '/images/web/ba-p1-before.jpg',
-      afterUrl: '/images/web/ba-p1-after.jpg',
-    },
-    {
-      caption: '2 weeks after bilateral breast reduction',
-      beforeUrl: '/images/web/ba-p3-before.jpg',
-      afterUrl: '/images/web/ba-p3-after.jpg',
-    },
-  ],
-  body: [],
-  face: [
-    {
-      caption: '6 weeks after upper and lower lid blepharoplasty',
-      beforeUrl: '/images/web/ba-p2-before.jpg',
-      afterUrl: '/images/web/ba-p2-after.jpg',
-    },
-  ],
-}

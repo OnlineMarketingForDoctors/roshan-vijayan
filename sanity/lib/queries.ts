@@ -16,7 +16,10 @@ export const reviewsQuery = groq`*[_type=="review" && defined(quote)]
 /* ---- Before & After ---- */
 export const beforeAfterQuery = groq`*[_type=="beforeAfterCase" && defined(beforeImage) && defined(afterImage)]
   | order(order asc, _createdAt asc){
-    _id, caption, category, beforeImage, afterImage
+    _id, caption, treatment, category, beforeImage, afterImage, beforeLabel, afterLabel,
+    "procedureSlugs": array::compact(
+      procedures[]->slug.current + [procedure->slug.current]
+    )
   }`
 
 /* ---- Blog ---- */

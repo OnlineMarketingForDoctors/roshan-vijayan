@@ -1,22 +1,24 @@
 import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {reviewsQuery, siteSettingsQuery} from '@/sanity/lib/queries'
+import {reviewsQuery, siteSettingsQuery, beforeAfterQuery} from '@/sanity/lib/queries'
 import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
-import {BA_PROCEDURES} from '@/lib/baCases'
+import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import ServicesCarousel from '@/components/ServicesCarousel'
 import ContactForm from '@/components/ContactForm'
 
 type Settings = {reviewScore?: string; reviewCount?: number; reviewSource?: string} | null
 
 export default async function Home() {
-  const [reviews, settings] = await Promise.all([
+  const [reviews, settings, baCases] = await Promise.all([
     sanityFetch<Review[]>(reviewsQuery, {}, []),
     sanityFetch<Settings>(siteSettingsQuery, {}, null),
+    sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
   ])
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
+  const baProcedures = buildBAProcedures(baCases)
 
   return (
     <>
@@ -113,7 +115,7 @@ export default async function Home() {
             handle on each case to reveal the journey, before and after.
           </p>
         </div>
-        <BeforeAfter procedures={BA_PROCEDURES} />
+        <BeforeAfter procedures={baProcedures} />
       </section>
 
       {/* SERVICES */}
