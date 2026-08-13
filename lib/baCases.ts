@@ -25,6 +25,13 @@ export type BAProcedure = {
   title: string
   /** grouping shown as a heading in the procedure menu */
   area: string
+  /**
+   * Slugs of the Sanity procedure pages this case belongs on. Several
+   * reconstruction cases share the skin cancer page, and the one
+   * blepharoplasty page carries both lid cases, so this is many-to-many
+   * rather than a slug match.
+   */
+  procedureSlugs: string[]
   patients: BAPatient[]
 }
 
@@ -35,6 +42,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'breast-reduction',
     title: 'Breast Reduction',
     area: 'Breast',
+    procedureSlugs: ['breast-reduction'],
     patients: [
       {
         caption: 'Bilateral breast reduction · Patient one',
@@ -52,6 +60,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'breast-explant-mastopexy',
     title: 'Explant & Mastopexy',
     area: 'Breast',
+    procedureSlugs: ['breast-lift'],
     patients: [
       {
         caption: 'Bilateral explant with mastopexy · One week after surgery',
@@ -65,6 +74,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'arm-lift',
     title: 'Arm Lift',
     area: 'Body',
+    procedureSlugs: ['arm-lift'],
     patients: [
       {
         caption: 'Bilateral arm reduction · Patient one',
@@ -82,6 +92,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'thigh-reduction',
     title: 'Thigh Reduction',
     area: 'Body',
+    procedureSlugs: ['thigh-lift'],
     patients: [
       {
         caption: 'Bilateral thigh reduction',
@@ -94,6 +105,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'upper-and-lower-lid-blepharoplasty',
     title: 'Upper & Lower Lid Blepharoplasty',
     area: 'Face',
+    procedureSlugs: ['upper-and-lower-lid-blepharoplasty'],
     patients: [
       {
         caption: 'Upper and lower lid blepharoplasty',
@@ -106,6 +118,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'lower-blepharoplasty',
     title: 'Lower Blepharoplasty',
     area: 'Face',
+    procedureSlugs: ['upper-and-lower-lid-blepharoplasty'],
     patients: [
       {
         caption: 'Lower lid blepharoplasty',
@@ -118,6 +131,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'skin-tumour-and-blepharoplasty',
     title: 'Skin Tumour & Upper Blepharoplasty',
     area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal', 'upper-and-lower-lid-blepharoplasty'],
     patients: [
       {
         caption: 'Skin tumour excision with bilateral upper blepharoplasty',
@@ -130,6 +144,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'skin-tumour-surgery',
     title: 'Skin Tumour Surgery',
     area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
     patients: [
       {
         caption: 'Skin tumour excision and reconstruction',
@@ -142,6 +157,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'cheek-tumour',
     title: 'Cheek Tumour',
     area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
     patients: [
       {
         caption: 'Cheek tumour excision and reconstruction',
@@ -154,6 +170,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'forehead-flap',
     title: 'Forehead Flap',
     area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
     patients: [
       {
         caption: 'Forehead flap reconstruction',
@@ -166,6 +183,7 @@ export const BA_PROCEDURES: BAProcedure[] = [
     slug: 'cervicofacial-flap',
     title: 'Cervicofacial Flap',
     area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
     patients: [
       {
         caption: 'Cervicofacial flap reconstruction · Shown during surgery and healed',
@@ -176,3 +194,8 @@ export const BA_PROCEDURES: BAProcedure[] = [
     ],
   },
 ]
+
+/** cases to show on a given Sanity procedure page, in BA_PROCEDURES order */
+export function baForProcedure(procedureSlug: string): BAProcedure[] {
+  return BA_PROCEDURES.filter((p) => p.procedureSlugs.includes(procedureSlug))
+}

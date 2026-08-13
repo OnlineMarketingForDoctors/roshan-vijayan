@@ -16,12 +16,16 @@ import type {BAProcedure} from '@/lib/baCases'
 export default function BeforeAfter({
   procedures,
   perTab = 2,
+  tabs = true,
   moreHref = '/gallery',
   moreText = 'See all results',
 }: {
   procedures: BAProcedure[]
   /** cases shown per tab before pointing at the full gallery */
   perTab?: number
+  /** off for procedure pages, where the page is already one procedure and
+   *  splitting its cases across area tabs only strands them */
+  tabs?: boolean
   moreHref?: string
   moreText?: string
 }) {
@@ -34,21 +38,44 @@ export default function BeforeAfter({
   const casesFor = (area: string) =>
     procedures.filter((p) => p.area === area).flatMap((p) => p.patients)
 
+  if (!tabs) {
+    const all = procedures.flatMap((p) => p.patients)
+    const shown = all.slice(0, perTab)
+    if (!shown.length) return null
+    return (
+      <div className="ba-panels reveal">
+        <div className={`ba-grid${shown.length === 1 ? ' ba-grid-one' : ''}`}>
+          {shown.map((c, i) => (
+            <BASlider key={i} c={c} />
+          ))}
+        </div>
+        <p className="ba-more">
+          <Link className="btn btn-text" href={moreHref}>
+            {moreText} <span className="arrow">→</span>
+          </Link>
+        </p>
+      </div>
+    )
+  }
+
   return (
     <>
-      <div className="ba-tabs reveal" role="tablist" aria-label="Result categories">
-        {areas.map((area) => (
-          <button
-            key={area}
-            className={`ba-tab${active === area ? ' active' : ''}`}
-            role="tab"
-            aria-selected={active === area}
-            onClick={() => setActive(area)}
-          >
-            {area}
-          </button>
-        ))}
-      </div>
+      {/* a single tab is a label, not a choice: procedure pages pass one area */}
+      {areas.length > 1 ? (
+        <div className="ba-tabs reveal" role="tablist" aria-label="Result categories">
+          {areas.map((area) => (
+            <button
+              key={area}
+              className={`ba-tab${active === area ? ' active' : ''}`}
+              role="tab"
+              aria-selected={active === area}
+              onClick={() => setActive(area)}
+            >
+              {area}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <div className="ba-panels reveal">
         {areas.map((area) => {

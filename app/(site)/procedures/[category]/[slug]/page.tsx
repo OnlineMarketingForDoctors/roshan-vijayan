@@ -15,7 +15,7 @@ import PortableTextBody from '@/components/PortableTextBody'
 import GlanceIcon from '@/components/GlanceIcon'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
-import {BA_PROCEDURES} from '@/lib/baCases'
+import {baForProcedure} from '@/lib/baCases'
 import {categorySegment, procedurePath} from '@/lib/procedurePath'
 
 type Params = {params: Promise<{category: string; slug: string}>}
@@ -85,10 +85,13 @@ export default async function ProcedurePage({params}: Params) {
   if (categorySegment(p.category) !== category) notFound()
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
+  // only this procedure's cases; procedures without any drop the section
+  const baCases = baForProcedure(slug)
+  const showResults = show(p.showResults) && baCases.length > 0
   const lower = p.title.toLowerCase()
 
   const subnav: {id: string; label: string; on: boolean}[] = [
-    {id: 'results', label: 'Before & After', on: show(p.showResults)},
+    {id: 'results', label: 'Before & After', on: showResults},
     {id: 'overview', label: 'Overview', on: show(p.showOverview)},
     {id: 'glance', label: 'At a Glance', on: show(p.showGlance) && !!p.atAGlance?.length},
     {id: 'concerns', label: 'Concerns', on: show(p.showConditions) && !!p.conditions?.length},
@@ -176,7 +179,7 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* BEFORE & AFTER */}
-      {show(p.showResults) ? (
+      {showResults ? (
         <section className="section bg-ivory2 proc-anchor" id="results">
           <div className="section-head center reveal">
             <h2 className="display">
@@ -187,7 +190,7 @@ export default async function ProcedurePage({params}: Params) {
               natural. Drag the handle on each case to reveal the journey.
             </p>
           </div>
-          <BeforeAfter procedures={BA_PROCEDURES} />
+          <BeforeAfter procedures={baCases} perTab={6} tabs={false} />
         </section>
       ) : null}
 
