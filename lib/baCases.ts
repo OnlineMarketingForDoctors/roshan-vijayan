@@ -8,6 +8,11 @@
  * beforeLabel/afterLabel exist because not every pair is a plain before/after:
  * one case is photographed during the procedure, and one after is at one week.
  * Those read as they were taken rather than being flattened into Before/After.
+ *
+ * An entry is one before/after pair, not one person: arm lift holds two views
+ * of the same patient. Nothing should present these counts as a number of
+ * patients, and captions should only say "Patient one/two" where the images
+ * really are different people.
  */
 
 export type BAPatient = {
@@ -77,12 +82,12 @@ export const BA_PROCEDURES: BAProcedure[] = [
     procedureSlugs: ['arm-lift'],
     patients: [
       {
-        caption: 'Bilateral arm reduction · Patient one',
+        caption: 'Bilateral arm reduction',
         beforeUrl: img('arm-lift-1', 'before'),
         afterUrl: img('arm-lift-1', 'after'),
       },
       {
-        caption: 'Bilateral arm reduction · Patient two',
+        caption: 'Bilateral arm reduction',
         beforeUrl: img('arm-lift-2', 'before'),
         afterUrl: img('arm-lift-2', 'after'),
       },

@@ -77,10 +77,12 @@ export default function BeforeAfterGallery({procedures}: {procedures: BAProcedur
       <div className="bag-panel">
         <div className="bag-head reveal">
           <h2 className="display">{current.title}</h2>
+          {/* deliberately no count: a procedure may hold several views of one
+              patient, so a number here would misstate how many people it shows */}
           <p>
             {current.patients.length === 1
-              ? 'One patient shown. Drag the handle on the image to reveal the result.'
-              : `${current.patients.length} patients shown. Drag the handle on each image to reveal the result.`}
+              ? 'Drag the handle on the image to reveal the result.'
+              : 'Drag the handle on each image to reveal the result.'}
           </p>
         </div>
         <div
