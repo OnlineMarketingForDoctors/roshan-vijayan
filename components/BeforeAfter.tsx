@@ -1,7 +1,8 @@
 'use client'
 
-import {useRef, useState} from 'react'
+import {useState} from 'react'
 import Link from 'next/link'
+import BASlider from '@/components/BASlider'
 
 export type BACase = {caption: string; beforeUrl: string; afterUrl: string}
 export type BAGroups = {breast: BACase[]; body: BACase[]; face: BACase[]}
@@ -11,52 +12,6 @@ const TABS: {key: keyof BAGroups; label: string}[] = [
   {key: 'body', label: 'Body'},
   {key: 'face', label: 'Face'},
 ]
-
-function Slider({c}: {c: BACase}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [pos, setPos] = useState(50)
-  const dragging = useRef(false)
-
-  const set = (clientX: number) => {
-    const el = ref.current
-    if (!el) return
-    const r = el.getBoundingClientRect()
-    let pct = ((clientX - r.left) / r.width) * 100
-    pct = Math.max(3, Math.min(97, pct))
-    setPos(pct)
-  }
-
-  return (
-    <figure className="ba-card">
-      <div
-        className="ba-slider"
-        ref={ref}
-        style={{['--pos' as string]: pos + '%'}}
-        onPointerDown={(e) => {
-          dragging.current = true
-          try {
-            ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
-          } catch {}
-          set(e.clientX)
-        }}
-        onPointerMove={(e) => {
-          if (dragging.current) set(e.clientX)
-        }}
-        onPointerUp={() => (dragging.current = false)}
-        onPointerCancel={() => (dragging.current = false)}
-      >
-        <img className="ba-img ba-after" src={c.afterUrl} alt={`${c.caption}, after`} />
-        <img className="ba-img ba-before" src={c.beforeUrl} alt={`${c.caption}, before`} />
-        <span className="ba-tagline ba-tag-before">Before</span>
-        <span className="ba-tagline ba-tag-after">After</span>
-        <button className="ba-handle" aria-label="Drag to compare before and after">
-          <span className="ba-grip">‹ ›</span>
-        </button>
-      </div>
-      <figcaption>{c.caption}</figcaption>
-    </figure>
-  )
-}
 
 export default function BeforeAfter({
   groups,
@@ -94,7 +49,7 @@ export default function BeforeAfter({
               {list.length ? (
                 <div className={`ba-grid${list.length === 1 ? ' ba-grid-one' : ''}`}>
                   {list.map((c, i) => (
-                    <Slider key={i} c={c} />
+                    <BASlider key={i} c={c} />
                   ))}
                 </div>
               ) : (

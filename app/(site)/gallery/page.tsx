@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
-import {sanityFetch} from '@/sanity/lib/fetch'
-import {beforeAfterQuery} from '@/sanity/lib/queries'
-import {buildBAGroups} from '@/sanity/lib/ba'
-import BeforeAfter from '@/components/BeforeAfter'
+import BeforeAfterGallery from '@/components/BeforeAfterGallery'
+import {BA_PROCEDURES} from '@/lib/baCases'
 
 export const metadata: Metadata = {
   title: 'Before & After | RV Plastic Surgery',
@@ -11,10 +9,7 @@ export const metadata: Metadata = {
     'Real before-and-after results from Mr Roshan Vijayan’s patients — natural, balanced and beautifully healed.',
 }
 
-export default async function GalleryPage() {
-  const baCases = await sanityFetch<unknown[]>(beforeAfterQuery, {}, [])
-  const groups = buildBAGroups(baCases as never)
-
+export default function GalleryPage() {
   return (
     <>
       <section className="page-hero">
@@ -43,7 +38,7 @@ export default async function GalleryPage() {
       </section>
 
       <section className="results">
-        <BeforeAfter groups={groups} emptyHref="/contact" emptyText="Ask to see examples" />
+        <BeforeAfterGallery procedures={BA_PROCEDURES} />
       </section>
 
       <section className="section bg-cream center">

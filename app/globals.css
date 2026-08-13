@@ -362,6 +362,31 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .ba-empty{max-width:34rem;margin:0 auto;color:var(--soft);font-size:1.05rem;
   display:flex;flex-direction:column;align-items:center;gap:1.1rem;padding:3rem 0}
 
+/* ---------- BEFORE & AFTER GALLERY (procedure menu at the left) ---------- */
+.bag{display:grid;grid-template-columns:minmax(200px,236px) 1fr;gap:clamp(1.8rem,4vw,4rem);
+  max-width:1240px;margin:0 auto;align-items:start;text-align:left}
+/* without this the scrollable menu's content widens its own grid track, which
+   drags the panel past the viewport on narrow screens */
+.bag-nav,.bag-panel{min-width:0}
+.bag-nav{position:sticky;top:130px}
+.bag-group + .bag-group{margin-top:1.5rem}
+.bag-area{font-family:var(--sans);font-size:.6rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold-deep);margin:0 0 .5rem .8rem}
+.bag-nav ul{list-style:none;margin:0;padding:0}
+.bag-link{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.7rem;text-align:left;
+  font-family:var(--sans);font-size:.88rem;line-height:1.35;color:var(--soft);background:none;cursor:pointer;
+  border:none;border-left:2px solid var(--line);padding:.62rem .8rem;transition:.3s var(--ease)}
+.bag-link:hover{color:var(--charcoal);border-left-color:var(--gold)}
+.bag-link.active{color:var(--charcoal);border-left-color:var(--gold-deep);background:rgba(255,253,248,.6)}
+.bag-link.active span:first-child{font-weight:500}
+.bag-count{font-size:.66rem;letter-spacing:.08em;color:var(--soft);opacity:.65}
+.bag-head{margin-bottom:clamp(1.3rem,3vw,1.9rem)}
+.bag-head h2{font-size:clamp(1.6rem,3vw,2.3rem);margin:0 0 .5rem}
+.bag-head p{color:var(--soft);font-size:.95rem;max-width:44rem}
+.bag-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.4rem,3vw,2.2rem);
+  animation:baFade .5s var(--ease)}
+.bag-grid-one{grid-template-columns:1fr;max-width:560px}
+
 /* ---------- JOURNEY ---------- */
 .journey{padding:clamp(4rem,8vw,7rem) clamp(1.2rem,6vw,7rem);
   background:linear-gradient(to bottom,var(--ivory-2),var(--ivory))}
@@ -552,6 +577,18 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .steps::before{display:none}
   .foot-top{grid-template-columns:1fr;gap:2rem}
   .ba-grid{grid-template-columns:1fr;max-width:520px}
+  /* the procedure menu stops being a column and becomes a scrollable row */
+  .bag{grid-template-columns:1fr;gap:1.6rem}
+  .bag-nav{position:static;display:flex;gap:1.4rem;overflow-x:auto;padding-bottom:.6rem;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .bag-nav::-webkit-scrollbar{display:none}
+  .bag-group + .bag-group{margin-top:0}
+  .bag-group{flex:0 0 auto}
+  .bag-nav ul{display:flex;gap:.4rem}
+  .bag-link{white-space:nowrap;border-left:none;border-bottom:2px solid var(--line);padding:.5rem .7rem}
+  .bag-link:hover{border-left-color:transparent;border-bottom-color:var(--gold)}
+  .bag-link.active{border-left-color:transparent;border-bottom-color:var(--gold-deep)}
+  .bag-grid{grid-template-columns:1fr;max-width:520px}
 }
 @media(max-width:640px){
   .review{flex:0 0 100%}
