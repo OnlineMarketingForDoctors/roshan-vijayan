@@ -365,9 +365,20 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 /* ---------- BEFORE & AFTER GALLERY (procedure menu at the left) ---------- */
 .bag{display:grid;grid-template-columns:minmax(200px,236px) 1fr;gap:clamp(1.8rem,4vw,4rem);
   max-width:1240px;margin:0 auto;align-items:start;text-align:left}
-/* without this the scrollable menu's content widens its own grid track, which
-   drags the panel past the viewport on narrow screens */
+/* grid items default to min-width:auto, which lets long content widen a track */
 .bag-nav,.bag-panel{min-width:0}
+/* the picker replaces the menu below 860px; see the media query */
+.bag-select-wrap{display:none}
+.bag-select-label{display:block;font-family:var(--sans);font-size:.6rem;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-deep);margin-bottom:.5rem}
+.bag-select{width:100%;appearance:none;-webkit-appearance:none;font-family:var(--sans);font-size:.95rem;
+  color:var(--charcoal);background:rgba(255,253,248,.85);border:1px solid var(--line);border-radius:8px;
+  padding:.85rem 2.6rem .85rem 1rem;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--gold-deep) 50%),
+    linear-gradient(135deg,var(--gold-deep) 50%,transparent 50%);
+  background-position:calc(100% - 1.15rem) 55%,calc(100% - .85rem) 55%;
+  background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.bag-select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .bag-nav{position:sticky;top:130px}
 .bag-group + .bag-group{margin-top:1.5rem}
 .bag-area{font-family:var(--sans);font-size:.6rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
@@ -577,17 +588,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .steps::before{display:none}
   .foot-top{grid-template-columns:1fr;gap:2rem}
   .ba-grid{grid-template-columns:1fr;max-width:520px}
-  /* the procedure menu stops being a column and becomes a scrollable row */
-  .bag{grid-template-columns:1fr;gap:1.6rem}
-  .bag-nav{position:static;display:flex;gap:1.4rem;overflow-x:auto;padding-bottom:.6rem;
-    scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .bag-nav::-webkit-scrollbar{display:none}
-  .bag-group + .bag-group{margin-top:0}
-  .bag-group{flex:0 0 auto}
-  .bag-nav ul{display:flex;gap:.4rem}
-  .bag-link{white-space:nowrap;border-left:none;border-bottom:2px solid var(--line);padding:.5rem .7rem}
-  .bag-link:hover{border-left-color:transparent;border-bottom-color:var(--gold)}
-  .bag-link.active{border-left-color:transparent;border-bottom-color:var(--gold-deep)}
+  /* the column menu gives way to a grouped picker: as a scrolling row only the
+     first two procedures were reachable, and the selected one could sit
+     off-screen entirely */
+  .bag{grid-template-columns:1fr;gap:1.4rem}
+  .bag-nav{display:none}
+  .bag-select-wrap{display:block}
   .bag-grid{grid-template-columns:1fr;max-width:520px}
 }
 @media(max-width:640px){

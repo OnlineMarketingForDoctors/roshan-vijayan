@@ -22,6 +22,33 @@ export default function BeforeAfterGallery({procedures}: {procedures: BAProcedur
 
   return (
     <div className="bag">
+      {/* narrow screens get this instead of the menu: eleven procedures with
+          names this long cannot be shown as a row or a wrap without either
+          hiding most of them or pushing the images off the screen */}
+      <div className="bag-select-wrap">
+        <label className="bag-select-label" htmlFor="bag-procedure">
+          Procedure
+        </label>
+        <select
+          id="bag-procedure"
+          className="bag-select"
+          value={current.slug}
+          onChange={(e) => setActive(e.target.value)}
+        >
+          {areas.map((area) => (
+            <optgroup label={area} key={area}>
+              {procedures
+                .filter((p) => p.area === area)
+                .map((p) => (
+                  <option value={p.slug} key={p.slug}>
+                    {p.title} ({p.patients.length})
+                  </option>
+                ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+
       <nav className="bag-nav reveal" aria-label="Procedures">
         {areas.map((area) => (
           <div className="bag-group" key={area}>
