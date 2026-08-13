@@ -91,7 +91,8 @@
       "Bash(sed -n '6p;182,183p' index.html)",
       "Bash(sed -n '85p' index.html)",
       "Bash(sed -n '6p' gallery.html)",
-      "Bash(sed -n '62,63p' about.html)"
+      "Bash(sed -n '62,63p' about.html)",
+      "mcp__Claude_Code_Remote__list_environments"
     ]
   }
 }
