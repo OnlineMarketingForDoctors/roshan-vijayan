@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import {locationSummaries} from '@/lib/locations'
 
 type Location = {name?: string; address?: string; note?: string}
 type Settings = {
@@ -10,11 +11,7 @@ type Settings = {
   locations?: Location[]
 } | null
 
-const FALLBACK_LOCATIONS: Location[] = [
-  {name: 'One Hatfield Hospital', address: '3 Hatfield Avenue, Hatfield, AL10 9UA'},
-  {name: 'One Stop Healthcare', address: 'One Medical House, Boundary Way, Hemel Hempstead, HP2 7YU'},
-  {name: 'London Skin Clinic', address: '152 London Road, St Albans, AL1 1PQ'},
-]
+const FALLBACK_LOCATIONS: Location[] = locationSummaries()
 
 export default function Footer({settings}: {settings: Settings}) {
   const phone = settings?.phone || '01727 221799'

@@ -8,6 +8,8 @@
  * these when no image has been set.
  */
 
+import {LOCATIONS, locationLines} from './locations'
+
 export type PageHero = {
   eyebrow?: string
   headingTop?: string
@@ -93,12 +95,7 @@ export const CONTACT_PAGE: ContactPageContent = {
   locationsEyebrow: 'Where to Find Us',
   locationsHeading: 'Four Hertfordshire settings',
   locationsBody: 'Choose whichever is most convenient, we’ll do the rest.',
-  locationsSummary: [
-    {label: 'One Hatfield', value: '3 Hatfield Avenue, Hatfield, AL10 9UA'},
-    {label: 'One Stop Healthcare', value: 'Boundary Way, Hemel Hempstead, HP2 7YU'},
-    {label: 'London Skin Clinic', value: '152 London Road, St Albans, AL1 1PQ'},
-    {label: 'Lister Hospital', value: 'Coreys Mill Lane, Stevenage, SG1 4AB · NHS'},
-  ],
+  locationsSummary: locationLines(),
   locationsLinkLabel: 'View all locations',
 }
 
@@ -118,45 +115,8 @@ export const LOCATIONS_PAGE: LocationsPageContent = {
     ctaLabel: 'Request a Consultation',
     ctaHref: '/contact',
   },
-  cards: [
-    {
-      name: 'One Hatfield Hospital',
-      tag: 'Private · Main Practice',
-      address: '3 Hatfield Avenue, Hatfield, AL10 9UA',
-      description:
-        'A modern private hospital and the home of Mr Vijayan’s main practice, Leonie Grace Ltd, with on-site theatres, imaging and overnight care.',
-      mapUrl: 'https://www.google.com/maps/search/?api=1&query=One+Hatfield+Hospital+AL10+9UA',
-      imageUrl: '/images/web/loc-hatfield.png',
-    },
-    {
-      name: 'One Stop Healthcare',
-      tag: 'Private',
-      address: 'One Medical House, Boundary Way, Hemel Hempstead, HP2 7YU',
-      description:
-        'A contemporary private outpatient and diagnostic centre, ideal for consultations and minor procedures in west Hertfordshire.',
-      mapUrl:
-        'https://www.google.com/maps/search/?api=1&query=One+Stop+Healthcare+Hemel+Hempstead+HP2+7YU',
-      imageUrl: '/images/web/loc-osd.png',
-    },
-    {
-      name: 'London Skin Clinic',
-      tag: 'Private · Skin',
-      address: '152 London Road, St Albans, AL1 1PQ',
-      description:
-        'An elegant St Albans clinic for skin assessments, mole and lesion checks and minor skin surgery in a discreet setting.',
-      mapUrl: 'https://www.google.com/maps/search/?api=1&query=152+London+Road+St+Albans+AL1+1PQ',
-      imageUrl: '/images/web/loc-london.png',
-    },
-    {
-      name: 'Lister Hospital',
-      tag: 'NHS',
-      address: 'Coreys Mill Lane, Stevenage, SG1 4AB',
-      description:
-        'Mr Vijayan’s NHS base, where he serves as a consultant plastic surgeon within the East and North Hertfordshire NHS Trust.',
-      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Lister+Hospital+Stevenage+SG1+4AB',
-      imageUrl: '/images/web/consultation.jpg',
-    },
-  ],
+  // the nhs flag only marks the one-line lists; the card shows the tag instead
+  cards: LOCATIONS.map(({nhs, ...card}) => card),
   closing: {
     eyebrow: 'Begin',
     heading: 'Find a time that suits you',
@@ -485,12 +445,7 @@ export const HOME_PAGE: HomePageContent = {
   locationsEyebrow: 'Locations',
   locationsHeadingTop: 'Across ',
   locationsHeadingEm: 'Hertfordshire.',
-  locationItems: [
-    {label: 'One Hatfield Hospital', value: '3 Hatfield Avenue, Hatfield, AL10 9UA'},
-    {label: 'One Stop Healthcare', value: 'One Medical House, Boundary Way, Hemel Hempstead, HP2 7YU'},
-    {label: 'London Skin Clinic', value: '152 London Road, St Albans, AL1 1PQ'},
-    {label: 'Lister Hospital', value: 'Coreys Mill Lane, Stevenage, SG1 4AB · NHS'},
-  ],
+  locationItems: locationLines(),
   locationsImageUrl: '/images/web/clinic-interior.jpg',
   contactEyebrow: 'Begin',
   contactHeadingTop: 'Request a',
