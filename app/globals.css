@@ -1057,3 +1057,6 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   border-radius:8px;padding:.75rem .9rem;margin-bottom:1rem;font-size:.92rem;line-height:1.5}
 .form-error a{color:inherit;text-decoration:underline}
 .contact-form button[disabled]{opacity:.6;cursor:progress}
+
+/* captions on images inside article bodies */
+.prose-img figcaption{margin-top:.6rem;font-size:.86rem;line-height:1.5;opacity:.72;text-align:center}

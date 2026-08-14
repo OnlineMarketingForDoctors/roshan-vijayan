@@ -114,13 +114,30 @@ export type Block = {
   children: Span[]
 }
 /** Images are emitted with the source URL; the importer swaps in an asset ref. */
-export type ImageBlock = {_type: 'image'; _key: string; url: string; alt: string}
+export type ImageBlock = {_type: 'image'; _key: string; url: string; alt: string; caption?: string}
 export type Content = Block | ImageBlock
 
 const stripTags = (s: string) => decodeEntities(s.replace(/<[^>]+>/g, ''))
 
 /** Collapses whitespace but keeps single spaces between words. */
 const tidy = (s: string) => s.replace(/\s+/g, ' ').trim()
+
+/**
+ * Removes what is markup about the page rather than the writing.
+ *
+ * These posts carry a JSON-LD <script> block of FAQ schema and a hand-built
+ * <nav> table of contents. Both are made of the article's own sentences, so
+ * left in they arrive as body paragraphs and the post reads as though it says
+ * everything twice. The new site builds its own navigation and does not need a
+ * table of contents baked into the copy.
+ */
+const sanitise = (html: string): string =>
+  html
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, '')
+    .replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/gi, '')
 
 /**
  * Inline markup to spans. Handles the tags WordPress editors actually produce:
@@ -183,6 +200,16 @@ export function htmlToPortableText(html: string): Content[] {
   const key = (p: string) => `${p}${(n++).toString(36)}`
 
   const out: Content[] = []
+
+  const pushImage = (attrs: string, caption = '') => {
+    const src = attrs.match(/src=["']([^"']+)["']/i)?.[1]
+    if (!src) return
+    const alt = decodeEntities(attrs.match(/alt=["']([^"']*)["']/i)?.[1] || '')
+    const img: ImageBlock = {_type: 'image', _key: key('i'), url: decodeEntities(src), alt: alt || caption}
+    if (caption) img.caption = caption
+    out.push(img)
+  }
+
   const push = (style: string, inner: string, listItem?: 'bullet' | 'number') => {
     const {spans, markDefs} = inlineSpans(inner, key)
     if (!spans.length || !spans.some((s) => s.text.trim())) return
@@ -194,10 +221,15 @@ export function htmlToPortableText(html: string): Content[] {
     out.push(block)
   }
 
-  // images anywhere become their own block, so pull them out first
-  const source = html.replace(/<figure\b[^>]*>([\s\S]*?)<\/figure>/gi, '$1')
+  // A <figure> is only handled as an image below. These posts also use it to
+  // wrap tables, so unwrap those first — otherwise the figure branch finds no
+  // <img> and the whole thing, table included, is dropped.
+  const source = sanitise(html).replace(
+    /<figure\b[^>]*>([\s\S]*?)<\/figure>/gi,
+    (whole, inner: string) => (/<img\b/i.test(inner) ? whole : inner),
+  )
 
-  const BLOCK = /<(h[1-6]|p|ul|ol|blockquote|img)\b([^>]*)>(?:([\s\S]*?)<\/\1>)?/gi
+  const BLOCK = /<(h[1-6]|p|ul|ol|blockquote|figure|table|img)\b([^>]*)>(?:([\s\S]*?)<\/\1>)?/gi
   let last = 0
   let m: RegExpExecArray | null
 
@@ -212,14 +244,30 @@ export function htmlToPortableText(html: string): Content[] {
     const inner = m[3] || ''
 
     if (name === 'img') {
-      const src = attrs.match(/src=["']([^"']+)["']/i)?.[1]
-      if (src) {
-        out.push({
-          _type: 'image',
-          _key: key('i'),
-          url: decodeEntities(src),
-          alt: decodeEntities(attrs.match(/alt=["']([^"']*)["']/i)?.[1] || ''),
-        })
+      pushImage(attrs)
+      continue
+    }
+
+    // a figure is an image plus its caption; the caption is content, so it is
+    // carried onto the image rather than dropped or left to become a paragraph
+    if (name === 'figure') {
+      const img = inner.match(/<img\b([^>]*)>/i)
+      const cap = inner.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/i)
+      if (img) pushImage(img[1], cap ? tidy(stripTags(cap[1])) : '')
+      continue
+    }
+
+    // Portable text has no table type here, so a table becomes a bulleted list
+    // with one item per row and its cells joined. Flattening it to a paragraph
+    // would run every cell together into one unreadable sentence.
+    if (name === 'table') {
+      const caption = inner.match(/<caption\b[^>]*>([\s\S]*?)<\/caption>/i)
+      if (caption && tidy(stripTags(caption[1]))) push('normal', `<strong>${tidy(caption[1])}</strong>`)
+      for (const row of inner.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+        const cells = [...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
+          .map((c) => tidy(c[1]))
+          .filter((c) => tidy(stripTags(c)))
+        if (cells.length) push('normal', cells.join(' — '), 'bullet')
       }
       continue
     }
@@ -250,16 +298,8 @@ export function htmlToPortableText(html: string): Content[] {
     // paragraphs may still contain an image
     const img = inner.match(/<img\b([^>]*)>/i)
     if (img) {
-      const src = img[1].match(/src=["']([^"']+)["']/i)?.[1]
+      pushImage(img[1])
       const rest = inner.replace(/<img\b[^>]*>/i, '')
-      if (src) {
-        out.push({
-          _type: 'image',
-          _key: key('i'),
-          url: decodeEntities(src),
-          alt: decodeEntities(img[1].match(/alt=["']([^"']*)["']/i)?.[1] || ''),
-        })
-      }
       if (tidy(stripTags(rest))) push('normal', rest)
       continue
     }

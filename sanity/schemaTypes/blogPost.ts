@@ -31,7 +31,14 @@ export default defineType({
       type: 'array',
       of: [
         {type: 'block'},
-        {type: 'image', options: {hotspot: true}, fields: [{name: 'alt', title: 'Alt text', type: 'string'}]},
+        {
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            {name: 'alt', title: 'Alt text', type: 'string'},
+            {name: 'caption', title: 'Caption', type: 'string', description: 'Shown under the image.'},
+          ],
+        },
       ],
     }),
     defineField({name: 'featured', title: 'Featured', type: 'boolean', initialValue: false}),

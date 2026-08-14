@@ -64,11 +64,12 @@ async function uploadImage(url: string): Promise<string | null> {
   }
 }
 
-const imageRef = (id: string, alt: string, key: string) => ({
+const imageRef = (id: string, alt: string, key: string, caption?: string) => ({
   _type: 'image',
   _key: key,
   asset: {_type: 'reference', _ref: id},
   alt,
+  ...(caption ? {caption} : {}),
 })
 
 /** Swaps image URLs for uploaded asset references, dropping any that failed. */
@@ -79,9 +80,9 @@ async function resolveImages(blocks: Content[]): Promise<unknown[]> {
       out.push(b)
       continue
     }
-    const id = dryRun ? 'dry-run' : await uploadImage(b.url)
-    if (id && !dryRun) out.push(imageRef(id, b.alt, b._key))
-    else if (dryRun) out.push({_type: 'image', _key: b._key, _dryRunUrl: b.url, alt: b.alt})
+    if (dryRun) continue
+    const id = await uploadImage(b.url)
+    if (id) out.push(imageRef(id, b.alt, b._key, b.caption))
   }
   return out
 }

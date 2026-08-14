@@ -8,6 +8,7 @@ const components: PortableTextComponents = {
       return (
         <figure className="prose-img">
           <img src={urlFor(value).width(1400).quality(82).url()} alt={value.alt || ''} loading="lazy" />
+          {value.caption ? <figcaption>{value.caption}</figcaption> : null}
         </figure>
       )
     },
