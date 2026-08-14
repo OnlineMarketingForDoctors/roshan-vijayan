@@ -80,14 +80,22 @@ Two things worth knowing before it goes live:
 
 ## Still outstanding
 
-**The Sanity revalidation webhook may not be firing.** After the last content
-script ran, pages kept serving stale copy for several minutes rather than
-updating immediately — which is what the webhook exists to prevent. Check
-Sanity → API → Webhooks: there should be one pointing at
-`https://<domain>/api/revalidate/` (**with** the trailing slash — the site
-redirects without it, and a redirect will break the signature check), with the
-secret matching `SANITY_REVALIDATE_SECRET` in Vercel. Without it, edits take up
-to five minutes to appear. With it, they are immediate.
+**The Sanity revalidation webhook works — but its URL needs changing at
+go-live.** It is verified: Vercel's runtime logs show it returning 200 for
+each document a content script patched. It currently points at
+`https://roshan-vijayan-2.vercel.app/api/revalidate/`, so update it to the
+real domain in Sanity → API → Webhooks. Keep the **trailing slash**: the site
+308-redirects without it, and a redirect breaks the signature check.
+
+Worth knowing rather than fixing: revalidation marks pages stale, it does not
+rebuild them. So the first page view after an edit still shows the old copy,
+and the one after that is correct. That is normal, not a fault — check twice
+before concluding an edit has not landed.
+
+To inspect deliveries, Vercel → Logs, filtered to `/api/revalidate`, shows
+every call with its status code. 401 means the secret in the webhook and
+`SANITY_REVALIDATE_SECRET` in Vercel have diverged; changing that variable
+needs a redeploy before it takes effect.
 
 **`/studio` is public.** The CMS is served at `https://<domain>/studio` and is
 protected only by Sanity login. That is normal, but it will be on the real
