@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import BeforeAfterGallery from '@/components/BeforeAfterGallery'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {beforeAfterQuery} from '@/sanity/lib/queries'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 
 export const metadata: Metadata = {
+  alternates: {canonical: absoluteUrl('/gallery/')},
   title: 'Before & After | RV Plastic Surgery',
   description:
     'Real before-and-after results from Mr Roshan Vijayan’s patients — natural, balanced and beautifully healed.',

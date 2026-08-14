@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {blogPostQuery, blogSlugsQuery} from '@/sanity/lib/queries'
@@ -29,7 +30,11 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {slug} = await params
   const p = await sanityFetch<any>(blogPostQuery, {slug}, null)
   if (!p) return {}
-  return {title: `${p.title} | RV Plastic Surgery`, description: p.excerpt || undefined}
+  return {
+    alternates: {canonical: absoluteUrl(`/blog/${slug}/`)},
+    title: `${p.title} | RV Plastic Surgery`,
+    description: p.excerpt || undefined,
+  }
 }
 
 export default async function BlogPostPage({params}: Params) {

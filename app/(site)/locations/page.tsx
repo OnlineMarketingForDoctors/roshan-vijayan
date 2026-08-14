@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {locationsPageQuery} from '@/sanity/lib/queries'
 import {mergeContent} from '@/sanity/lib/pages'
@@ -12,7 +13,11 @@ async function getContent(): Promise<LocationsPageContent> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const {seo} = await getContent()
-  return {title: seo.title, description: seo.description}
+  return {
+    alternates: {canonical: absoluteUrl('/locations/')},
+    title: seo.title,
+    description: seo.description,
+  }
 }
 
 export default async function LocationsPage() {

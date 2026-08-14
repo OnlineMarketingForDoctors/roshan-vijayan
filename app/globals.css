@@ -1048,3 +1048,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .to-top:hover{background:var(--gold);color:var(--charcoal);border-color:var(--gold)}
 .to-top:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.to-top{transition:opacity .01s,visibility .01s}}
+
+/* enquiry form states */
+.form-note{text-align:center;padding:2.4rem 1.6rem}
+.form-note h3{font-family:var(--font-serif);font-size:1.5rem;margin-bottom:.6rem}
+.form-note p{opacity:.85;line-height:1.6}
+.form-error{color:#b3261e;background:rgba(179,38,30,.07);border:1px solid rgba(179,38,30,.25);
+  border-radius:8px;padding:.75rem .9rem;margin-bottom:1rem;font-size:.92rem;line-height:1.5}
+.form-error a{color:inherit;text-decoration:underline}
+.contact-form button[disabled]{opacity:.6;cursor:progress}

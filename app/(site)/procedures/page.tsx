@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {procedureListQuery} from '@/sanity/lib/queries'
 import {procedurePath} from '@/lib/procedurePath'
 
 export const metadata: Metadata = {
+  alternates: {canonical: absoluteUrl('/procedures/')},
   title: 'Procedures | RV Plastic Surgery',
   description:
     'Aesthetic and reconstructive procedures by Mr Roshan Vijayan, Consultant Plastic Surgeon in Hertfordshire — body, breast, face & eyes, and skin & reconstruction.',

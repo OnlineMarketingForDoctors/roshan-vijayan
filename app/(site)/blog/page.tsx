@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {blogListQuery} from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
 
 export const metadata: Metadata = {
+  alternates: {canonical: absoluteUrl('/blog/')},
   title: 'Journal, Insight & Advice | RV Plastic Surgery',
   description:
     'Considered, honest guidance on aesthetic and reconstructive surgery, recovery and aftercare from Mr Roshan Vijayan and his team.',

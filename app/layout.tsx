@@ -1,6 +1,10 @@
 import type {Metadata} from 'next'
 import {Fraunces, Jost} from 'next/font/google'
+import {SITE_URL, isLive} from '@/lib/site'
 import './globals.css'
+
+// what appears when a page is shared on WhatsApp, LinkedIn or Facebook
+const OG_IMAGE = '/images/web/og-cover.jpg'
 
 // Load Fraunces as a variable font (no explicit weight) WITH the optical-size
 // axis, so large headings render in its high-contrast display shape — matching
@@ -21,16 +25,34 @@ const sans = Jost({
   display: 'swap',
 })
 
+const TITLE = 'RV Plastic Surgery | Mr Roshan Vijayan, Consultant Plastic Surgeon'
+const DESCRIPTION =
+  'Natural, balanced aesthetic and reconstructive surgery, consultant-led, in Hertfordshire, by Mr Roshan Vijayan, MBBS FRCS(Plast).'
+
 // Until go-live, keep search engines out of the staging URL. Flip the switch
 // by setting NEXT_PUBLIC_SITE_LIVE=true in Vercel when the real domain goes live.
-const isLive = process.env.NEXT_PUBLIC_SITE_LIVE === 'true'
-
 export const metadata: Metadata = {
-  title: 'RV Plastic Surgery | Mr Roshan Vijayan, Consultant Plastic Surgeon',
-  description:
-    'Natural, balanced aesthetic and reconstructive surgery, consultant-led, in Hertfordshire, by Mr Roshan Vijayan, MBBS FRCS(Plast).',
+  // resolves the relative image paths below, and every page's canonical link
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
   icons: {icon: '/favicon.svg'},
   robots: isLive ? undefined : {index: false, follow: false},
+  openGraph: {
+    type: 'website',
+    siteName: 'RV Plastic Surgery',
+    locale: 'en_GB',
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    images: [{url: OG_IMAGE, width: 1200, height: 630, alt: 'RV Plastic Surgery'}],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
+  },
 }
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

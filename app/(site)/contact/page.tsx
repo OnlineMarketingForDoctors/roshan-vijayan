@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import ContactForm from '@/components/ContactForm'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {contactPageQuery} from '@/sanity/lib/queries'
@@ -13,7 +14,11 @@ async function getContent(): Promise<ContactPageContent> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const {seo} = await getContent()
-  return {title: seo.title, description: seo.description}
+  return {
+    alternates: {canonical: absoluteUrl('/contact/')},
+    title: seo.title,
+    description: seo.description,
+  }
 }
 
 export default async function ContactPage() {

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import type {Metadata} from 'next'
+import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {
@@ -64,10 +65,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({params}: Params): Promise<Metadata> {
-  const {slug} = await params
+  const {category, slug} = await params
   const p = await sanityFetch<any>(procedureQuery, {slug}, null)
   if (!p) return {}
   return {
+    alternates: {canonical: absoluteUrl(`/procedures/${category}/${slug}/`)},
     title: p.seoTitle || `${p.title} in Hertfordshire | RV Plastic Surgery`,
     description: p.seoDescription || p.heroPromise || undefined,
   }
