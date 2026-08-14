@@ -18,10 +18,16 @@
  * post rather than creating a second copy, and an existing document is left
  * alone unless --force is passed.
  *
- * Images are fetched from the old site and uploaded into Sanity rather than
- * hotlinked, so the new site does not depend on the old one staying up. A
- * download that fails is reported and the post is still imported without it —
- * losing a picture is recoverable, losing the writing is not.
+ * Images are uploaded into Sanity rather than hotlinked, so the new site does
+ * not depend on the old one staying up. They are read from content/uploads/ if
+ * a copy of wp-content/uploads has been placed there, and fetched over HTTP
+ * otherwise — the old host answers image requests with its bot-challenge page,
+ * so the local copy is the route that works. A missing image is reported and
+ * the post still imports: losing a picture is recoverable, losing the writing
+ * is not.
+ *
+ * Re-run with --force once the images are available to fill them in; the text
+ * is regenerated identically, so nothing else changes.
  */
 import {getCliClient} from 'sanity/cli'
 import {readFileSync, existsSync} from 'fs'
@@ -39,23 +45,45 @@ const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
 /** Uploaded once per URL however many posts use it. */
 const uploaded = new Map<string, string | null>()
 
+/**
+ * Where a downloaded copy of wp-content/uploads may sit, mirroring the paths
+ * in the URLs. The old host answers image requests with its bot-challenge page
+ * rather than the file, so fetching them over HTTP fails; a folder copied off
+ * the server sidesteps that entirely and is used in preference when present.
+ */
+const localFor = (url: string): string | null => {
+  const m = url.match(/wp-content\/uploads\/(.+)$/)
+  if (!m) return null
+  const path = `content/uploads/${decodeURIComponent(m[1].split('?')[0])}`
+  return existsSync(path) ? path : null
+}
+
 async function uploadImage(url: string): Promise<string | null> {
   if (uploaded.has(url)) return uploaded.get(url)!
 
   try {
-    const res = await fetch(url, {headers: {'User-Agent': UA, Accept: 'image/*,*/*'}})
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const local = localFor(url)
+    let buf: Buffer
 
-    const type = res.headers.get('content-type') || ''
-    if (!type.startsWith('image/')) throw new Error(`not an image (${type || 'no content-type'})`)
+    if (local) {
+      buf = readFileSync(local)
+    } else {
+      const res = await fetch(url, {headers: {'User-Agent': UA, Accept: 'image/*,*/*'}})
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-    const buf = Buffer.from(await res.arrayBuffer())
-    if (buf.length < 100) throw new Error('empty response')
+      const type = res.headers.get('content-type') || ''
+      // the bot challenge answers with HTML and a 200, so the type is checked
+      if (!type.startsWith('image/')) throw new Error(`not an image (${type || 'no content-type'})`)
+
+      buf = Buffer.from(await res.arrayBuffer())
+    }
+
+    if (buf.length < 100) throw new Error('empty file')
 
     const filename = decodeURIComponent(url.split('/').pop()?.split('?')[0] || 'image.jpg')
     const asset = await client.assets.upload('image', buf, {filename})
     uploaded.set(url, asset._id)
-    console.log(`      uploaded  ${filename}  (${Math.round(buf.length / 1024)}KB)`)
+    console.log(`      uploaded  ${filename}  (${Math.round(buf.length / 1024)}KB)${local ? '  [local copy]' : ''}`)
     return asset._id
   } catch (err) {
     console.log(`      FAILED    ${url}\n                ${(err as Error)?.message}`)
