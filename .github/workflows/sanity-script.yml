@@ -15,6 +15,10 @@ on:
         description: Path to the script, relative to the repo root
         required: true
         default: scripts/add-arm-lift.ts
+      args:
+        description: 'Extra flags, e.g. --dry-run or --force (optional)'
+        required: false
+        default: ''
 
 jobs:
   run:
@@ -29,15 +33,19 @@ jobs:
 
       - run: npm ci
 
-      # the script path goes through the environment rather than being
-      # interpolated into the command, so its contents cannot run as shell
+      # the script path and the flags go through the environment rather than
+      # being interpolated into the command, so their contents cannot run as
+      # shell. read -ra splits the flags on whitespace into literal argv
+      # entries without interpreting anything in them.
       - name: Run the script
         env:
           SCRIPT: ${{ inputs.script }}
+          ARGS: ${{ inputs.args }}
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
         run: |
           if [ -z "$SANITY_AUTH_TOKEN" ]; then
             echo "SANITY_AUTH_TOKEN is not set - add it under Settings > Secrets and variables > Actions."
             exit 1
           fi
-          npx sanity exec "$SCRIPT" --with-user-token
+          read -ra EXTRA <<< "$ARGS"
+          npx sanity exec "$SCRIPT" --with-user-token "${EXTRA[@]}"
