@@ -30,7 +30,13 @@ const dryRun = process.argv.includes('--dry-run')
 const keyed = <T extends object>(prefix: string, items: T[]) =>
   items.map((item, i) => ({...item, _key: `${prefix}${i}`}))
 
-/** Compares ignoring _key, which is Sanity's own array bookkeeping. */
+/**
+ * Compares ignoring _key, which is Sanity's own array bookkeeping, and
+ * ignoring the order keys happen to come back in — Sanity does not preserve
+ * the order they were written in, so comparing serialised objects directly
+ * reports a difference where the content is identical. Absent and null are
+ * treated alike, since an unset field comes back as either.
+ */
 const sameContent = (a: unknown, b: unknown) => {
   const strip = (v: unknown): unknown =>
     Array.isArray(v)
@@ -38,7 +44,8 @@ const sameContent = (a: unknown, b: unknown) => {
       : v && typeof v === 'object'
         ? Object.fromEntries(
             Object.entries(v as Record<string, unknown>)
-              .filter(([k]) => k !== '_key')
+              .filter(([k, val]) => k !== '_key' && val !== null && val !== undefined)
+              .sort(([x], [y]) => (x < y ? -1 : x > y ? 1 : 0))
               .map(([k, val]) => [k, strip(val)]),
           )
         : v
