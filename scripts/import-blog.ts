@@ -163,6 +163,7 @@ async function run() {
     console.log(`      published ${post.date || '(no date — will use today)'}`)
     console.log(`      body      ${blocks.filter((b) => b._type === 'block').length} blocks, ${text.length} chars`)
     console.log(`      excerpt   ${excerpt.slice(0, 90)}${excerpt.length > 90 ? '…' : ''}`)
+    console.log(`      category  ${post.categories[0] || '(none)'}`)
 
     const inlineImages = blocks.filter((b) => b._type === 'image').length
     const coverUrl = post.thumbnailId ? attachments.get(post.thumbnailId)?.url : undefined
@@ -185,6 +186,7 @@ async function run() {
       slug: {_type: 'slug', current: slug},
       excerpt,
       publishedAt: post.date || new Date().toISOString(),
+      ...(post.categories[0] ? {category: post.categories[0]} : {}),
       body,
       featured: false,
     }

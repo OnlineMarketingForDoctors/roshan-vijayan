@@ -25,14 +25,29 @@ export const beforeAfterQuery = groq`*[_type=="beforeAfterCase" && defined(befor
 /* ---- Blog ---- */
 export const blogListQuery = groq`*[_type=="blogPost" && defined(publishedAt)]
   | order(featured desc, publishedAt desc){
-    _id, title, "slug": slug.current, excerpt, publishedAt, featured,
+    _id, title, "slug": slug.current, excerpt, publishedAt, featured, category,
     coverImage, "plain": pt::text(body)
   }`
+
+/** Category names with their post counts, for the journal sidebar. */
+export const blogCategoriesQuery = groq`*[_type=="blogPost" && defined(category)]{category}`
 
 export const blogSlugsQuery = groq`*[_type=="blogPost" && defined(slug.current)]{"slug": slug.current}`
 
 export const blogPostQuery = groq`*[_type=="blogPost" && slug.current==$slug][0]{
-  title, excerpt, publishedAt, coverImage, body
+  title, excerpt, publishedAt, coverImage, body, category
+}`
+
+/**
+ * Other posts to read next: same category first, then anything recent, never
+ * the post being read. Asking for more than are shown leaves room to drop the
+ * current one without coming up short.
+ */
+export const relatedPostsQuery = groq`{
+  "sameCategory": *[_type=="blogPost" && defined(publishedAt) && category==$category && slug.current!=$slug]
+    | order(publishedAt desc)[0...6]{title, "slug": slug.current, publishedAt, coverImage, category},
+  "recent": *[_type=="blogPost" && defined(publishedAt) && slug.current!=$slug]
+    | order(publishedAt desc)[0...6]{title, "slug": slug.current, publishedAt, coverImage, category}
 }`
 
 /* ---- Procedures ---- */

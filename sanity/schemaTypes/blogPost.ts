@@ -24,6 +24,19 @@ export default defineType({
       },
       fields: [{name: 'alt', title: 'Alt text', type: 'string'}],
     }),
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      description: 'Groups the post in the journal and drives the related posts shown beside it.',
+      options: {
+        list: [
+          {title: 'Body Lift Surgery', value: 'Body Lift Surgery'},
+          {title: 'Breast Contouring Surgery', value: 'Breast Contouring Surgery'},
+          {title: 'Minor Surgical Procedures', value: 'Minor Surgical Procedures'},
+        ],
+      },
+    }),
     defineField({name: 'publishedAt', title: 'Published at', type: 'datetime', initialValue: () => new Date().toISOString()}),
     defineField({
       name: 'body',
@@ -44,5 +57,5 @@ export default defineType({
     defineField({name: 'featured', title: 'Featured', type: 'boolean', initialValue: false}),
   ],
   orderings: [{title: 'Newest first', name: 'newest', by: [{field: 'publishedAt', direction: 'desc'}]}],
-  preview: {select: {title: 'title', subtitle: 'publishedAt', media: 'coverImage'}},
+  preview: {select: {title: 'title', subtitle: 'category', media: 'coverImage'}},
 })

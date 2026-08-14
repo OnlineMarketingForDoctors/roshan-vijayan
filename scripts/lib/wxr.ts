@@ -21,6 +21,8 @@ export type WxrPost = {
   excerpt: string
   html: string
   thumbnailId: string | null
+  /** WordPress categories, excluding tags. Usually exactly one. */
+  categories: string[]
 }
 
 export type WxrAttachment = {id: string; url: string; title: string}
@@ -94,6 +96,10 @@ export function parseWxr(xml: string): Wxr {
       excerpt: tag(item, 'excerpt:encoded'),
       html: tag(item, 'content:encoded'),
       thumbnailId: thumb ? thumb[1] : null,
+      // domain="category" separates real categories from tags, which share the element
+      categories: [
+        ...item.matchAll(/<category domain="category"[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/category>/g),
+      ].map((m) => decodeEntities(m[1]).trim()).filter(Boolean),
     })
   }
 

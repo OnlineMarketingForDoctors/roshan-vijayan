@@ -21,6 +21,7 @@ type Post = {
   featured?: boolean
   coverImage?: unknown
   plain?: string
+  category?: string
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -37,8 +38,12 @@ function cover(img: unknown, w: number, fallback: string) {
   return img ? urlFor(img as never).width(w).quality(82).url() : fallback
 }
 
-export default async function BlogPage() {
-  const posts = await sanityFetch<Post[]>(blogListQuery, {}, [])
+export default async function BlogPage({searchParams}: {searchParams?: Promise<{category?: string}>}) {
+  const all = await sanityFetch<Post[]>(blogListQuery, {}, [])
+
+  // the sidebar links here with ?category=, so the listing narrows to match
+  const active = (await searchParams)?.category
+  const posts = active ? all.filter((p) => p.category === active) : all
 
   if (!posts.length) {
     return (
@@ -46,7 +51,13 @@ export default async function BlogPage() {
         <div className="section-head center reveal">
           <span className="eyebrow">The Journal</span>
           <h1 className="display">Honest insight, thoughtfully written.</h1>
-          <p>New articles are on the way. Please check back shortly.</p>
+          {active ? (
+            <p>
+              Nothing filed under “{active}” yet. <Link href="/blog">See every article</Link>.
+            </p>
+          ) : (
+            <p>New articles are on the way. Please check back shortly.</p>
+          )}
         </div>
       </section>
     )
@@ -54,6 +65,8 @@ export default async function BlogPage() {
 
   const featured = posts.find((p) => p.featured) || posts[0]
   const rest = posts.filter((p) => p._id !== featured._id)
+
+  const categories = [...new Set(all.map((p) => p.category).filter(Boolean))] as string[]
 
   return (
     <>
@@ -79,12 +92,31 @@ export default async function BlogPage() {
         </div>
       </section>
 
+      {categories.length ? (
+        <section className="section" style={{paddingBottom: 0}}>
+          <nav className="blog-filters reveal" aria-label="Filter by category">
+            <Link href="/blog" className={active ? undefined : 'is-active'}>
+              All
+            </Link>
+            {categories.map((c) => (
+              <Link
+                key={c}
+                href={`/blog/?category=${encodeURIComponent(c)}`}
+                className={active === c ? 'is-active' : undefined}
+              >
+                {c}
+              </Link>
+            ))}
+          </nav>
+        </section>
+      ) : null}
+
       <section className="section">
         <article className="blog-feature reveal">
           <Link className="bf-link" href={`/blog/${featured.slug}`} style={{display: 'contents'}}>
             <img src={cover(featured.coverImage, 900, '/images/web/blog-choosing.png')} alt={featured.title} />
             <div className="bf-body">
-              <span className="post-cat">Editor’s Pick</span>
+              <span className="post-cat">{active || 'Editor’s Pick'}</span>
               <h2 className="display">{featured.title}</h2>
               {featured.excerpt ? <p className="body">{featured.excerpt}</p> : null}
               <p className="post-meta">
@@ -105,7 +137,7 @@ export default async function BlogPage() {
                     <img src={cover(p.coverImage, 600, '/images/web/blog-consultation.png')} alt={p.title} loading="lazy" />
                   </div>
                   <div className="post-body">
-                    <span className="post-cat">Journal</span>
+                    <span className="post-cat">{p.category || 'Journal'}</span>
                     <h3>{p.title}</h3>
                     <p className="post-excerpt">{p.excerpt || ''}</p>
                     <p className="post-meta">
