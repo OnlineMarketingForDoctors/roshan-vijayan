@@ -446,7 +446,7 @@ export const HOME_PAGE: HomePageContent = {
       body: 'Mr Vijayan personally reviews you, answers your emails within a day, and calls on day one after surgery, never handed to others.',
     },
   ],
-  diffImageUrl: '/images/web/doctor-scrubs.jpg',
+  diffImageUrl: '/images/web/doctor-difference.jpg',
   aboutEyebrow: 'About Mr Vijayan',
   aboutHeadingTop: 'Eighteen years a doctor.',
   aboutHeadingEm: 'An artist’s eye.',

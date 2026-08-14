@@ -130,7 +130,7 @@ export default async function Home() {
       {/* THE DIFFERENCE */}
       <section className="difference" id="difference">
         <div className="diff-media reveal">
-          <img src={c.diffImageUrl} alt="Mr Roshan Vijayan in surgical scrubs" />
+          <img src={c.diffImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
         </div>
         <div className="diff-copy">
           <span className="eyebrow">{c.diffEyebrow}</span>
