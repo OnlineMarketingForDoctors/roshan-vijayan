@@ -27,7 +27,11 @@
  * is not.
  *
  * Re-run with --force once the images are available to fill them in; the text
- * is regenerated identically, so nothing else changes.
+ * is regenerated identically, so nothing else changes. A --force run replaces
+ * whole documents, but it will not strip a post back: a cover already in Sanity
+ * is kept unless a real one downloads to replace it, and Featured is preserved.
+ * That matters here because the covers currently on the blog were generated to
+ * stand in for the originals, which the old host still refuses to serve.
  */
 import {getCliClient} from 'sanity/cli'
 import {readFileSync, existsSync} from 'fs'
@@ -44,6 +48,9 @@ const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
 
 /** Uploaded once per URL however many posts use it. */
 const uploaded = new Map<string, string | null>()
+
+/** The fields of an already-imported post that a re-run must not throw away. */
+type Existing = {_id: string; coverImage?: unknown; featured?: boolean}
 
 /**
  * Where a downloaded copy of wp-content/uploads may sit, mirroring the paths
@@ -147,7 +154,12 @@ async function run() {
     const slug = post.slug || post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
     const _id = `blog-${slug}`.slice(0, 128)
 
-    const existing = await client.fetch<{_id: string} | null>(`*[_id==$id][0]{_id}`, {id: _id})
+    // coverImage and featured are read back because the write below replaces the
+    // whole document — see the note where the document is assembled
+    const existing = await client.fetch<Existing | null>(
+      `*[_id==$id][0]{_id, coverImage, featured}`,
+      {id: _id},
+    )
     if (existing && !force) {
       console.log(`\nleft alone  ${slug} — already in Sanity (pass --force to overwrite)`)
       left++
@@ -188,9 +200,19 @@ async function run() {
       publishedAt: post.date || new Date().toISOString(),
       ...(post.categories[0] ? {category: post.categories[0]} : {}),
       body,
-      featured: false,
+      // createOrReplace writes the whole document, so anything set in Studio and
+      // not rebuilt here would be dropped. Carry it over rather than reset it.
+      featured: existing?.featured ?? false,
     }
+
+    // A cover already in Sanity is only replaced by one that actually downloaded.
+    // Otherwise a re-run against the still-unreachable old host would strip the
+    // covers off every post — including the generated ones standing in for them.
     if (coverId) doc.coverImage = imageRef(coverId, post.title, 'cover')
+    else if (existing?.coverImage) {
+      doc.coverImage = existing.coverImage
+      if (coverUrl) console.log(`      cover     kept the one already in Sanity`)
+    }
 
     await client.createOrReplace(doc as never)
     existing ? updated++ : created++
