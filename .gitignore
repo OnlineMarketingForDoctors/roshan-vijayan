@@ -10,3 +10,6 @@ next-env.d.ts
 .sanity
 *.log
 *.tsbuildinfo
+
+# Restored wp-content/uploads, extracted from the zip in Assets/ — not re-committed
+content/uploads/
