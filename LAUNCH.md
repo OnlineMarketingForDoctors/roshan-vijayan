@@ -101,21 +101,28 @@ needs a redeploy before it takes effect.
 protected only by Sanity login. That is normal, but it will be on the real
 domain, and `robots.txt` disallows it so it should not be indexed.
 
-**The blog covers are stand-ins, and 54 tables are missing.** All 141 posts
-imported with their text, category and excerpt, and all 141 carry a cover — but
-those covers were generated, not migrated. None of the 194 original images could
-be fetched: the old host answers image requests with a SiteGround bot-challenge
-page (HTTP 202 and HTML, never the file), so this is not something a retry
-fixes. 141 of those images were the post covers; the other 54 were tables and
-charts inside the articles, and the import drops an image it cannot fetch. So
-some articles now refer to a comparison table that is not on the page.
+**The blog covers are generated, not the originals.** All 141 posts imported
+with their text, category and excerpt, and all 141 carry a cover. None of the
+194 original images could be fetched over the network: the old host answers
+image requests with a SiteGround bot-challenge page (HTTP 202 and HTML, never
+the file), so this is not something a retry fixes.
 
-The fix for both is the same: get `wp-content/uploads` off SiteGround by File
+The 53 tables and charts that sit inside the articles — across 28 posts — are
+the real ones. They were recovered from a copy of the originals and are back in
+place, which matters because they carry clinical and pricing figures that must
+never be recreated from a description.
+
+The 141 covers are a different case. They were generated to a brief rather than
+migrated, each one written from what the original cover showed, so a post about
+arm-lift recovery gets an arm-lift photograph rather than a stock abstraction.
+They read correctly and are consistent with the rest of the site; they are just
+not the pictures the old blog used.
+
+To put the originals back, get `wp-content/uploads` off SiteGround by File
 Manager or FTP, put it in `content/uploads/`, and re-run
 `scripts/import-blog.ts --force`. It reads the local folder in preference to the
-network, restores the real covers and the missing tables, and leaves a generated
-cover in place wherever an original still cannot be found. Until then the blog
-reads correctly but a handful of posts are missing a table they mention.
+network and leaves a generated cover in place wherever an original still cannot
+be found, so nothing is lost by running it.
 
 **No analytics.** Nothing is measuring traffic. Vercel Analytics is one switch
 in the dashboard; Google Analytics needs a tag adding.
