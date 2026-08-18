@@ -34,6 +34,16 @@ export const blogCategoriesQuery = groq`*[_type=="blogPost" && defined(category)
 
 export const blogSlugsQuery = groq`*[_type=="blogPost" && defined(slug.current)]{"slug": slug.current}`
 
+/**
+ * Titles and slugs only, for the human sitemap. blogListQuery would do, but it
+ * carries the plain text of every article — several megabytes to render a list
+ * of links.
+ */
+export const blogIndexQuery = groq`*[_type=="blogPost" && defined(slug.current)]
+  | order(title asc){
+    _id, title, "slug": slug.current, category
+  }`
+
 export const blogPostQuery = groq`*[_type=="blogPost" && slug.current==$slug][0]{
   title, excerpt, publishedAt, coverImage, body, category
 }`

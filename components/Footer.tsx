@@ -37,6 +37,7 @@ export default function Footer({settings}: {settings: Settings}) {
           <Link href="/locations">Locations</Link>
           <Link href="/blog">Blog</Link>
           <Link href="/contact">Contact</Link>
+          <Link href="/sitemap">Sitemap</Link>
         </nav>
         <div className="foot-contact">
           <h5>Contact</h5>

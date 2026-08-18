@@ -20,6 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {path: '/locations/', priority: 0.7},
     {path: '/blog/', priority: 0.6},
     {path: '/contact/', priority: 0.9},
+    {path: '/sitemap/', priority: 0.2},
   ]
 
   const [procedures, posts] = await Promise.all([
