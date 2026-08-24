@@ -1,6 +1,7 @@
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {siteSettingsQuery, procedureListQuery} from '@/sanity/lib/queries'
+import {siteSettingsQuery, procedureListQuery, beforeAfterQuery} from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
+import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Reveal from '@/components/Reveal'
@@ -16,9 +17,10 @@ type ProcedureRow = {
 }
 
 export default async function SiteLayout({children}: {children: React.ReactNode}) {
-  const [settings, procedures] = await Promise.all([
+  const [settings, procedures, baCases] = await Promise.all([
     sanityFetch(siteSettingsQuery, {}, null),
     sanityFetch<ProcedureRow[]>(procedureListQuery, {}, []),
+    sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
   ])
 
   // Build the menu thumbnails here rather than in the header, so the client
@@ -32,10 +34,13 @@ export default async function SiteLayout({children}: {children: React.ReactNode}
       : null,
   }))
 
+  // the before & after menu lists the same treatments the gallery groups by
+  const baTreatments = buildBAProcedures(baCases).map((p) => ({slug: p.slug, title: p.title}))
+
   return (
     <>
       <div className="grain" aria-hidden="true" />
-      <Header settings={settings} procedures={navProcedures} />
+      <Header settings={settings} procedures={navProcedures} results={baTreatments} />
       <main>{children}</main>
       <Footer settings={settings} />
       <Reveal />

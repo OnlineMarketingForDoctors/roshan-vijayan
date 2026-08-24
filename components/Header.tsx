@@ -5,6 +5,8 @@ import Link from 'next/link'
 import {procedurePath} from '@/lib/procedurePath'
 
 type Procedure = {slug: string; title: string; category?: string; image?: string | null}
+/** A before & after treatment, one per page under /gallery. */
+type Result = {slug: string; title: string}
 type Settings = {phone?: string} | null
 
 /** Menu columns, in display order. Headings link to the matching band on /procedures. */
@@ -23,7 +25,15 @@ function telHref(phone?: string) {
   return 'tel:' + d
 }
 
-export default function Header({settings, procedures}: {settings: Settings; procedures: Procedure[]}) {
+export default function Header({
+  settings,
+  procedures,
+  results = [],
+}: {
+  settings: Settings
+  procedures: Procedure[]
+  results?: Result[]
+}) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [preview, setPreview] = useState<Procedure | null>(null)
@@ -153,7 +163,28 @@ export default function Header({settings, procedures}: {settings: Settings; proc
               </span>
             )}
           </span>
-          <Link href="/gallery">Before &amp; After</Link>
+          <span className="nav-drop">
+            <Link href="/gallery">
+              Before &amp; After
+              {results.length ? (
+                <span className="nav-caret" aria-hidden="true">
+                  ▾
+                </span>
+              ) : null}
+            </Link>
+            {results.length ? (
+              <span className="nav-menu">
+                {results.map((r) => (
+                  <Link key={r.slug} href={`/gallery/${r.slug}`}>
+                    {r.title}
+                  </Link>
+                ))}
+                <Link className="nav-menu-all" href="/gallery">
+                  See every case
+                </Link>
+              </span>
+            ) : null}
+          </span>
           <Link href="/locations">Locations</Link>
         </nav>
 
@@ -211,6 +242,18 @@ export default function Header({settings, procedures}: {settings: Settings; proc
             </details>
           ))}
           <Link href="/gallery" onClick={close}>Before &amp; After</Link>
+          {results.length ? (
+            <details className="mm-group">
+              <summary className="mm-head">Results by procedure</summary>
+              <div className="mm-items">
+                {results.map((r) => (
+                  <Link key={r.slug} href={`/gallery/${r.slug}`} onClick={close}>
+                    {r.title}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          ) : null}
           <Link href="/locations" onClick={close}>Locations</Link>
           <Link href="/blog" onClick={close}>Blog</Link>
           <Link href="/contact" onClick={close}>Contact</Link>

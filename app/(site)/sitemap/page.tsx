@@ -2,7 +2,8 @@ import Link from 'next/link'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {procedureListQuery, blogIndexQuery} from '@/sanity/lib/queries'
+import {procedureListQuery, blogIndexQuery, beforeAfterQuery} from '@/sanity/lib/queries'
+import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import {procedurePath, categorySegment} from '@/lib/procedurePath'
 
 export const metadata: Metadata = {
@@ -34,10 +35,12 @@ const AREAS: {seg: string; title: string}[] = [
 ]
 
 export default async function SitemapPage() {
-  const [procedures, posts] = await Promise.all([
+  const [procedures, posts, baCases] = await Promise.all([
     sanityFetch<Procedure[]>(procedureListQuery, {}, []),
     sanityFetch<Post[]>(blogIndexQuery, {}, []),
+    sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
   ])
+  const results = buildBAProcedures(baCases)
 
   const areas = AREAS.map((a) => ({
     ...a,
@@ -93,6 +96,19 @@ export default async function SitemapPage() {
                   </ul>
                 </div>
               ))}
+            </section>
+          ) : null}
+
+          {results.length ? (
+            <section className="sitemap-block">
+              <h2>Before &amp; After</h2>
+              <ul className="sitemap-list">
+                {results.map((r) => (
+                  <li key={r.slug}>
+                    <Link href={`/gallery/${r.slug}`}>{r.title}</Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 
