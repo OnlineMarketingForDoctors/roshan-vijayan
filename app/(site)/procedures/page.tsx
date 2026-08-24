@@ -4,6 +4,7 @@ import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {procedureListQuery} from '@/sanity/lib/queries'
 import {procedurePath} from '@/lib/procedurePath'
+import {SERVICE_TAGS, type ServiceTag} from '@/lib/serviceCategories'
 
 export const metadata: Metadata = {
   alternates: {canonical: absoluteUrl('/procedures/')},
@@ -12,12 +13,8 @@ export const metadata: Metadata = {
     'Aesthetic and reconstructive procedures by Mr Roshan Vijayan, Consultant Plastic Surgeon in Hertfordshire — body, breast, face & eyes, and skin & reconstruction.',
 }
 
-/**
- * A pill in a category band. `slug` names the procedure page it links to; pills
- * without one describe a service that has no page of its own and stay as plain
- * labels.
- */
-type Tag = {label: string; slug?: string}
+/** A pill in a category band — see lib/serviceCategories. */
+type Tag = ServiceTag
 
 type Category = {
   id: string
@@ -42,14 +39,7 @@ const CATEGORIES: Category[] = [
     body: 'A particular focus of the practice: restoring the body after pregnancy or significant weight loss by refining loose, redundant skin and re-defining a natural, proportioned shape.',
     img: '/images/web/body-contour.jpg',
     alt: 'Body contouring surgery',
-    tags: [
-      {label: 'Abdominoplasty', slug: 'abdominoplasty'},
-      {label: 'Arm Lift', slug: 'arm-lift'},
-      {label: 'Thigh Lift', slug: 'thigh-lift'},
-      {label: 'Liposuction', slug: 'liposuction-contouring'},
-      {label: 'Post-Weight-Loss Lift'},
-      {label: 'Mummy Makeover'},
-    ],
+    tags: SERVICE_TAGS.body,
     cta: 'Enquire about body surgery',
   },
   {
@@ -60,14 +50,7 @@ const CATEGORIES: Category[] = [
     body: 'From reduction and uplift to augmentation and reconstruction, Mr Vijayan plans breast surgery around your frame and your wishes, for results that feel as natural as they look.',
     img: '/images/web/decolletage.jpg',
     alt: 'Breast surgery',
-    tags: [
-      {label: 'Breast Reduction', slug: 'breast-reduction'},
-      {label: 'Breast Uplift', slug: 'breast-lift'},
-      {label: 'Breast Augmentation', slug: 'breast-augmentation'},
-      {label: 'Breast Reconstruction'},
-      {label: 'Gynaecomastia', slug: 'male-gynaecomastia-reduction'},
-      {label: 'Nipple Correction'},
-    ],
+    tags: SERVICE_TAGS.breast,
     cta: 'Enquire about breast surgery',
     flip: true,
     bg: true,
@@ -80,15 +63,7 @@ const CATEGORIES: Category[] = [
     body: 'Facial and eyelid surgery designed to soften the signs of time while keeping every feature unmistakably yours, subtle, rested and naturally in keeping with your face.',
     img: '/images/web/face-portrait.jpg',
     alt: 'Facial aesthetic surgery',
-    tags: [
-      {label: 'Facelift', slug: 'facelift'},
-      {label: 'Brow Lift'},
-      {label: 'Eyelid Surgery', slug: 'upper-and-lower-lid-blepharoplasty'},
-      {label: 'Rhinoplasty', slug: 'rhinoplasty'},
-      {label: 'Lip Lift', slug: 'lip-lift'},
-      {label: 'Ear Correction', slug: 'prominent-ear-correction'},
-      {label: 'Split Ear Lobe Correction', slug: 'split-ear-lobe-correction'},
-    ],
+    tags: SERVICE_TAGS.face,
     cta: 'Enquire about facial surgery',
   },
   {
@@ -99,16 +74,7 @@ const CATEGORIES: Category[] = [
     body: 'From mole and lesion checks to skin-cancer removal and reconstructive work, Mr Vijayan brings reconstructive precision to results that heal discreetly and beautifully.',
     img: '/images/web/proc-skin.png',
     alt: 'Skin and reconstructive surgery',
-    tags: [
-      {label: 'Skin-Cancer Removal', slug: 'aesthetic-repair-and-reconstruction-after-skin-cancer-removal'},
-      // Split from "Mole & Cyst Removal" so each pill can reach its own page.
-      {label: 'Mole Removal', slug: 'mole-removal'},
-      {label: 'Cyst Removal', slug: 'cyst-removal'},
-      {label: 'Lipoma Removal', slug: 'lipoma-removal'},
-      {label: 'Scar Revision', slug: 'scar-revision-and-correction'},
-      {label: 'Reconstructive Surgery'},
-      {label: 'Dermatoscopy Review'},
-    ],
+    tags: SERVICE_TAGS.skin,
     cta: 'Enquire about skin surgery',
     flip: true,
     bg: true,

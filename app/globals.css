@@ -99,7 +99,10 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .menu-toggle span{width:24px;height:2px;background:var(--ivory);border-radius:2px;transition:.4s;
   box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .header-phone{color:var(--ivory);font-weight:700;font-size:.9rem;letter-spacing:.04em;white-space:nowrap;
-  text-shadow:0 1px 14px rgba(0,0,0,.55);transition:color .35s var(--ease)}
+  text-shadow:0 1px 14px rgba(0,0,0,.55);transition:color .35s var(--ease);
+  display:inline-flex;align-items:center;gap:.45rem}
+/* the glyph carries no shadow of its own: at this weight it muddies the stroke */
+.header-phone-glyph{flex:none;filter:drop-shadow(0 1px 8px rgba(0,0,0,.45))}
 .header-phone:hover{color:var(--gold)}
 .header-phone-icon{display:none;align-items:center;justify-content:center;color:var(--ivory);
   padding:11px;background:rgba(36,26,16,.5);border:1px solid rgba(255,255,255,.38);border-radius:12px;
@@ -248,6 +251,8 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .svc-cols ul{list-style:none}
 .svc-cols li{font-size:clamp(.86rem,1vw,.96rem);padding:.62rem 0;letter-spacing:.01em;
   color:rgba(246,240,230,.92);border-bottom:1px solid rgba(220,200,166,.16);white-space:nowrap}
+.svc-cols li a{color:inherit;transition:color .3s var(--ease)}
+.svc-cols li a:hover{color:var(--gold)}
 .svc-cta{margin-top:1.7rem;align-self:flex-start;
   background:var(--ivory);color:var(--charcoal);border-color:var(--ivory);padding:.95rem 1.7rem}
 .svc-cta span{margin-left:.5rem}
@@ -275,8 +280,20 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
    the gradient below carries it into the charcoal the copy sits on */
 .diff-media{position:absolute;inset:0;z-index:0}
 .diff-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 22%}
+/* An eased ramp rather than two stops. A straight fade from clear to solid
+   over a fifth of the width reads as a vertical seam down the middle of the
+   photograph; these stops start the fall earlier, bend it through the middle
+   and still reach solid charcoal before the copy column begins, so the text
+   keeps a flat ground to sit on. */
 .diff-media::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(to right,transparent 28%,var(--charcoal) 50%)}
+  background:linear-gradient(to right,
+    rgba(51,48,44,0) 6%,
+    rgba(51,48,44,.06) 20%,
+    rgba(51,48,44,.22) 30%,
+    rgba(51,48,44,.46) 38%,
+    rgba(51,48,44,.72) 44%,
+    rgba(51,48,44,.90) 48%,
+    var(--charcoal) 53%)}
 .diff-copy{grid-column:2;z-index:2;padding:clamp(3.5rem,7vw,7rem) clamp(1.5rem,5vw,5rem)}
 .diff-copy .eyebrow{color:var(--gold)}
 .diff-copy h2{color:var(--ivory);margin-bottom:2.5rem}
@@ -585,7 +602,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   /* stacked here, so the photograph goes back to being a block above the copy */
   .diff-media{position:relative;inset:auto;min-height:360px}
   .diff-copy{grid-column:auto}
-  .diff-media::after{background:linear-gradient(to bottom,transparent 60%,var(--charcoal))}
+  .diff-media::after{background:linear-gradient(to bottom,
+    rgba(51,48,44,0) 30%,
+    rgba(51,48,44,.18) 52%,
+    rgba(51,48,44,.55) 72%,
+    rgba(51,48,44,.85) 88%,
+    var(--charcoal) 100%)}
   .about-media{margin-top:1.5rem}
   .gallery-art{height:78vw;max-height:560px;margin-top:1rem}
   .steps{grid-template-columns:repeat(2,1fr);gap:2rem}
@@ -676,7 +698,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .feature-row.flip .feature-media{order:2}
 /* Mirror a photo so the subject faces the adjacent copy (toggled per image in Sanity). */
 .mirrored{transform:scaleX(-1)}
-.feature-media{position:relative}
+/* The image and its corner tag share a frame so a caption can sit below both.
+   Without it the tag anchors to the bottom of the whole column and lands on
+   top of the caption. The frame takes the column's height, so an image with no
+   caption is unchanged. */
+.feature-media{position:relative;display:flex;flex-direction:column}
+.fm-frame{position:relative;flex:1 1 auto;min-height:0}
 .feature-media img{width:100%;height:100%;max-height:580px;object-fit:cover;border-radius:6px;
   box-shadow:var(--shadow)}
 .feature-media .fm-tag{position:absolute;left:1.1rem;bottom:1.1rem;background:rgba(34,26,16,.78);
@@ -1163,7 +1190,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 }
 
 /* caption under a section image */
-.fm-caption{margin-top:.7rem;font-size:.85rem;line-height:1.5;color:var(--soft)}
+.fm-caption{flex:none;margin-top:.7rem;font-size:.85rem;line-height:1.5;color:var(--soft)}
 
 /* the reviewed-by line above a procedure article */
 .med-review{font-size:.86rem;line-height:1.6;color:var(--soft);text-align:center;

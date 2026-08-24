@@ -2,70 +2,88 @@
 
 import {useCallback, useEffect, useRef, useState} from 'react'
 import Link from 'next/link'
+import {SERVICE_TAGS, type ServiceTag} from '@/lib/serviceCategories'
 
-type Service = {title: string; img: string; alt: string; cols: string[][]; cta: string}
+type Service = {id: string; title: string; img: string; alt: string; cta: string}
 
+/**
+ * The cards, in order. `id` matches both the band on /procedures the button
+ * scrolls to and the service list in lib/serviceCategories, so the names shown
+ * here are the same ones that page shows and each links to its own page.
+ */
 const SERVICES: Service[] = [
   {
+    id: 'body',
     title: 'Body',
     img: '/images/web/body-contour.jpg',
     alt: 'Body contouring surgery',
-    cols: [
-      ['Abdominoplasty', 'Arm Lift', 'Thigh Lift'],
-      ['Liposuction', 'Post-Weight-Loss Lift', 'Mummy Makeover'],
-    ],
     cta: 'View all body procedures',
   },
   {
+    id: 'breast',
     title: 'Breast',
     img: '/images/web/decolletage.jpg',
     alt: 'Breast surgery',
-    cols: [
-      ['Breast Reduction', 'Breast Uplift', 'Breast Augmentation'],
-      ['Breast Reconstruction', 'Gynaecomastia', 'Nipple Correction'],
-    ],
     cta: 'View all breast procedures',
   },
   {
+    id: 'face',
     title: 'Face & Eyes',
     img: '/images/web/face-portrait.jpg',
     alt: 'Facial aesthetic surgery',
-    cols: [
-      ['Facelift', 'Brow Lift', 'Eyelid Surgery'],
-      ['Rhinoplasty', 'Lip Lift', 'Ear Correction'],
-    ],
     cta: 'View all facial procedures',
   },
   {
+    id: 'skin',
     title: 'Skin & Reconstruction',
     img: '/images/web/instruments.jpg',
     alt: 'Skin and reconstructive surgery',
-    cols: [
-      ['Skin-Cancer Removal', 'Mole & Cyst Removal', 'Lipoma Removal'],
-      ['Scar Revision', 'Reconstructive Surgery', 'Dermatoscopy Review'],
-    ],
     cta: 'View all skin procedures',
   },
 ]
 
+/** Two columns per card, filled down then across. */
+const columns = (tags: ServiceTag[]) => {
+  const half = Math.ceil(tags.length / 2)
+  return [tags.slice(0, half), tags.slice(half)]
+}
+
 const GAP = 14
 
-export default function ServicesCarousel() {
+/**
+ * @param paths procedure slug -> its URL, resolved on the server from Sanity so
+ *   a service whose page has not been published yet stays a plain label.
+ */
+export default function ServicesCarousel({paths = {}}: {paths?: Record<string, string>}) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
   const cwRef = useRef(0)
+  // the card that was open a moment ago is still shrinking, so it must not be
+  // the one the offset is measured from
+  const leaving = useRef(0)
 
   const render = useCallback((idx: number) => {
     const track = trackRef.current
     if (track) track.style.transform = `translateX(${-idx * (cwRef.current + GAP)}px)`
   }, [])
 
+  /**
+   * The track shifts by one collapsed card per step, so it needs a collapsed
+   * card's width. Card widths animate over .85s, so measuring the card that is
+   * opening or the one that is closing returns a width part-way through the
+   * animation: the track then stops short and the open card's first letters sit
+   * outside the viewport. Measure one that is not moving.
+   */
   const measure = useCallback(
     (idx: number) => {
       const track = trackRef.current
       if (!track || !track.children.length) return
-      const collapsed = Array.from(track.children).find((_, i) => i !== idx) || track.children[0]
-      cwRef.current = (collapsed as HTMLElement).getBoundingClientRect().width
+      const kids = Array.from(track.children) as HTMLElement[]
+      const settled =
+        kids.find((_, i) => i !== idx && i !== leaving.current) ||
+        kids.find((_, i) => i !== idx) ||
+        kids[0]
+      cwRef.current = settled.getBoundingClientRect().width
       render(idx)
     },
     [render],
@@ -75,10 +93,22 @@ export default function ServicesCarousel() {
     measure(active)
     const onResize = () => measure(active)
     window.addEventListener('resize', onResize)
-    const t = setTimeout(() => measure(active), 400)
+
+    // whatever the mid-animation measurement produced, the widths are final
+    // once the card has finished growing, so take them again and correct
+    const track = trackRef.current
+    const onEnd = (e: TransitionEvent) => {
+      if (e.propertyName === 'flex-basis') {
+        leaving.current = active
+        measure(active)
+      }
+    }
+    track?.addEventListener('transitionend', onEnd)
+
     return () => {
       window.removeEventListener('resize', onResize)
-      clearTimeout(t)
+      track?.removeEventListener('transitionend', onEnd)
+      leaving.current = active
     }
   }, [active, measure])
 
@@ -103,15 +133,20 @@ export default function ServicesCarousel() {
                 <h3 className="svc-title">{s.title}</h3>
                 <div className="svc-reveal">
                   <div className="svc-cols">
-                    {s.cols.map((col, ci) => (
+                    {columns(SERVICE_TAGS[s.id] || []).map((col, ci) => (
                       <ul key={ci}>
-                        {col.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
+                        {col.map((t) => {
+                          const href = t.slug ? paths[t.slug] : undefined
+                          return (
+                            <li key={t.label}>
+                              {href ? <Link href={href}>{t.label}</Link> : t.label}
+                            </li>
+                          )
+                        })}
                       </ul>
                     ))}
                   </div>
-                  <Link className="btn svc-cta" href="/procedures">
+                  <Link className="btn svc-cta" href={`/procedures/#${s.id}`}>
                     {s.cta} <span>›</span>
                   </Link>
                 </div>

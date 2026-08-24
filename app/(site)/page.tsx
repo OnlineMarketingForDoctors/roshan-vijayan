@@ -1,6 +1,13 @@
 import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {reviewsQuery, siteSettingsQuery, beforeAfterQuery, homePageQuery} from '@/sanity/lib/queries'
+import {
+  reviewsQuery,
+  siteSettingsQuery,
+  beforeAfterQuery,
+  homePageQuery,
+  procedureSlugsQuery,
+} from '@/sanity/lib/queries'
+import {procedurePath} from '@/lib/procedurePath'
 import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
@@ -30,15 +37,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [reviews, settings, baCases, c] = await Promise.all([
+  const [reviews, settings, baCases, procSlugs, c] = await Promise.all([
     sanityFetch<Review[]>(reviewsQuery, {}, []),
     sanityFetch<Settings>(siteSettingsQuery, {}, null),
     sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
+    sanityFetch<{slug: string; category?: string}[]>(procedureSlugsQuery, {}, []),
     getContent(),
   ])
 
   const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
   const baProcedures = buildBAProcedures(baCases)
+  // slug -> URL, so the services carousel links only to pages that exist
+  const servicePaths = Object.fromEntries(
+    (procSlugs || []).map((p) => [p.slug, procedurePath(p.category, p.slug)]),
+  )
 
   return (
     <>
@@ -129,7 +141,7 @@ export default async function Home() {
             {c.servicesLinkLabel} <span className="arrow">→</span>
           </Link>
         </div>
-        <ServicesCarousel />
+        <ServicesCarousel paths={servicePaths} />
       </section>
 
       {/* THE DIFFERENCE */}

@@ -230,8 +230,10 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="overview">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={altOf(p.overviewImage, p.title)} />
-              <span className="fm-tag">{p.title}</span>
+              <div className="fm-frame">
+                <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={altOf(p.overviewImage, p.title)} />
+                <span className="fm-tag">{p.title}</span>
+              </div>
               {captionOf(p.overviewImage) ? <p className="fm-caption">{captionOf(p.overviewImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
@@ -288,8 +290,10 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="benefits">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={altOf(p.benefitsImage, p.benefitsHeading || 'Benefits')} />
-              <span className="fm-tag">Benefits</span>
+              <div className="fm-frame">
+                <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={altOf(p.benefitsImage, p.benefitsHeading || 'Benefits')} />
+                <span className="fm-tag">Benefits</span>
+              </div>
               {captionOf(p.benefitsImage) ? <p className="fm-caption">{captionOf(p.benefitsImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
@@ -310,8 +314,10 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="candidates">
           <div className="feature-row flip">
             <div className="feature-media reveal">
-              <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt={altOf(p.candidatesImage, 'Is it right for you?')} />
-              <span className="fm-tag">Is It Right for You?</span>
+              <div className="fm-frame">
+                <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt={altOf(p.candidatesImage, 'Is it right for you?')} />
+                <span className="fm-tag">Is It Right for You?</span>
+              </div>
               {captionOf(p.candidatesImage) ? <p className="fm-caption">{captionOf(p.candidatesImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
@@ -335,7 +341,9 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="techniques">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={altOf(p.techniquesImage, p.techniquesHeading || 'Techniques')} />
+              <div className="fm-frame">
+                <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={altOf(p.techniquesImage, p.techniquesHeading || 'Techniques')} />
+              </div>
               {captionOf(p.techniquesImage) ? <p className="fm-caption">{captionOf(p.techniquesImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
