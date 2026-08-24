@@ -207,7 +207,8 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   max-height:none;object-fit:contain;border-radius:0;box-shadow:none;z-index:2;
   filter:brightness(0) invert(1);opacity:.92;pointer-events:none}
 .phil-copy{position:relative;z-index:1;max-width:30rem}
-.phil-copy h2{margin-bottom:1.4rem}
+.phil-copy h2,.phil-copy .phil-heading{margin-bottom:1.4rem}
+.phil-copy .phil-heading{font-size:clamp(2.1rem,4.6vw,3.9rem);letter-spacing:-.01em}
 .lead-quote{font-size:clamp(1.5rem,2.9vw,2.3rem);color:var(--charcoal);margin-bottom:1.8rem;line-height:1.25}
 .phil-copy p{margin-bottom:1.1rem;color:var(--ink)}
 .phil-copy .btn-text{margin-top:.6rem}
@@ -498,9 +499,9 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 /* ---------- techniques split list ---------- */
 .tech-list{list-style:none;margin:1.7rem 0 0;padding:0;display:flex;flex-direction:column;gap:1.15rem}
 .tech-list li{padding-left:1.1rem;border-left:2px solid var(--gold)}
-.tech-list li strong{display:block;font-family:var(--serif);font-weight:400;font-size:1.12rem;
+.tech-list li h3{display:block;font-family:var(--serif);font-weight:400;font-size:1.12rem;
   color:var(--charcoal);margin-bottom:.15rem;letter-spacing:-.01em}
-.tech-list li span{color:var(--soft);font-size:.94rem;line-height:1.5}
+.tech-list li span,.tech-list li span p{color:var(--soft);font-size:.94rem;line-height:1.5}
 /* techniques illustration: show the full diagram, don't crop it like a photo */
 .feature-media img.tech-illus{height:auto;max-height:none;object-fit:contain;background:#fff;
   aspect-ratio:1/1;border-radius:14px;padding:clamp(.6rem,1.6vw,1.3rem)}
@@ -709,8 +710,10 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .tl li:last-child{padding-bottom:0}
 .tl li::before{content:"";position:absolute;left:-6px;top:.2rem;width:11px;height:11px;border-radius:50%;
   background:var(--gold)}
-.tl h4{font-family:var(--serif);font-size:1.25rem;margin-bottom:.3rem}
+.tl h3{font-family:var(--serif);font-size:1.25rem;font-weight:400;letter-spacing:normal;
+  margin-bottom:.3rem}
 .tl p{color:var(--soft)}
+.tl p+p{margin-top:.6rem}
 
 /* blog */
 .blog-feature{display:grid;grid-template-columns:1.15fr 1fr;max-width:1240px;margin:0 auto clamp(2.4rem,4vw,3.6rem);
@@ -949,6 +952,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .proc-hero-inner h1{margin:.2rem 0 1.3rem;color:var(--ivory)}
 .proc-hero-sub{font-size:1.08rem;line-height:1.6;color:rgba(246,240,230,.9);max-width:48ch;
   margin-bottom:1.9rem}
+.proc-hero-sub p+p{margin-top:.8rem}
 .proc-benefits{list-style:none;display:flex;flex-direction:column;gap:.85rem;margin-bottom:2.3rem}
 .proc-benefits li{position:relative;padding-left:2rem;font-size:1rem;color:var(--ivory)}
 .proc-benefits li::before{content:"";position:absolute;left:0;top:.5em;width:9px;height:9px;
@@ -983,6 +987,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .faq-item summary{cursor:pointer;list-style:none;padding:1.35rem 0;display:flex;
   justify-content:space-between;align-items:center;gap:1.2rem;
   font-family:var(--serif);font-weight:430;font-size:clamp(1.15rem,1.7vw,1.4rem);color:var(--charcoal)}
+.faq-item summary h3{font:inherit;letter-spacing:inherit;color:inherit;margin:0}
 .faq-item summary::-webkit-details-marker{display:none}
 .faq-item summary::after{content:"+";flex:none;color:var(--gold-deep);font-size:1.5rem;
   line-height:1;transition:transform .35s var(--ease)}
@@ -1069,6 +1074,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .cost-figure{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,6vw,3.6rem);
   color:var(--gold-deep);line-height:1}
 .cost-lead{max-width:46ch;margin:0 auto 1.5rem;color:var(--soft);line-height:1.6;font-size:.97rem}
+.cost-lead p+p{margin-top:.7rem}
 .cost-sub{max-width:42ch;margin:1.1rem auto 0;color:var(--soft);line-height:1.6;font-size:.95rem}
 .cost-incl-label{font-family:var(--sans);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
   color:var(--charcoal);margin:2rem 0 1.1rem;padding-top:1.6rem;border-top:1px solid var(--line)}
@@ -1155,3 +1161,11 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 @media(max-width:700px){
   .sitemap-list{columns:1}
 }
+
+/* caption under a section image */
+.fm-caption{margin-top:.7rem;font-size:.85rem;line-height:1.5;color:var(--soft)}
+
+/* the reviewed-by line above a procedure article */
+.med-review{font-size:.86rem;line-height:1.6;color:var(--soft);text-align:center;
+  padding-bottom:.4rem}
+.med-review a{color:var(--gold-deep)}

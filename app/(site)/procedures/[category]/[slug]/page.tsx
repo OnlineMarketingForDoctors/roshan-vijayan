@@ -13,7 +13,7 @@ import {
 } from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
 import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
-import PortableTextBody from '@/components/PortableTextBody'
+import PortableTextBody, {toPlain} from '@/components/PortableTextBody'
 import GlanceIcon from '@/components/GlanceIcon'
 import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
 import BeforeAfter from '@/components/BeforeAfter'
@@ -55,6 +55,17 @@ function img(src: unknown, fallback: string, w: number, q = 82) {
   return fallback
 }
 
+/** Alt text set on the image in Sanity, falling back to the section's own words. */
+const altOf = (src: unknown, fallback: string): string => {
+  const a = (src as {alt?: unknown})?.alt
+  return typeof a === 'string' && a.trim() ? a : fallback
+}
+
+const captionOf = (src: unknown): string | null => {
+  const c = (src as {caption?: unknown})?.caption
+  return typeof c === 'string' && c.trim() ? c : null
+}
+
 export async function generateStaticParams() {
   try {
     const slugs = await client.fetch<{slug: string; category?: string}[]>(procedureSlugsQuery)
@@ -71,7 +82,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
   return {
     alternates: {canonical: absoluteUrl(`/procedures/${category}/${slug}/`)},
     title: p.seoTitle || `${p.title} in Hertfordshire | RV Plastic Surgery`,
-    description: p.seoDescription || p.heroPromise || undefined,
+    description: p.seoDescription || toPlain(p.heroPromise) || undefined,
   }
 }
 
@@ -118,7 +129,7 @@ export default async function ProcedurePage({params}: Params) {
         mainEntity: p.faqs.map((f: any) => ({
           '@type': 'Question',
           name: f.question,
-          acceptedAnswer: {'@type': 'Answer', text: f.answer},
+          acceptedAnswer: {'@type': 'Answer', text: toPlain(f.answer)},
         })),
       }
     : null
@@ -127,12 +138,19 @@ export default async function ProcedurePage({params}: Params) {
     <>
       {/* HERO */}
       <section className="proc-hero">
-        <img src={img(p.heroImage, DEF.hero, 2000, 78)} className={p.heroImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" />
+        <img
+          src={img(p.heroImage, DEF.hero, 2000, 78)}
+          className={p.heroImageFlip ? 'mirrored' : undefined}
+          alt={altOf(p.heroImage, '')}
+          {...(altOf(p.heroImage, '') ? {} : {'aria-hidden': true as const})}
+        />
         <div className="proc-hero-veil" />
         <div className="proc-hero-inner reveal">
           <span className="eyebrow">{p.category} · Surgery</span>
           <h1 className="display">{p.heroHeading || p.title}</h1>
-          {p.heroPromise ? <p className="proc-hero-sub">{p.heroPromise}</p> : null}
+          <div className="proc-hero-sub">
+            <PortableTextBody value={p.heroPromise} />
+          </div>
           {p.heroBullets?.length ? (
             <ul className="proc-benefits">
               {p.heroBullets.map((b: unknown, i: number) => (
@@ -170,6 +188,15 @@ export default async function ProcedurePage({params}: Params) {
         </div>
       </nav>
 
+      {/* MEDICALLY REVIEWED BY */}
+      {p.medicalReview ? (
+        <section className="section" style={{paddingTop: '2.6rem', paddingBottom: 0}}>
+          <div className="narrow med-review reveal">
+            <PortableTextBody value={p.medicalReview} />
+          </div>
+        </section>
+      ) : null}
+
       {/* INTRO */}
       {show(p.showIntro) && p.introBody?.length ? (
         <section className="section center">
@@ -203,8 +230,9 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="overview">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={p.title} />
+              <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={altOf(p.overviewImage, p.title)} />
               <span className="fm-tag">{p.title}</span>
+              {captionOf(p.overviewImage) ? <p className="fm-caption">{captionOf(p.overviewImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
               {p.overviewHeading ? <h2 className="display">{p.overviewHeading}</h2> : null}
@@ -245,7 +273,7 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="concerns">
           <div className="section-head center reveal">
             <h2 className="display">{p.conditionsHeading || 'What it can address'}</h2>
-            {p.conditionsIntro ? <p>{p.conditionsIntro}</p> : null}
+            <PortableTextBody value={p.conditionsIntro} />
           </div>
           <ul className="point-grid reveal">
             {p.conditions.map((c: unknown, i: number) => (
@@ -260,12 +288,13 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="benefits">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={p.benefitsHeading || 'Benefits'} />
+              <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={altOf(p.benefitsImage, p.benefitsHeading || 'Benefits')} />
               <span className="fm-tag">Benefits</span>
+              {captionOf(p.benefitsImage) ? <p className="fm-caption">{captionOf(p.benefitsImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
               <h2 className="display">{p.benefitsHeading || 'Key benefits'}</h2>
-              {p.benefitsIntro ? <p>{p.benefitsIntro}</p> : null}
+              <PortableTextBody value={p.benefitsIntro} />
               <ul className="check-list">
                 {p.benefitsList.map((b: unknown, i: number) => (
                   <li key={i}>{asText(b)}</li>
@@ -281,12 +310,13 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="candidates">
           <div className="feature-row flip">
             <div className="feature-media reveal">
-              <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt="Is it right for you?" />
+              <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt={altOf(p.candidatesImage, 'Is it right for you?')} />
               <span className="fm-tag">Is It Right for You?</span>
+              {captionOf(p.candidatesImage) ? <p className="fm-caption">{captionOf(p.candidatesImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
               <h2 className="display">{p.candidatesHeading || `Who may consider ${lower}?`}</h2>
-              {p.candidatesIntro ? <p>{p.candidatesIntro}</p> : null}
+              <PortableTextBody value={p.candidatesIntro} />
               {p.candidates?.length ? (
                 <ul className="check-list">
                   {p.candidates.map((c: unknown, i: number) => (
@@ -294,7 +324,7 @@ export default async function ProcedurePage({params}: Params) {
                   ))}
                 </ul>
               ) : null}
-              {p.candidatesOutro ? <p>{p.candidatesOutro}</p> : null}
+              <PortableTextBody value={p.candidatesOutro} />
             </div>
           </div>
         </section>
@@ -305,19 +335,20 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="techniques">
           <div className="feature-row">
             <div className="feature-media reveal">
-              <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={p.techniquesHeading || 'Techniques'} />
+              <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={altOf(p.techniquesImage, p.techniquesHeading || 'Techniques')} />
+              {captionOf(p.techniquesImage) ? <p className="fm-caption">{captionOf(p.techniquesImage)}</p> : null}
             </div>
             <div className="feature-copy reveal">
               <h2 className="display">{p.techniquesHeading || 'Techniques'}</h2>
-              {p.techniquesIntro ? <p>{p.techniquesIntro}</p> : null}
+              <PortableTextBody value={p.techniquesIntro} />
               <ul className="tech-list">
                 {p.techniques.map((t: any, i: number) => (
                   <li key={i}>
-                    <strong>
+                    <h3>
                       {t.name}
                       {t.tier ? ` · ${t.tier}` : ''}
-                    </strong>
-                    {t.description ? <span>{t.description}</span> : null}
+                    </h3>
+                    {t.description ? <span><PortableTextBody value={t.description} /></span> : null}
                   </li>
                 ))}
               </ul>
@@ -344,13 +375,13 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section proc-anchor" id="journey">
           <div className="section-head center reveal">
             <h2 className="display">{p.journeyHeading || 'Your treatment journey'}</h2>
-            {p.journeyIntro ? <p>{p.journeyIntro}</p> : null}
+            <PortableTextBody value={p.journeyIntro} />
           </div>
           <ul className="tl reveal">
             {p.journey.map((r: any, i: number) => (
               <li key={i}>
-                <h4>{r.stage}</h4>
-                <p>{r.description}</p>
+                <h3>{r.stage}</h3>
+                <PortableTextBody value={r.description} />
               </li>
             ))}
           </ul>
@@ -370,13 +401,13 @@ export default async function ProcedurePage({params}: Params) {
                 </>
               )}
             </h2>
-            {p.recoveryIntro ? <p>{p.recoveryIntro}</p> : null}
+            <PortableTextBody value={p.recoveryIntro} />
           </div>
           <ul className="tl reveal">
             {p.recovery.map((r: any, i: number) => (
               <li key={i}>
-                <h4>{r.stage}</h4>
-                <p>{r.description}</p>
+                <h3>{r.stage}</h3>
+                <PortableTextBody value={r.description} />
               </li>
             ))}
           </ul>
@@ -388,7 +419,7 @@ export default async function ProcedurePage({params}: Params) {
         <section className="section bg-cream proc-anchor" id="risks">
           <div className="section-head center reveal">
             <h2 className="display">{p.risksHeading || 'Risks and considerations'}</h2>
-            {p.risksIntro ? <p>{p.risksIntro}</p> : null}
+            <PortableTextBody value={p.risksIntro} />
           </div>
           <ul className="point-grid reveal">
             {p.risks.map((r: unknown, i: number) => (
@@ -402,32 +433,12 @@ export default async function ProcedurePage({params}: Params) {
         </section>
       ) : null}
 
-      {/* SURGEON */}
-      {show(p.showSurgeon) ? (
-        <section className="philosophy proc-anchor" id="surgeon">
-          <div className="blob blob-1" aria-hidden="true" />
-          <div className="phil-portrait reveal">
-            <img src="/images/web/doctor-suit.jpg" alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
-            <img className="phil-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
-          </div>
-          <div className="phil-copy reveal">
-            <h2 className="display">{p.surgeonHeading || 'Meet your surgeon'}</h2>
-            <div className="prose">
-              <PortableTextBody value={p.surgeonBody} />
-            </div>
-            <Link className="btn btn-text" href="/about">
-              More about Mr Vijayan <span className="arrow">→</span>
-            </Link>
-          </div>
-        </section>
-      ) : null}
-
       {/* WHY CHOOSE US */}
       {show(p.showWhy) && p.whyPoints?.length ? (
         <section className="section bg-ivory2 proc-anchor" id="why">
           <div className="section-head center reveal">
             <h2 className="display">{p.whyHeading || 'Why choose us'}</h2>
-            {p.whyIntro ? <p>{p.whyIntro}</p> : null}
+            <PortableTextBody value={p.whyIntro} />
           </div>
           <div className="why-grid reveal">
             {p.whyPoints.map((point: unknown, i: number) => (
@@ -445,15 +456,37 @@ export default async function ProcedurePage({params}: Params) {
         </section>
       ) : null}
 
+      {/* SURGEON */}
+      {show(p.showSurgeon) ? (
+        <section className="philosophy proc-anchor" id="surgeon">
+          <div className="blob blob-1" aria-hidden="true" />
+          <div className="phil-portrait reveal">
+            <img src="/images/web/doctor-suit.jpg" alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
+            <img className="phil-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
+          </div>
+          <div className="phil-copy reveal">
+            <h3 className="display phil-heading">{p.surgeonHeading || 'Meet your surgeon'}</h3>
+            <div className="prose">
+              <PortableTextBody value={p.surgeonBody} />
+            </div>
+            <Link className="btn btn-text" href="/about">
+              More about Mr Vijayan <span className="arrow">→</span>
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       {/* COST */}
       {show(p.showCost) ? (
         <section className="section proc-anchor" id="cost">
           <div className="section-head center reveal">
             <h2 className="display">{p.costHeading || `${p.title} cost`}</h2>
-            {p.costIntro ? <p>{p.costIntro}</p> : null}
+            <PortableTextBody value={p.costIntro} />
           </div>
           <div className="cost-card reveal">
-            {p.costLead ? <p className="cost-lead">{p.costLead}</p> : null}
+            <div className="cost-lead">
+              <PortableTextBody value={p.costLead} />
+            </div>
             {p.costFrom ? <div className="cost-figure">{p.costFrom}</div> : null}
             <p className="cost-sub">
               {p.costFrom ? 'Indicative guide. ' : ''}Your exact, all-inclusive quote is confirmed in
@@ -485,8 +518,10 @@ export default async function ProcedurePage({params}: Params) {
           <div className="faq-list reveal">
             {p.faqs.map((f: any, i: number) => (
               <details className="faq-item" key={i}>
-                <summary>{f.question}</summary>
-                <p>{f.answer}</p>
+                <summary>
+                  <h3>{f.question}</h3>
+                </summary>
+                <PortableTextBody value={f.answer} />
               </details>
             ))}
           </div>
@@ -503,7 +538,7 @@ export default async function ProcedurePage({params}: Params) {
             {p.related.map((r: any) => (
               <Link className="related-card" href={procedurePath(r.category, r.slug)} key={r.slug}>
                 <h3>{r.title}</h3>
-                {r.heroPromise ? <p>{r.heroPromise}</p> : null}
+                {toPlain(r.heroPromise) ? <p>{toPlain(r.heroPromise)}</p> : null}
                 <span className="arrow" aria-hidden="true">
                   →
                 </span>
@@ -519,10 +554,13 @@ export default async function ProcedurePage({params}: Params) {
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
           <h2 className="display">{p.ctaHeading || 'Have a conversation with Mr Vijayan'}</h2>
-          <p>
-            {p.ctaBody ||
-              `Enquiries are answered personally, usually within a day. There is no pressure, only an honest, expert opinion on whether ${lower} is right for you.`}
-          </p>
+          {p.ctaBody ? (
+            <PortableTextBody value={p.ctaBody} />
+          ) : (
+            <p>
+              {`Enquiries are answered personally, usually within a day. There is no pressure, only an honest, expert opinion on whether ${lower} is right for you.`}
+            </p>
+          )}
           <Link className="btn btn-pill btn-gold" href="/contact">
             Request a Consultation
           </Link>
