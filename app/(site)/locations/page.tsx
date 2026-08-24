@@ -5,10 +5,22 @@ import {sanityFetch} from '@/sanity/lib/fetch'
 import {locationsPageQuery} from '@/sanity/lib/queries'
 import {mergeContent} from '@/sanity/lib/pages'
 import {LOCATIONS_PAGE, type LocationsPageContent} from '@/lib/pageContent'
+import {LOCATIONS} from '@/lib/locations'
 
 async function getContent(): Promise<LocationsPageContent> {
   const cms = await sanityFetch<unknown>(locationsPageQuery, {}, null)
-  return mergeContent(LOCATIONS_PAGE, cms)
+  const merged = mergeContent(LOCATIONS_PAGE, cms)
+
+  // A CMS list replaces the repository list outright, so a card saved in Studio
+  // without a picture arrives with no image at all. Match it back to the
+  // repository copy by name rather than render a card with an empty frame.
+  return {
+    ...merged,
+    cards: merged.cards.map((card) => ({
+      ...card,
+      imageUrl: card.imageUrl || LOCATIONS.find((l) => l.name === card.name)?.imageUrl || '',
+    })),
+  }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -49,7 +61,7 @@ export default async function LocationsPage() {
           {c.cards.map((card) => (
             <article className="loc-card reveal" key={card.name}>
               <div className="loc-img">
-                <img src={card.imageUrl} alt={card.name} />
+                {card.imageUrl ? <img src={card.imageUrl} alt={card.name} /> : null}
               </div>
               <div className="loc-info">
                 <span className="loc-tag">{card.tag}</span>
