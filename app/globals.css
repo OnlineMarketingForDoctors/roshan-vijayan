@@ -1169,3 +1169,18 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .med-review{font-size:.86rem;line-height:1.6;color:var(--soft);text-align:center;
   padding-bottom:.4rem}
 .med-review a{color:var(--gold-deep)}
+
+/* before & after, one procedure per page */
+.ba-page-grid{margin:0 auto}
+.ba-page-link{margin-top:clamp(1.8rem,3vw,2.6rem);text-align:center;font-size:.95rem;
+  color:var(--soft)}
+.ba-page-link a{color:var(--gold-deep);border-bottom:1px solid transparent;
+  transition:border-color .2s}
+.ba-page-link a:hover{border-bottom-color:var(--gold-deep)}
+.ba-page-others{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;max-width:60rem;
+  margin:0 auto}
+.ba-page-others a{border:1px solid rgba(151,124,69,.3);border-radius:999px;
+  padding:.45rem 1.1rem;font-size:.82rem;letter-spacing:.04em;color:var(--charcoal);
+  text-decoration:none;transition:background .2s,color .2s,border-color .2s}
+.ba-page-others a:hover{border-color:var(--gold-deep);color:var(--gold-deep)}
+.ba-page-others a.is-all{background:var(--charcoal);border-color:var(--charcoal);color:var(--ivory)}
