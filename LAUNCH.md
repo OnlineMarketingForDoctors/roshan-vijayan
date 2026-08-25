@@ -29,11 +29,10 @@ Vercel → Settings → Environment Variables, **Production** scope:
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | `https://www.example.co.uk` | Canonical links, Open Graph URLs, the sitemap. No trailing slash. |
 | `NEXT_PUBLIC_SITE_LIVE` | `true` | Removes `noindex` and opens robots.txt to crawlers. |
-| `NEXT_PUBLIC_FORM_ENDPOINT` | your Formspree URL | Where enquiries are sent. |
 
-These three are `NEXT_PUBLIC_`, which means they are **baked in at build
-time**. Setting them is not enough — you must redeploy afterwards, or the site
-keeps serving the old values.
+Both are `NEXT_PUBLIC_`, which means they are **baked in at build time**.
+Setting them is not enough — you must redeploy afterwards, or the site keeps
+serving the old values.
 
 Leave them unset on Preview. Previews then stay `noindex` and describe
 themselves by their own Vercel URL, which is what you want.
@@ -57,21 +56,23 @@ Google Search Console → add the domain as a property → submit
 `https://<domain>/sitemap.xml`. Nothing gets indexed until step 2 is done, so
 do this last.
 
-## 5. Set up the enquiry form
+## 5. Check the enquiry form
 
-1. Create the form at [formspree.io](https://formspree.io) and set the
-   destination inbox.
-2. Put its endpoint (`https://formspree.io/f/xxxxxxx`) in
-   `NEXT_PUBLIC_FORM_ENDPOINT` and redeploy.
-3. Send yourself a test enquiry from `/contact` and confirm it arrives.
+The form on `/contact` and the homepage is embedded from LeadConnector, so
+there is nothing to configure in the site and no environment variable to set.
+Two things to confirm in LeadConnector itself:
 
-Until that variable is set the form shows an error and points people at the
-phone number and email address instead — it never silently swallows an
-enquiry, but it also cannot accept one, so treat this as a launch blocker.
+1. The destination inbox for submissions.
+2. The post-submission redirect, which should point at
+   `https://<domain>/thank-you-contact/`. That page exists and is deliberately
+   `noindex` and absent from both sitemaps.
+
+Then send yourself a test enquiry from `/contact` and confirm it arrives and
+that you land on the thank-you page.
 
 Two things worth knowing before it goes live:
 
-- Enquiries pass through Formspree's servers. These are patient enquiries
+- Enquiries pass through LeadConnector's servers. These are patient enquiries
   naming procedures, so check their data processing terms and where data is
   held against your GDPR obligations, and add a privacy note by the form.
 - There is no privacy policy page on the site yet.

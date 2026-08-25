@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 type Procedure = {_id: string; title: string; slug: string; category?: string}
 type Post = {_id: string; title: string; slug: string; category?: string}
 
+// The pages a reader would look for. /thank-you-contact is left out on
+// purpose — it is where the form lands, not somewhere to navigate to.
 const PAGES = [
   {href: '/', label: 'Home'},
   {href: '/about', label: 'About Mr Vijayan'},
