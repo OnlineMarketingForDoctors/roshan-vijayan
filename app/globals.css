@@ -465,13 +465,17 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   padding:clamp(1.5rem,3vw,2.6rem);border-radius:20px;backdrop-filter:blur(8px);
   box-shadow:0 40px 70px -44px rgba(60,46,26,.55)}
 
-/* The embedded enquiry form. The card keeps the styling the built-in form had,
-   with no padding of its own: the form draws its own margins inside the frame,
-   and any here would read as a band of white above and below it. The iframe is
-   a block so it leaves no inline descender gap under it either. */
+/* The embedded enquiry form. The card keeps the styling the built-in form had.
+   Less padding at the foot than the sides and top, because the form already
+   leaves a margin under its button. The iframe is a block so it adds no inline
+   descender gap of its own below that. */
 .form-embed{background:rgba(255,253,248,.88);border:1px solid rgba(151,124,69,.28);
-  border-radius:20px;overflow:hidden;backdrop-filter:blur(8px);
-  box-shadow:0 40px 70px -44px rgba(60,46,26,.55);line-height:0}
+  border-radius:20px;overflow:hidden;padding:40px 40px 20px;backdrop-filter:blur(8px);
+  box-shadow:0 40px 70px -44px rgba(60,46,26,.55);line-height:0;
+  /* content-box so the height reserved for the form is the form's own height:
+     under border-box the padding would eat into it and the card would jump
+     when the iframe arrives */
+  box-sizing:content-box}
 .form-embed iframe{display:block;width:100%;border:0}
 .field{margin-bottom:1.1rem;display:flex;flex-direction:column;gap:.45rem}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
