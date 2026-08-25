@@ -18,12 +18,12 @@ const fmt = (iso?: string) => {
 
 /** Posts have no cover yet, so the thumbnail falls back to a repository image. */
 const FALLBACKS = [
-  '/images/web/blog-breast.png',
-  '/images/web/blog-recovery.png',
-  '/images/web/blog-facial.png',
-  '/images/web/blog-consultation.png',
-  '/images/web/blog-scar.png',
-  '/images/web/blog-choosing.png',
+  '/images/web/blog-breast.webp',
+  '/images/web/blog-recovery.webp',
+  '/images/web/blog-facial.webp',
+  '/images/web/blog-consultation.webp',
+  '/images/web/blog-scar.webp',
+  '/images/web/blog-choosing.webp',
 ]
 
 const thumb = (img: unknown, i: number) =>
@@ -69,7 +69,7 @@ export default function BlogSidebar({
               <li key={p.slug}>
                 <Link href={`/blog/${p.slug}`}>
                   <span className="sp-thumb">
-                    <img src={thumb(p.coverImage, i)} alt="" aria-hidden="true" loading="lazy" />
+                    <img src={thumb(p.coverImage, i)} alt="" aria-hidden="true" loading="lazy" decoding="async" />
                   </span>
                   <span className="sp-copy">
                     <span className="sp-title">{p.title}</span>
@@ -87,7 +87,7 @@ export default function BlogSidebar({
           those belong in the gallery, in context, not as decoration repeated
           beside every article. */}
       <section className="side-banner">
-        <img src="/images/web/silk-texture.jpg" alt="" aria-hidden="true" loading="lazy" />
+        <img src="/images/web/silk-texture.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
         <div className="sb-inner">
           <span className="eyebrow">Results</span>
           <h3>Before &amp; After</h3>

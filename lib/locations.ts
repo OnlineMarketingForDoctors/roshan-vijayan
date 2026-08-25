@@ -32,7 +32,7 @@ export const LOCATIONS: Location[] = [
     description:
       'A modern private hospital and the home of Mr Vijayan’s main practice, Leonie Grace Ltd, with on-site theatres, imaging and overnight care.',
     mapUrl: 'https://www.google.com/maps/search/?api=1&query=One+Hatfield+Hospital+AL10+9UA',
-    imageUrl: '/images/web/loc-hatfield.png',
+    imageUrl: '/images/web/loc-hatfield.webp',
   },
   {
     name: 'One Stop Healthcare',
@@ -42,7 +42,7 @@ export const LOCATIONS: Location[] = [
       'A contemporary private outpatient and diagnostic centre, ideal for consultations and minor procedures in west Hertfordshire.',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=One+Stop+Healthcare+Hemel+Hempstead+HP2+7YU',
-    imageUrl: '/images/web/loc-osd.png',
+    imageUrl: '/images/web/loc-osd.webp',
   },
   {
     name: 'London Skin Clinic',
@@ -51,7 +51,7 @@ export const LOCATIONS: Location[] = [
     description:
       'An elegant St Albans clinic for skin assessments, mole and lesion checks and minor skin surgery in a discreet setting.',
     mapUrl: 'https://www.google.com/maps/search/?api=1&query=152+London+Road+St+Albans+AL1+1PQ',
-    imageUrl: '/images/web/loc-london.png',
+    imageUrl: '/images/web/loc-london.webp',
   },
   {
     name: 'Lister Hospital',
@@ -60,7 +60,7 @@ export const LOCATIONS: Location[] = [
     description:
       'Mr Vijayan’s NHS base, where he serves as a consultant plastic surgeon within the East and North Hertfordshire NHS Trust.',
     mapUrl: 'https://www.google.com/maps/search/?api=1&query=Lister+Hospital+Stevenage+SG1+4AB',
-    imageUrl: '/images/web/consultation.jpg',
+    imageUrl: '/images/web/consultation.webp',
     nhs: true,
   },
 ]

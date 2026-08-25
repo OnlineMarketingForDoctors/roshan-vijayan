@@ -25,12 +25,16 @@ export const SITE_URL = (
 ).replace(/\/+$/, '')
 
 /**
- * An absolute URL for a path. Paths keep their trailing slash to match
+ * An absolute URL for a path. Pages keep their trailing slash to match
  * next.config.ts, so a canonical link never disagrees with the URL that
- * actually served the page.
+ * actually served the page. A file — /images/web/og-cover.jpg — does not get
+ * one: it is not a route, and a slash on the end of it is a 404.
  */
+const IS_FILE = /\/[^/]+\.[a-z0-9]{2,5}$/i
+
 export const absoluteUrl = (path = '/') => {
   const withLeading = path.startsWith('/') ? path : `/${path}`
-  const withTrailing = withLeading.endsWith('/') ? withLeading : `${withLeading}/`
+  const withTrailing =
+    withLeading.endsWith('/') || IS_FILE.test(withLeading) ? withLeading : `${withLeading}/`
   return `${SITE_URL}${withTrailing}`
 }

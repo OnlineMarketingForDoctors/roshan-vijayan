@@ -272,7 +272,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   min-height:520px;background:var(--charcoal);color:var(--ivory);overflow:hidden}
 /* classical marble bust watermark, full section height, pinned flush to the right margin */
 .difference::after{content:"";position:absolute;top:0;right:0;bottom:0;width:100%;
-  background:url("/images/web/bust-watermark.png") right center/auto 100% no-repeat;
+  background:url("/images/web/bust-watermark.webp") right center/auto 100% no-repeat;
   opacity:.1;pointer-events:none;z-index:0}
 .difference>*{position:relative;z-index:1}
 @media(max-width:768px){.difference::after{opacity:.06}}
@@ -340,7 +340,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   background:linear-gradient(165deg,var(--cream),var(--champagne) 135%)}
 /* classical statue watermark, full section height, pinned flush to the right margin */
 .results::after{content:"";position:absolute;top:0;right:0;bottom:0;width:100%;
-  background:url("/images/web/statue-watermark.png") right center/auto 100% no-repeat;
+  background:url("/images/web/statue-watermark.webp") right center/auto 100% no-repeat;
   opacity:.1;mix-blend-mode:multiply;pointer-events:none;z-index:0}
 .results>*{position:relative;z-index:1}
 @media(max-width:768px){.results::after{opacity:.05}}
@@ -450,7 +450,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 
 /* ---------- CONTACT ---------- */
 .contact{position:relative;padding:clamp(4rem,9vw,8rem) clamp(1.2rem,6vw,7rem);overflow:hidden;
-  background:url("/images/web/silk-texture.jpg") center/cover no-repeat}
+  background:url("/images/web/silk-texture.webp") center/cover no-repeat}
 .contact-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;
   gap:clamp(2rem,6vw,6rem);align-items:center;max-width:1100px;margin:0 auto}
 .contact-copy{color:var(--charcoal)}
@@ -695,8 +695,8 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   background-position:right center;background-size:auto 100%;background-repeat:no-repeat;
   mix-blend-mode:multiply;pointer-events:none;z-index:0}
 .wm>*{position:relative;z-index:1}
-.wm-david::after{background-image:url("/images/web/statue-watermark.png");opacity:.12}
-.wm-venus::after{background-image:url("/images/web/bust-watermark.png");opacity:.12}
+.wm-david::after{background-image:url("/images/web/statue-watermark.webp");opacity:.12}
+.wm-venus::after{background-image:url("/images/web/bust-watermark.webp");opacity:.12}
 @media(max-width:768px){.wm::after{opacity:.06}}
 .wrap{max-width:1240px;margin:0 auto}
 .narrow{max-width:760px;margin:0 auto}
@@ -1227,3 +1227,23 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 /* the last item in a simple nav dropdown, separated from the list above it */
 .nav-menu-all{margin-top:.35rem;padding-top:.7rem;
   border-top:1px solid rgba(220,200,166,.18);color:var(--gold)}
+
+/* breadcrumbs, at the foot of a hero */
+.crumbs{margin-top:clamp(1.6rem,3vw,2.4rem)}
+.crumbs ol{list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+.crumbs li{display:flex;align-items:center;gap:.4rem;color:rgba(246,240,230,.6)}
+.crumbs li+li::before{content:"/";opacity:.45}
+.crumbs a{color:rgba(246,240,230,.78);text-decoration:none;transition:color .3s var(--ease)}
+.crumbs a:hover{color:var(--gold)}
+.crumbs [aria-current="page"]{color:var(--champagne)}
+/* the .page-head band centres its contents, and the trail follows */
+.page-head .crumbs ol{justify-content:center}
+.page-head .crumbs a{text-decoration:none}
+
+/* the build credit in the footer's bottom bar */
+.foot-credit{display:flex;align-items:center;gap:.55rem}
+.foot-credit img{height:22px;width:auto;display:block;opacity:.85}
+.foot-credit a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(220,200,166,.35);
+  transition:color .3s var(--ease),border-color .3s var(--ease)}
+.foot-credit a:hover{color:var(--gold);border-color:var(--gold)}

@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -37,7 +39,7 @@ const CATEGORIES: Category[] = [
     tag: 'Body',
     heading: (<>Reveal the<br />physique beneath.</>),
     body: 'A particular focus of the practice: restoring the body after pregnancy or significant weight loss by refining loose, redundant skin and re-defining a natural, proportioned shape.',
-    img: '/images/web/body-contour.jpg',
+    img: '/images/web/body-contour.webp',
     alt: 'Body contouring surgery',
     tags: SERVICE_TAGS.body,
     cta: 'Enquire about body surgery',
@@ -48,7 +50,7 @@ const CATEGORIES: Category[] = [
     tag: 'Breast',
     heading: (<>Proportion,<br />comfort, balance.</>),
     body: 'From reduction and uplift to augmentation and reconstruction, Mr Vijayan plans breast surgery around your frame and your wishes, for results that feel as natural as they look.',
-    img: '/images/web/decolletage.jpg',
+    img: '/images/web/decolletage.webp',
     alt: 'Breast surgery',
     tags: SERVICE_TAGS.breast,
     cta: 'Enquire about breast surgery',
@@ -61,7 +63,7 @@ const CATEGORIES: Category[] = [
     tag: 'Face & Eyes',
     heading: (<>Refreshed, never<br />rearranged.</>),
     body: 'Facial and eyelid surgery designed to soften the signs of time while keeping every feature unmistakably yours, subtle, rested and naturally in keeping with your face.',
-    img: '/images/web/face-portrait.jpg',
+    img: '/images/web/face-portrait.webp',
     alt: 'Facial aesthetic surgery',
     tags: SERVICE_TAGS.face,
     cta: 'Enquire about facial surgery',
@@ -72,7 +74,7 @@ const CATEGORIES: Category[] = [
     tag: 'Skin & Reconstruction',
     heading: (<>Expert care for<br />skin and lesions.</>),
     body: 'From mole and lesion checks to skin-cancer removal and reconstructive work, Mr Vijayan brings reconstructive precision to results that heal discreetly and beautifully.',
-    img: '/images/web/proc-skin.png',
+    img: '/images/web/proc-skin.webp',
     alt: 'Skin and reconstructive surgery',
     tags: SERVICE_TAGS.skin,
     cta: 'Enquire about skin surgery',
@@ -103,7 +105,7 @@ export default async function ProceduresPage() {
   return (
     <>
       <section className="page-hero">
-        <img src="/images/web/procedures-hero.png" alt="Serene woman in ivory silk by a window" />
+        <img src="/images/web/procedures-hero.webp" alt="Serene woman in ivory silk by a window" decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">Signature Procedures</span>
@@ -125,6 +127,7 @@ export default async function ProceduresPage() {
               Browse procedures <span className="arrow">→</span>
             </a>
           </div>
+          <Breadcrumbs trail={[{name: 'Procedures', href: '/procedures'}]} />
         </div>
       </section>
 
@@ -142,7 +145,7 @@ export default async function ProceduresPage() {
         <section className={`section${c.bg ? ' bg-ivory2' : ''}`} id={c.id} key={c.id}>
           <div className={`feature-row${c.flip ? ' flip' : ''}`}>
             <div className="feature-media reveal">
-              <img src={c.img} alt={c.alt} />
+              <img src={c.img} alt={c.alt} decoding="async" loading="lazy" />
               <span className="fm-tag">{c.tag}</span>
             </div>
             <div className="feature-copy reveal">
@@ -184,7 +187,7 @@ export default async function ProceduresPage() {
       </section>
 
       <section className="cta-band">
-        <img src="/images/web/instruments.jpg" alt="" aria-hidden="true" />
+        <img src="/images/web/instruments.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
           <h2 className="display">Not sure which procedure is right?</h2>
@@ -197,6 +200,18 @@ export default async function ProceduresPage() {
           </Link>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageLd({
+              path: '/procedures/',
+              name: 'Procedures',
+              description: metadata.description as string,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

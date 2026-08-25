@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -74,6 +76,7 @@ export default async function BAProcedurePage({params}: Params) {
             ? 'A result from Mr Vijayan’s own patients. Drag the handle on the image to reveal it.'
             : 'Results from Mr Vijayan’s own patients. Drag the handle on each image to reveal it.'}
         </p>
+        <Breadcrumbs trail={[{name: 'Before & After', href: '/gallery'}, {name: p.title}]} />
       </section>
 
       <section className="section">
@@ -132,7 +135,7 @@ export default async function BAProcedurePage({params}: Params) {
       ) : null}
 
       <section className="cta-band">
-        <img src="/images/web/robe-window.jpg" alt="" aria-hidden="true" />
+        <img src="/images/web/robe-window.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
           <h2 className="display">See more results in person</h2>
@@ -145,6 +148,19 @@ export default async function BAProcedurePage({params}: Params) {
           </Link>
         </div>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageLd({
+              path: `/gallery/${p.slug}/`,
+              name: `${p.title} Before & After`,
+              description: `${p.title} before and after photographs from Mr Roshan Vijayan’s own patients, shared with written consent.`,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

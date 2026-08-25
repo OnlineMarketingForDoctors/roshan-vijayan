@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import PortableTextBody from '@/components/PortableTextBody'
@@ -27,7 +29,7 @@ export default async function AboutPage() {
   return (
     <>
       <section className="page-hero">
-        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} />
+        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">{c.hero.eyebrow}</span>
@@ -47,14 +49,15 @@ export default async function AboutPage() {
               </Link>
             ) : null}
           </div>
+          <Breadcrumbs trail={[{name: 'About', href: '/about'}]} />
         </div>
       </section>
 
       <section className="section wm wm-david">
         <div className="feature-row">
           <div className="feature-media reveal">
-            <img src={c.profileImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
-            <img className="sig fm-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
+            <img src={c.profileImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" decoding="async" loading="lazy" />
+            <img className="sig fm-sign" src="/images/web/signature.webp" alt="Signature of Mr Roshan Vijayan" decoding="async" loading="lazy" />
           </div>
           <div className="feature-copy reveal">
             <span className="eyebrow">{c.profileEyebrow}</span>
@@ -100,7 +103,7 @@ export default async function AboutPage() {
       <section className="section">
         <div className="feature-row flip">
           <div className="feature-media reveal">
-            <img src={c.interestImageUrl} alt="A poised woman by a window in soft morning light" />
+            <img src={c.interestImageUrl} alt="A poised woman by a window in soft morning light" decoding="async" loading="lazy" />
           </div>
           <div className="feature-copy reveal">
             <span className="eyebrow">{c.interestEyebrow}</span>
@@ -133,7 +136,7 @@ export default async function AboutPage() {
       </section>
 
       <section className="cta-band">
-        <img src={c.closing.imageUrl} alt="" aria-hidden="true" />
+        <img src={c.closing.imageUrl} alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">{c.closing.eyebrow}</span>
           <h2 className="display">{c.closing.heading}</h2>
@@ -143,6 +146,10 @@ export default async function AboutPage() {
           </Link>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(webPageLd({path: '/about/', name: c.seo.title, description: c.seo.description}))}}
+      />
     </>
   )
 }

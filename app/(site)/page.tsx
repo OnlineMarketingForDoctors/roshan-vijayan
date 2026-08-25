@@ -15,12 +15,24 @@ import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import {mergeContent} from '@/sanity/lib/pages'
 import {HOME_PAGE, type HomePageContent} from '@/lib/pageContent'
 import PortableTextBody from '@/components/PortableTextBody'
+import {localBusinessLd, websiteLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import ServicesCarousel from '@/components/ServicesCarousel'
 import ContactForm from '@/components/ContactForm'
 
-type Settings = {reviewScore?: string; reviewCount?: number; reviewSource?: string} | null
+type Settings = {
+  reviewScore?: string
+  reviewCount?: number
+  reviewSource?: string
+  practiceName?: string
+  surgeonName?: string
+  credentials?: string
+  gmcNumber?: string
+  phone?: string
+  email?: string
+  locations?: {name?: string; address?: string; note?: string}[]
+} | null
 
 async function getContent(): Promise<HomePageContent> {
   const cms = await sanityFetch<unknown>(homePageQuery, {}, null)
@@ -57,7 +69,7 @@ export default async function Home() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-media">
-          <img src={c.heroImageUrl} alt={c.heroImageAlt} />
+          <img src={c.heroImageUrl} alt={c.heroImageAlt} decoding="async" fetchPriority="high" />
           <div className="hero-veil" />
         </div>
         <div className="hero-inner">
@@ -100,8 +112,8 @@ export default async function Home() {
       <section className="philosophy" id="ethos">
         <div className="blob blob-1" aria-hidden="true" />
         <div className="phil-portrait reveal">
-          <img src={c.philImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
-          <img className="phil-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
+          <img src={c.philImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" decoding="async" loading="lazy" />
+          <img className="phil-sign" src="/images/web/signature.webp" alt="Signature of Mr Roshan Vijayan" decoding="async" loading="lazy" />
         </div>
         <div className="phil-copy reveal">
           <span className="eyebrow">{c.philEyebrow}</span>
@@ -147,7 +159,7 @@ export default async function Home() {
       {/* THE DIFFERENCE */}
       <section className="difference" id="difference">
         <div className="diff-media reveal">
-          <img src={c.diffImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
+          <img src={c.diffImageUrl} alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" decoding="async" loading="lazy" />
         </div>
         <div className="diff-copy">
           <span className="eyebrow">{c.diffEyebrow}</span>
@@ -162,7 +174,7 @@ export default async function Home() {
               </li>
             ))}
           </ul>
-          <img className="sig diff-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
+          <img className="sig diff-sign" src="/images/web/signature.webp" alt="Signature of Mr Roshan Vijayan" decoding="async" loading="lazy" />
         </div>
       </section>
 
@@ -185,7 +197,7 @@ export default async function Home() {
           <p className="gmc">{c.aboutGmcLine}</p>
         </div>
         <div className="about-media reveal">
-          <img src={c.aboutImageUrl} alt="Mr Vijayan in consultation with a patient" />
+          <img src={c.aboutImageUrl} alt="Mr Vijayan in consultation with a patient" decoding="async" loading="lazy" />
           <div className="about-stat">
             <strong>{c.aboutStatValue}</strong>
             <span>{c.aboutStatLabel}</span>
@@ -197,19 +209,19 @@ export default async function Home() {
       <section className="accred">
         <p className="accred-label reveal">{c.accredMembershipsLabel}</p>
         <div className="logo-row memberships reveal">
-          <img src="/images/logos/gmc.webp" alt="General Medical Council" />
-          <img src="/images/logos/rcs.webp" alt="Royal College of Surgeons" />
-          <img src="/images/logos/bapras.webp" alt="BAPRAS" />
-          <img src="/images/logos/baaps.webp" alt="BAAPS" />
+          <img src="/images/logos/gmc.webp" alt="General Medical Council" decoding="async" loading="lazy" />
+          <img src="/images/logos/rcs.webp" alt="Royal College of Surgeons" decoding="async" loading="lazy" />
+          <img src="/images/logos/bapras.webp" alt="BAPRAS" decoding="async" loading="lazy" />
+          <img src="/images/logos/baaps.webp" alt="BAAPS" decoding="async" loading="lazy" />
         </div>
         <p className="accred-label reveal">{c.accredInsurersLabel}</p>
         <div className="logo-row insurers reveal">
-          <img src="/images/logos/bupa.webp" alt="Bupa" />
-          <img src="/images/logos/axa.webp" alt="AXA Health" />
-          <img src="/images/logos/aviva.webp" alt="Aviva" />
-          <img src="/images/logos/vitality.webp" alt="Vitality" />
-          <img src="/images/logos/wpa.webp" alt="WPA" />
-          <img src="/images/logos/aetna.webp" alt="Aetna" />
+          <img src="/images/logos/bupa.webp" alt="Bupa" decoding="async" loading="lazy" />
+          <img src="/images/logos/axa.webp" alt="AXA Health" decoding="async" loading="lazy" />
+          <img src="/images/logos/aviva.webp" alt="Aviva" decoding="async" loading="lazy" />
+          <img src="/images/logos/vitality.webp" alt="Vitality" decoding="async" loading="lazy" />
+          <img src="/images/logos/wpa.webp" alt="WPA" decoding="async" loading="lazy" />
+          <img src="/images/logos/aetna.webp" alt="Aetna" decoding="async" loading="lazy" />
         </div>
       </section>
 
@@ -233,7 +245,7 @@ export default async function Home() {
       {/* LOCATIONS */}
       <section className="locations" id="locations">
         <div className="loc-media reveal">
-          <img src={c.locationsImageUrl} alt="A calm, luxurious clinic interior" />
+          <img src={c.locationsImageUrl} alt="A calm, luxurious clinic interior" decoding="async" loading="lazy" />
         </div>
         <div className="loc-copy reveal">
           <span className="eyebrow">{c.locationsEyebrow}</span>
@@ -273,6 +285,17 @@ export default async function Home() {
           <ContactForm />
         </div>
       </section>
+
+      {/* The practice itself, described once, for the whole site to point at. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            localBusinessLd(settings),
+            websiteLd(settings?.practiceName || undefined),
+          ]),
+        }}
+      />
     </>
   )
 }

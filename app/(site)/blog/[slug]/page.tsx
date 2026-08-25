@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {articleLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -30,12 +32,12 @@ function fmt(iso?: string) {
  * slug — stable per post rather than changing between renders.
  */
 const HERO_FALLBACKS = [
-  '/images/web/blog-breast.png',
-  '/images/web/blog-recovery.png',
-  '/images/web/blog-facial.png',
-  '/images/web/blog-consultation.png',
-  '/images/web/blog-scar.png',
-  '/images/web/blog-choosing.png',
+  '/images/web/blog-breast.webp',
+  '/images/web/blog-recovery.webp',
+  '/images/web/blog-facial.webp',
+  '/images/web/blog-consultation.webp',
+  '/images/web/blog-scar.webp',
+  '/images/web/blog-choosing.webp',
 ]
 const fallbackFor = (slug: string) => {
   let n = 0
@@ -96,7 +98,7 @@ export default async function BlogPostPage({params}: Params) {
   return (
     <>
       <section className="page-hero bp-hero">
-        <img src={heroSrc} alt={p.title} />
+        <img src={heroSrc} alt={p.title} decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <Link className="bp-back" href="/blog">
@@ -107,6 +109,7 @@ export default async function BlogPostPage({params}: Params) {
             {p.category ? <span className="bp-cat">{p.category}</span> : null}
             {p.publishedAt ? <span>{fmt(p.publishedAt)}</span> : null}
           </p>
+          <Breadcrumbs trail={[{name: 'Journal', href: '/blog'}, {name: p.title}]} />
         </div>
       </section>
 
@@ -122,7 +125,7 @@ export default async function BlogPostPage({params}: Params) {
       </div>
 
       <section className="cta-band">
-        <img src="/images/web/silk-texture.jpg" alt="" aria-hidden="true" />
+        <img src="/images/web/silk-texture.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
           <h2 className="display">Have a question of your own?</h2>
@@ -132,6 +135,22 @@ export default async function BlogPostPage({params}: Params) {
           </Link>
         </div>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            articleLd({
+              path: `/blog/${slug}/`,
+              title: p.title,
+              description: p.excerpt || undefined,
+              image: heroSrc.startsWith('http') ? heroSrc : absoluteUrl(heroSrc),
+              published: p.publishedAt || undefined,
+              section: p.category || undefined,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

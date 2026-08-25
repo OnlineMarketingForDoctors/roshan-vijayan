@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -71,7 +73,7 @@ export default async function BlogPage({searchParams}: {searchParams?: Promise<{
   return (
     <>
       <section className="page-hero">
-        <img src="/images/web/lifestyle-laugh.jpg" alt="A woman laughing in warm natural light" />
+        <img src="/images/web/lifestyle-laugh.webp" alt="A woman laughing in warm natural light" decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">The Journal</span>
@@ -89,6 +91,7 @@ export default async function BlogPage({searchParams}: {searchParams?: Promise<{
               Request a Consultation
             </Link>
           </div>
+          <Breadcrumbs trail={[{name: 'Journal', href: '/blog'}]} />
         </div>
       </section>
 
@@ -114,7 +117,7 @@ export default async function BlogPage({searchParams}: {searchParams?: Promise<{
       <section className="section">
         <article className="blog-feature reveal">
           <Link className="bf-link" href={`/blog/${featured.slug}`} style={{display: 'contents'}}>
-            <img src={cover(featured.coverImage, 900, '/images/web/blog-choosing.png')} alt={featured.title} />
+            <img src={cover(featured.coverImage, 900, '/images/web/blog-choosing.webp')} alt={featured.title} decoding="async" loading="lazy" />
             <div className="bf-body">
               <span className="post-cat">{active || 'Editor’s Pick'}</span>
               <h2 className="display">{featured.title}</h2>
@@ -134,7 +137,7 @@ export default async function BlogPage({searchParams}: {searchParams?: Promise<{
               <article className="post-card reveal" key={p._id}>
                 <Link className="post-link" href={`/blog/${p.slug}`} style={{display: 'flex', flexDirection: 'column', flex: 1, color: 'inherit'}}>
                   <div className="post-img">
-                    <img src={cover(p.coverImage, 600, '/images/web/blog-consultation.png')} alt={p.title} loading="lazy" />
+                    <img src={cover(p.coverImage, 600, '/images/web/blog-consultation.webp')} alt={p.title} loading="lazy" decoding="async" />
                   </div>
                   <div className="post-body">
                     <span className="post-cat">{p.category || 'Journal'}</span>
@@ -150,6 +153,18 @@ export default async function BlogPage({searchParams}: {searchParams?: Promise<{
           </div>
         </section>
       ) : null}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageLd({
+              path: '/blog/',
+              name: 'Journal',
+              description: metadata.description as string,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

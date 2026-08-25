@@ -42,8 +42,8 @@ export default function BASlider({c}: {c: BAPatient}) {
         onPointerUp={() => (dragging.current = false)}
         onPointerCancel={() => (dragging.current = false)}
       >
-        <img className="ba-img ba-after" src={c.afterUrl} alt={`${c.caption}, after`} loading="lazy" />
-        <img className="ba-img ba-before" src={c.beforeUrl} alt={`${c.caption}, before`} loading="lazy" />
+        <img className="ba-img ba-after" src={c.afterUrl} alt={`${c.caption}, after`} loading="lazy" decoding="async" />
+        <img className="ba-img ba-before" src={c.beforeUrl} alt={`${c.caption}, before`} loading="lazy" decoding="async" />
         <span className="ba-tagline ba-tag-before">{c.beforeLabel || 'Before'}</span>
         <span className="ba-tagline ba-tag-after">{c.afterLabel || 'After'}</span>
         <button

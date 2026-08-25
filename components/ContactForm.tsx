@@ -70,6 +70,7 @@ export default function ContactForm({withLocation = false}: {withLocation?: bool
           src={SRC}
           id={`inline-${FORM_ID}`}
           title="Contact Form"
+          loading="lazy"
           style={{width: '100%', height, border: 'none', borderRadius: 0, display: 'block'}}
           data-layout="{'id':'INLINE'}"
           data-trigger-type="alwaysShow"

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {medicalProcedureLd, faqLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -42,12 +44,12 @@ const asText = (v: unknown): string => {
 
 // Section image fallbacks (used until an editor sets images in Sanity)
 const DEF = {
-  hero: '/images/web/bl-hero.jpg',
-  overview: '/images/web/bl-overview.jpg',
-  benefits: '/images/web/decolletage.jpg',
-  candidates: '/images/web/bl-candidates.jpg',
-  techniques: '/images/web/bl-techniques-split.png',
-  procedure: '/images/web/consultation.jpg',
+  hero: '/images/web/bl-hero.webp',
+  overview: '/images/web/bl-overview.webp',
+  benefits: '/images/web/decolletage.webp',
+  candidates: '/images/web/bl-candidates.webp',
+  techniques: '/images/web/bl-techniques-split.webp',
+  procedure: '/images/web/consultation.webp',
 }
 
 function img(src: unknown, fallback: string, w: number, q = 82) {
@@ -122,16 +124,15 @@ export default async function ProcedurePage({params}: Params) {
     {id: 'faq', label: 'FAQs', on: show(p.showFaqs) && !!p.faqs?.length},
   ]
 
-  const faqLd = p.faqs?.length
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: p.faqs.map((f: any) => ({
-          '@type': 'Question',
-          name: f.question,
-          acceptedAnswer: {'@type': 'Answer', text: toPlain(f.answer)},
-        })),
-      }
+  const path = `/procedures/${category}/${slug}/`
+  const procedureLd = medicalProcedureLd({
+    path,
+    name: p.title,
+    description: p.seoDescription || toPlain(p.heroPromise) || undefined,
+    image: img(p.heroImage, absoluteUrl(DEF.hero), 1600),
+  })
+  const faqBlock = show(p.showFaqs)
+    ? faqLd((p.faqs || []).map((f: any) => ({question: f.question, answer: toPlain(f.answer)})))
     : null
 
   return (
@@ -143,6 +144,8 @@ export default async function ProcedurePage({params}: Params) {
           className={p.heroImageFlip ? 'mirrored' : undefined}
           alt={altOf(p.heroImage, '')}
           {...(altOf(p.heroImage, '') ? {} : {'aria-hidden': true as const})}
+          decoding="async"
+          fetchPriority="high"
         />
         <div className="proc-hero-veil" />
         <div className="proc-hero-inner reveal">
@@ -166,6 +169,9 @@ export default async function ProcedurePage({params}: Params) {
               Learn more <span className="arrow">→</span>
             </a>
           </div>
+          <Breadcrumbs
+            trail={[{name: 'Procedures', href: '/procedures'}, {name: p.title}]}
+          />
         </div>
       </section>
 
@@ -231,7 +237,7 @@ export default async function ProcedurePage({params}: Params) {
           <div className="feature-row">
             <div className="feature-media reveal">
               <div className="fm-frame">
-                <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={altOf(p.overviewImage, p.title)} />
+                <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={altOf(p.overviewImage, p.title)} decoding="async" loading="lazy" />
                 <span className="fm-tag">{p.title}</span>
               </div>
               {captionOf(p.overviewImage) ? <p className="fm-caption">{captionOf(p.overviewImage)}</p> : null}
@@ -291,7 +297,7 @@ export default async function ProcedurePage({params}: Params) {
           <div className="feature-row">
             <div className="feature-media reveal">
               <div className="fm-frame">
-                <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={altOf(p.benefitsImage, p.benefitsHeading || 'Benefits')} />
+                <img src={img(p.benefitsImage, DEF.benefits, 900)} className={p.benefitsImageFlip ? 'mirrored' : undefined} alt={altOf(p.benefitsImage, p.benefitsHeading || 'Benefits')} decoding="async" loading="lazy" />
                 <span className="fm-tag">Benefits</span>
               </div>
               {captionOf(p.benefitsImage) ? <p className="fm-caption">{captionOf(p.benefitsImage)}</p> : null}
@@ -315,7 +321,7 @@ export default async function ProcedurePage({params}: Params) {
           <div className="feature-row flip">
             <div className="feature-media reveal">
               <div className="fm-frame">
-                <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt={altOf(p.candidatesImage, 'Is it right for you?')} />
+                <img src={img(p.candidatesImage, DEF.candidates, 900)} className={p.candidatesImageFlip ? 'mirrored' : undefined} alt={altOf(p.candidatesImage, 'Is it right for you?')} decoding="async" loading="lazy" />
                 <span className="fm-tag">Is It Right for You?</span>
               </div>
               {captionOf(p.candidatesImage) ? <p className="fm-caption">{captionOf(p.candidatesImage)}</p> : null}
@@ -342,7 +348,7 @@ export default async function ProcedurePage({params}: Params) {
           <div className="feature-row">
             <div className="feature-media reveal">
               <div className="fm-frame">
-                <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={altOf(p.techniquesImage, p.techniquesHeading || 'Techniques')} />
+                <img className={`tech-illus${p.techniquesImageFlip ? ' mirrored' : ''}`} src={img(p.techniquesImage, DEF.techniques, 900, 88)} alt={altOf(p.techniquesImage, p.techniquesHeading || 'Techniques')} decoding="async" loading="lazy" />
               </div>
               {captionOf(p.techniquesImage) ? <p className="fm-caption">{captionOf(p.techniquesImage)}</p> : null}
             </div>
@@ -368,7 +374,7 @@ export default async function ProcedurePage({params}: Params) {
       {/* THE PROCEDURE */}
       {show(p.showProcedure) ? (
         <section className="proc-band proc-anchor" id="procedure">
-          <img src={img(p.procedureImage, DEF.procedure, 1600, 78)} className={p.procedureImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" />
+          <img src={img(p.procedureImage, DEF.procedure, 1600, 78)} className={p.procedureImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" decoding="async" loading="lazy" />
           <div className="pb-inner reveal">
             {p.procedureHeading ? <h2 className="display">{p.procedureHeading}</h2> : null}
             <div className="prose">
@@ -469,8 +475,8 @@ export default async function ProcedurePage({params}: Params) {
         <section className="philosophy proc-anchor" id="surgeon">
           <div className="blob blob-1" aria-hidden="true" />
           <div className="phil-portrait reveal">
-            <img src="/images/web/doctor-suit.jpg" alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" />
-            <img className="phil-sign" src="/images/web/signature.png" alt="Signature of Mr Roshan Vijayan" />
+            <img src="/images/web/doctor-suit.webp" alt="Mr Roshan Vijayan, Consultant Plastic Surgeon" decoding="async" loading="lazy" />
+            <img className="phil-sign" src="/images/web/signature.webp" alt="Signature of Mr Roshan Vijayan" decoding="async" loading="lazy" />
           </div>
           <div className="phil-copy reveal">
             <h3 className="display phil-heading">{p.surgeonHeading || 'Meet your surgeon'}</h3>
@@ -558,7 +564,7 @@ export default async function ProcedurePage({params}: Params) {
 
       {/* CTA */}
       <section className="cta-band proc-anchor" id="enquire">
-        <img src="/images/web/clinic-interior.jpg" alt="" aria-hidden="true" />
+        <img src="/images/web/clinic-interior.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
           <h2 className="display">{p.ctaHeading || 'Have a conversation with Mr Vijayan'}</h2>
@@ -575,8 +581,15 @@ export default async function ProcedurePage({params}: Params) {
         </div>
       </section>
 
-      {faqLd ? (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(faqLd)}} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(procedureLd)}}
+      />
+      {faqBlock ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(faqBlock)}}
+        />
       ) : null}
     </>
   )

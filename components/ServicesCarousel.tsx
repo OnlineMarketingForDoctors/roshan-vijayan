@@ -15,28 +15,28 @@ const SERVICES: Service[] = [
   {
     id: 'body',
     title: 'Body',
-    img: '/images/web/body-contour.jpg',
+    img: '/images/web/body-contour.webp',
     alt: 'Body contouring surgery',
     cta: 'View all body procedures',
   },
   {
     id: 'breast',
     title: 'Breast',
-    img: '/images/web/decolletage.jpg',
+    img: '/images/web/decolletage.webp',
     alt: 'Breast surgery',
     cta: 'View all breast procedures',
   },
   {
     id: 'face',
     title: 'Face & Eyes',
-    img: '/images/web/face-portrait.jpg',
+    img: '/images/web/face-portrait.webp',
     alt: 'Facial aesthetic surgery',
     cta: 'View all facial procedures',
   },
   {
     id: 'skin',
     title: 'Skin & Reconstruction',
-    img: '/images/web/instruments.jpg',
+    img: '/images/web/instruments.webp',
     alt: 'Skin and reconstructive surgery',
     cta: 'View all skin procedures',
   },
@@ -127,7 +127,7 @@ export default function ServicesCarousel({paths = {}}: {paths?: Record<string, s
               className={`svc-card${i === active ? ' active' : ''}`}
               onClick={() => i !== active && go(i)}
             >
-              <img src={s.img} alt={s.alt} />
+              <img src={s.img} alt={s.alt} decoding="async" loading="lazy" />
               <div className="svc-veil" />
               <div className="svc-body">
                 <h3 className="svc-title">{s.title}</h3>

@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import BeforeAfterGallery from '@/components/BeforeAfterGallery'
@@ -20,7 +22,7 @@ export default async function GalleryPage() {
   return (
     <>
       <section className="page-hero">
-        <img src="/images/web/decolletage.jpg" alt="Soft editorial portrait" />
+        <img src="/images/web/decolletage.webp" alt="Soft editorial portrait" decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">Before &amp; After</span>
@@ -41,6 +43,7 @@ export default async function GalleryPage() {
               Explore procedures <span className="arrow">→</span>
             </Link>
           </div>
+          <Breadcrumbs trail={[{name: 'Before & After', href: '/gallery'}]} />
         </div>
       </section>
 
@@ -64,7 +67,7 @@ export default async function GalleryPage() {
       </section>
 
       <section className="cta-band">
-        <img src="/images/web/robe-window.jpg" alt="" aria-hidden="true" />
+        <img src="/images/web/robe-window.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">Begin</span>
           <h2 className="display">See more results in person</h2>
@@ -74,6 +77,18 @@ export default async function GalleryPage() {
           </Link>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageLd({
+              path: '/gallery/',
+              name: 'Before & After',
+              description: metadata.description as string,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

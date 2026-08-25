@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -38,7 +40,7 @@ export default async function LocationsPage() {
   return (
     <>
       <section className="page-hero">
-        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} />
+        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">{c.hero.eyebrow}</span>
@@ -53,6 +55,7 @@ export default async function LocationsPage() {
               {c.hero.ctaLabel}
             </Link>
           </div>
+          <Breadcrumbs trail={[{name: 'Locations', href: '/locations'}]} />
         </div>
       </section>
 
@@ -61,7 +64,7 @@ export default async function LocationsPage() {
           {c.cards.map((card) => (
             <article className="loc-card reveal" key={card.name}>
               <div className="loc-img">
-                {card.imageUrl ? <img src={card.imageUrl} alt={card.name} /> : null}
+                {card.imageUrl ? <img src={card.imageUrl} alt={card.name} decoding="async" loading="lazy" /> : null}
               </div>
               <div className="loc-info">
                 <span className="loc-tag">{card.tag}</span>
@@ -70,7 +73,7 @@ export default async function LocationsPage() {
                 <p className="loc-addr">{card.description}</p>
                 {card.mapUrl ? (
                   <div className="loc-link">
-                    <a className="btn btn-text" href={card.mapUrl} target="_blank" rel="noopener">
+                    <a className="btn btn-text" href={card.mapUrl} target="_blank" rel="nofollow noopener noreferrer">
                       Get directions <span className="arrow">→</span>
                     </a>
                   </div>
@@ -82,7 +85,7 @@ export default async function LocationsPage() {
       </section>
 
       <section className="cta-band">
-        <img src={c.closing.imageUrl} alt="" aria-hidden="true" />
+        <img src={c.closing.imageUrl} alt="" aria-hidden="true" decoding="async" loading="lazy" />
         <div className="cb-inner reveal">
           <span className="eyebrow">{c.closing.eyebrow}</span>
           <h2 className="display">{c.closing.heading}</h2>
@@ -92,6 +95,10 @@ export default async function LocationsPage() {
           </Link>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(webPageLd({path: '/locations/', name: c.seo.title, description: c.seo.description}))}}
+      />
     </>
   )
 }

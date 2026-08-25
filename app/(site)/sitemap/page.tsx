@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import {webPageLd} from '@/lib/schema'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -65,6 +67,7 @@ export default async function SitemapPage() {
           Every page on this site. If you are looking for something specific and cannot find it,
           please <Link href="/contact">get in touch</Link> — we are happy to point you to it.
         </p>
+        <Breadcrumbs trail={[{name: 'Sitemap', href: '/sitemap'}]} />
       </section>
 
       <section className="section">
@@ -154,6 +157,18 @@ export default async function SitemapPage() {
           </p>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageLd({
+              path: '/sitemap/',
+              name: 'Sitemap',
+              description: metadata.description as string,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

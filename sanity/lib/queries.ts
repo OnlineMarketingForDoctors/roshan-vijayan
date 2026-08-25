@@ -41,7 +41,7 @@ export const blogSlugsQuery = groq`*[_type=="blogPost" && defined(slug.current)]
  */
 export const blogIndexQuery = groq`*[_type=="blogPost" && defined(slug.current)]
   | order(title asc){
-    _id, title, "slug": slug.current, category
+    _id, title, "slug": slug.current, category, excerpt
   }`
 
 export const blogPostQuery = groq`*[_type=="blogPost" && slug.current==$slug][0]{

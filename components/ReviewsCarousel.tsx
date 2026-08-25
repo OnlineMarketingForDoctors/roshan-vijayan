@@ -118,7 +118,7 @@ export default function ReviewsCarousel({
         </div>
         <div className="reviews-aside">
           <div className="reviews-rating">
-            <img className="iwgc" src="/images/iwgc-logo.png" alt="iWantGreatCare verified reviews" />
+            <img className="iwgc" src="/images/iwgc-logo.png" alt="iWantGreatCare verified reviews" decoding="async" loading="lazy" />
             <div className="rating-meta">
               <div className="stars" aria-hidden="true">
                 ★★★★★

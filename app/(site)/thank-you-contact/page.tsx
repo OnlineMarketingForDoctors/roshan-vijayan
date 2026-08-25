@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import type {Metadata} from 'next'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {siteSettingsQuery} from '@/sanity/lib/queries'
@@ -33,6 +34,7 @@ export default async function ThankYouPage() {
           Mr Vijayan’s team will be in touch personally, usually within one working day. If your
           enquiry is urgent, please call <a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>.
         </p>
+        <Breadcrumbs trail={[{name: 'Thank you'}]} />
       </section>
 
       <section className="section center">

@@ -37,7 +37,7 @@ serving the old values.
 Leave them unset on Preview. Previews then stay `noindex` and describe
 themselves by their own Vercel URL, which is what you want.
 
-## 3. Redeploy, then check four things
+## 3. Redeploy, then check five things
 
 - `https://<domain>/robots.txt` — should say `Allow: /` and list the sitemap.
   If it still says `Disallow: /`, `NEXT_PUBLIC_SITE_LIVE` did not take.
@@ -49,6 +49,9 @@ themselves by their own Vercel URL, which is what you want.
   domain, and there should be **no** `<meta name="robots" content="noindex">`.
 - Share a page link into WhatsApp or Slack — the preview card should show the
   photograph of Mr Vijayan.
+- `https://<domain>/llms.txt` — a plain-text summary of the site for language
+  models, built from Sanity like the sitemap. Every link in it should start
+  with your domain.
 
 ## 4. Submit to Google
 
@@ -69,6 +72,13 @@ Two things to confirm in LeadConnector itself:
 
 Then send yourself a test enquiry from `/contact` and confirm it arrives and
 that you land on the thank-you page.
+
+## 6. The footer credit mark
+
+The footer reads "Powered by Online Marketing For Doctors". The logo sits
+beside it as soon as the artwork is in the repository: save it as
+`public/images/logos/omd.svg` (`.webp` and `.png` also work) and redeploy.
+Until then the credit shows as text alone.
 
 Two things worth knowing before it goes live:
 

@@ -16,7 +16,7 @@ const GROUPS = [
   {key: 'skin', label: 'Skin & Reconstruction', anchor: 'skin'},
 ] as const
 
-const FALLBACK_IMAGE = '/images/web/procedures-hero.png'
+const FALLBACK_IMAGE = '/images/web/procedures-hero.webp'
 
 function telHref(phone?: string) {
   if (!phone) return 'tel:+441727221799'
@@ -141,7 +141,7 @@ export default function Header({
                   ))}
 
                   <div className="mega-feature">
-                    <img src={featured?.image || FALLBACK_IMAGE} alt="" aria-hidden="true" />
+                    <img src={featured?.image || FALLBACK_IMAGE} alt="" aria-hidden="true" decoding="async" loading="lazy" />
                     {featured ? (
                       <Link
                         className="mega-feature-cap"
@@ -189,7 +189,7 @@ export default function Header({
         </nav>
 
         <Link className="brand" href="/" aria-label="RV Plastic Surgery home">
-          <img className="brand-mark" src="/images/logo-white.svg" alt="RV Plastic Surgery" />
+          <img className="brand-mark" src="/images/logo-white.svg" alt="RV Plastic Surgery" decoding="async" fetchPriority="high" />
         </Link>
 
         <div className="nav-end">

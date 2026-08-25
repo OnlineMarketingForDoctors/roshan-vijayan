@@ -7,18 +7,24 @@ const components: PortableTextComponents = {
       if (!value?.asset) return null
       return (
         <figure className="prose-img">
-          <img src={urlFor(value).width(1400).quality(82).url()} alt={value.alt || ''} loading="lazy" />
+          <img src={urlFor(value).width(1400).quality(82).url()} alt={value.alt || ''} loading="lazy" decoding="async" />
           {value.caption ? <figcaption>{value.caption}</figcaption> : null}
         </figure>
       )
     },
   },
   marks: {
+    // A link out of the site opens in its own tab and is not an endorsement:
+    // nofollow keeps this site's ranking to itself, noopener/noreferrer keep
+    // the new tab from reaching back into this one.
     link: ({value, children}) => {
       const href = value?.href || '#'
       const ext = /^https?:/.test(href)
       return (
-        <a href={href} {...(ext ? {target: '_blank', rel: 'noopener'} : {})}>
+        <a
+          href={href}
+          {...(ext ? {target: '_blank', rel: 'nofollow noopener noreferrer'} : {})}
+        >
           {children}
         </a>
       )
