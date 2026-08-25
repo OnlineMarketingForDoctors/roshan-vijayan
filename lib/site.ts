@@ -1,25 +1,38 @@
 /**
- * Where the site lives, resolved once.
+ * Where the site lives, resolved once. Canonical links, Open Graph URLs, the
+ * JSON-LD identifiers, both sitemaps and llms.txt all follow from this.
  *
- * The domain is not settled yet, so nothing hard-codes it. Set
- * NEXT_PUBLIC_SITE_URL in Vercel when it is, and canonical links, Open Graph
- * URLs, the sitemap and robots.txt all follow from that one value.
+ * Resolved in order:
  *
- * Until then it falls back to whichever Vercel URL is serving the request, so
- * previews describe themselves rather than pointing at a domain that does not
- * exist. NEXT_PUBLIC_SITE_LIVE gates indexing separately: a preview should be
- * self-consistent but must still stay out of Google.
+ *   1. NEXT_PUBLIC_SITE_URL, if set. An explicit answer always wins, so the
+ *      domain can be changed in Vercel without touching the code.
+ *   2. PRODUCTION_URL, on a production deployment. The domain is settled, and
+ *      naming it here means production says the same thing whether or not
+ *      anyone remembers to set the variable.
+ *   3. The Vercel URL serving the request, on a preview. A preview describes
+ *      itself rather than claiming to be the live site.
+ *   4. localhost, when developing.
+ *
+ * NEXT_PUBLIC_SITE_LIVE gates indexing separately: this says what the site
+ * calls itself, that says whether search engines may act on it. Until the
+ * domain actually points at this project, leave it unset — every page carries
+ * noindex, so a canonical pointing somewhere not yet serving does no harm.
  */
+
+/** The live domain. No trailing slash. */
+const PRODUCTION_URL = 'https://vijayan.co.uk'
 
 /** True only once the real domain is serving the site. */
 export const isLive = process.env.NEXT_PUBLIC_SITE_LIVE === 'true'
 
 const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 const fromVercel = process.env.NEXT_PUBLIC_VERCEL_URL?.trim()
 
 /** No trailing slash: callers append paths that start with one. */
 export const SITE_URL = (
   fromEnv ||
+  (isProduction ? PRODUCTION_URL : '') ||
   (fromVercel ? `https://${fromVercel}` : '') ||
   'http://localhost:3000'
 ).replace(/\/+$/, '')

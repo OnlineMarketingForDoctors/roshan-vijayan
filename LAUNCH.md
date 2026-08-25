@@ -27,7 +27,7 @@ Vercel → Settings → Environment Variables, **Production** scope:
 
 | Variable | Value | What it does |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | `https://www.example.co.uk` | Canonical links, Open Graph URLs, the sitemap. No trailing slash. |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.example.co.uk` | Optional. Canonical links, Open Graph URLs, the sitemap. No trailing slash. Production already resolves to `https://vijayan.co.uk` from `lib/site.ts`, so set this only to override that — a different domain, or a staging host that should describe itself. |
 | `NEXT_PUBLIC_SITE_LIVE` | `true` | Removes `noindex` and opens robots.txt to crawlers. |
 
 Both are `NEXT_PUBLIC_`, which means they are **baked in at build time**.
