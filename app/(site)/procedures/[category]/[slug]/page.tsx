@@ -68,6 +68,61 @@ const captionOf = (src: unknown): string | null => {
   return typeof c === 'string' && c.trim() ? c : null
 }
 
+/**
+ * Section backgrounds, resolved against the sections that are actually on.
+ *
+ * Every band on this page is optional, so a tint written into the markup
+ * leaves two identical backgrounds touching whenever the section between them
+ * is switched off: a procedure with no before-and-after cases ran the intro
+ * straight into the overview, and with nothing to separate them the two read
+ * as one enormous empty gap. Journey and recovery collided the same way on
+ * every page.
+ *
+ * The tints below are therefore an intention rather than an instruction. They
+ * are walked in document order and any that would repeat the band above it
+ * moves on to the next tint, so the page alternates whichever sections happen
+ * to be showing. Sections with a treatment of their own — the photographic
+ * band, the surgeon's portrait — break the run and reset it.
+ */
+const TINTS = ['', 'bg-ivory2', 'bg-cream']
+
+const TINT_INTENT: [string, string][] = [
+  ['intro', ''],
+  ['results', 'bg-ivory2'],
+  ['overview', ''],
+  ['glance', 'bg-ivory2'],
+  ['concerns', ''],
+  ['benefits', 'bg-cream'],
+  ['candidates', ''],
+  ['techniques', 'bg-cream'],
+  ['procedure', 'own'],
+  ['journey', ''],
+  ['recovery', ''],
+  ['risks', 'bg-cream'],
+  ['why', 'bg-ivory2'],
+  ['surgeon', 'own'],
+  ['cost', ''],
+  ['faq', 'bg-ivory2'],
+  ['related', ''],
+]
+
+function resolveTints(on: Record<string, boolean>): Record<string, string> {
+  const out: Record<string, string> = {}
+  let previous: string | null = null
+  for (const [id, intent] of TINT_INTENT) {
+    if (!on[id]) continue
+    if (intent === 'own') {
+      previous = 'own'
+      continue
+    }
+    const tint: string =
+      intent === previous ? TINTS[(TINTS.indexOf(intent) + 1) % TINTS.length] : intent
+    out[id] = tint
+    previous = tint
+  }
+  return out
+}
+
 export async function generateStaticParams() {
   try {
     const slugs = await client.fetch<{slug: string; category?: string}[]>(procedureSlugsQuery)
@@ -107,22 +162,48 @@ export default async function ProcedurePage({params}: Params) {
   const showResults = show(p.showResults) && baCases.length > 0
   const lower = p.title.toLowerCase()
 
-  const subnav: {id: string; label: string; on: boolean}[] = [
-    {id: 'results', label: 'Before & After', on: showResults},
-    {id: 'overview', label: 'Overview', on: show(p.showOverview)},
-    {id: 'glance', label: 'At a Glance', on: show(p.showGlance) && !!p.atAGlance?.length},
-    {id: 'concerns', label: 'Concerns', on: show(p.showConditions) && !!p.conditions?.length},
-    {id: 'benefits', label: 'Benefits', on: show(p.showBenefits) && !!p.benefitsList?.length},
-    {id: 'candidates', label: 'Candidates', on: show(p.showCandidates)},
-    {id: 'techniques', label: 'Techniques', on: show(p.showTechniques) && !!p.techniques?.length},
-    {id: 'procedure', label: 'Procedure', on: show(p.showProcedure)},
-    {id: 'journey', label: 'Journey', on: show(p.showJourney) && !!p.journey?.length},
-    {id: 'recovery', label: 'Recovery', on: show(p.showRecovery) && !!p.recovery?.length},
-    {id: 'risks', label: 'Risks', on: show(p.showRisks) && !!p.risks?.length},
-    {id: 'surgeon', label: 'Surgeon', on: show(p.showSurgeon)},
-    {id: 'cost', label: 'Cost', on: show(p.showCost)},
-    {id: 'faq', label: 'FAQs', on: show(p.showFaqs) && !!p.faqs?.length},
-  ]
+  // which sections this procedure actually renders — read by the sub-nav and
+  // by the background resolver, so the two can never disagree
+  const on: Record<string, boolean> = {
+    intro: show(p.showIntro) && !!p.introBody?.length,
+    results: showResults,
+    overview: show(p.showOverview),
+    glance: show(p.showGlance) && !!p.atAGlance?.length,
+    concerns: show(p.showConditions) && !!p.conditions?.length,
+    benefits: show(p.showBenefits) && !!p.benefitsList?.length,
+    candidates: show(p.showCandidates),
+    techniques: show(p.showTechniques) && !!p.techniques?.length,
+    procedure: show(p.showProcedure),
+    journey: show(p.showJourney) && !!p.journey?.length,
+    recovery: show(p.showRecovery) && !!p.recovery?.length,
+    risks: show(p.showRisks) && !!p.risks?.length,
+    why: show(p.showWhy) && !!p.whyPoints?.length,
+    surgeon: show(p.showSurgeon),
+    cost: show(p.showCost),
+    faq: show(p.showFaqs) && !!p.faqs?.length,
+    related: show(p.showRelated) && !!p.related?.length,
+  }
+
+  const tint = resolveTints(on)
+  /** The class list for a numbered section, with the background it resolved to. */
+  const band = (id: string) => `section${tint[id] ? ` ${tint[id]}` : ''} proc-anchor`
+
+  const subnav = [
+    {id: 'results', label: 'Before & After'},
+    {id: 'overview', label: 'Overview'},
+    {id: 'glance', label: 'At a Glance'},
+    {id: 'concerns', label: 'Concerns'},
+    {id: 'benefits', label: 'Benefits'},
+    {id: 'candidates', label: 'Candidates'},
+    {id: 'techniques', label: 'Techniques'},
+    {id: 'procedure', label: 'Procedure'},
+    {id: 'journey', label: 'Journey'},
+    {id: 'recovery', label: 'Recovery'},
+    {id: 'risks', label: 'Risks'},
+    {id: 'surgeon', label: 'Surgeon'},
+    {id: 'cost', label: 'Cost'},
+    {id: 'faq', label: 'FAQs'},
+  ].filter((s) => on[s.id])
 
   const path = `/procedures/${category}/${slug}/`
   const procedureLd = medicalProcedureLd({
@@ -186,7 +267,7 @@ export default async function ProcedurePage({params}: Params) {
       {/* SUB-NAV */}
       <nav className="proc-subnav" aria-label="On this page">
         <div className="proc-subnav-inner">
-          {subnav.filter((s) => s.on).map((s) => (
+          {subnav.map((s) => (
             <a key={s.id} href={`#${s.id}`}>
               {s.label}
             </a>
@@ -204,8 +285,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* INTRO */}
-      {show(p.showIntro) && p.introBody?.length ? (
-        <section className="section center">
+      {on.intro ? (
+        <section className={`section center${tint.intro ? ` ${tint.intro}` : ''}`}>
           <div className="narrow reveal">
             {p.introHeading ? <h2 className="display">{p.introHeading}</h2> : null}
             <div className="prose intro-prose">
@@ -216,8 +297,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* BEFORE & AFTER */}
-      {showResults ? (
-        <section className="section bg-ivory2 proc-anchor" id="results">
+      {on.results ? (
+        <section className={band('results')} id="results">
           <div className="section-head center reveal">
             <h2 className="display">
               Real, natural <em>results.</em>
@@ -232,8 +313,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* OVERVIEW */}
-      {show(p.showOverview) ? (
-        <section className="section proc-anchor" id="overview">
+      {on.overview ? (
+        <section className={band('overview')} id="overview">
           <div className="feature-row">
             <div className="feature-media reveal">
               <div className="fm-frame">
@@ -253,8 +334,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* AT A GLANCE */}
-      {show(p.showGlance) && p.atAGlance?.length ? (
-        <section className="section bg-ivory2 proc-anchor" id="glance">
+      {on.glance ? (
+        <section className={band('glance')} id="glance">
           <div className="section-head center reveal">
             <h2 className="display">{p.glanceHeading || `${p.title} at a glance`}</h2>
             <p>
@@ -277,8 +358,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* WHAT IT ADDRESSES */}
-      {show(p.showConditions) && p.conditions?.length ? (
-        <section className="section proc-anchor" id="concerns">
+      {on.concerns ? (
+        <section className={band('concerns')} id="concerns">
           <div className="section-head center reveal">
             <h2 className="display">{p.conditionsHeading || 'What it can address'}</h2>
             <PortableTextBody value={p.conditionsIntro} />
@@ -292,8 +373,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* BENEFITS */}
-      {show(p.showBenefits) && p.benefitsList?.length ? (
-        <section className="section bg-cream proc-anchor" id="benefits">
+      {on.benefits ? (
+        <section className={band('benefits')} id="benefits">
           <div className="feature-row">
             <div className="feature-media reveal">
               <div className="fm-frame">
@@ -316,8 +397,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* CANDIDATES */}
-      {show(p.showCandidates) ? (
-        <section className="section proc-anchor" id="candidates">
+      {on.candidates ? (
+        <section className={band('candidates')} id="candidates">
           <div className="feature-row flip">
             <div className="feature-media reveal">
               <div className="fm-frame">
@@ -343,8 +424,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* TECHNIQUES / PROCEDURE TYPES */}
-      {show(p.showTechniques) && p.techniques?.length ? (
-        <section className="section bg-cream proc-anchor" id="techniques">
+      {on.techniques ? (
+        <section className={band('techniques')} id="techniques">
           <div className="feature-row">
             <div className="feature-media reveal">
               <div className="fm-frame">
@@ -372,7 +453,7 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* THE PROCEDURE */}
-      {show(p.showProcedure) ? (
+      {on.procedure ? (
         <section className="proc-band proc-anchor" id="procedure">
           <img src={img(p.procedureImage, DEF.procedure, 1600, 78)} className={p.procedureImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" decoding="async" loading="lazy" />
           <div className="pb-inner reveal">
@@ -385,8 +466,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* TREATMENT JOURNEY */}
-      {show(p.showJourney) && p.journey?.length ? (
-        <section className="section proc-anchor" id="journey">
+      {on.journey ? (
+        <section className={band('journey')} id="journey">
           <div className="section-head center reveal">
             <h2 className="display">{p.journeyHeading || 'Your treatment journey'}</h2>
             <PortableTextBody value={p.journeyIntro} />
@@ -403,8 +484,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* RECOVERY */}
-      {show(p.showRecovery) && p.recovery?.length ? (
-        <section className="section proc-anchor" id="recovery">
+      {on.recovery ? (
+        <section className={band('recovery')} id="recovery">
           <div className="section-head center reveal">
             <h2 className="display">
               {p.recoveryHeading || (
@@ -429,8 +510,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* RISKS */}
-      {show(p.showRisks) && p.risks?.length ? (
-        <section className="section bg-cream proc-anchor" id="risks">
+      {on.risks ? (
+        <section className={band('risks')} id="risks">
           <div className="section-head center reveal">
             <h2 className="display">{p.risksHeading || 'Risks and considerations'}</h2>
             <PortableTextBody value={p.risksIntro} />
@@ -448,8 +529,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* WHY CHOOSE US */}
-      {show(p.showWhy) && p.whyPoints?.length ? (
-        <section className="section bg-ivory2 proc-anchor" id="why">
+      {on.why ? (
+        <section className={band('why')} id="why">
           <div className="section-head center reveal">
             <h2 className="display">{p.whyHeading || 'Why choose us'}</h2>
             <PortableTextBody value={p.whyIntro} />
@@ -471,7 +552,7 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* SURGEON */}
-      {show(p.showSurgeon) ? (
+      {on.surgeon ? (
         <section className="philosophy proc-anchor" id="surgeon">
           <div className="blob blob-1" aria-hidden="true" />
           <div className="phil-portrait reveal">
@@ -491,8 +572,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* COST */}
-      {show(p.showCost) ? (
-        <section className="section proc-anchor" id="cost">
+      {on.cost ? (
+        <section className={band('cost')} id="cost">
           <div className="section-head center reveal">
             <h2 className="display">{p.costHeading || `${p.title} cost`}</h2>
             <PortableTextBody value={p.costIntro} />
@@ -524,8 +605,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* FAQ */}
-      {show(p.showFaqs) && p.faqs?.length ? (
-        <section className="section bg-ivory2 proc-anchor" id="faq">
+      {on.faq ? (
+        <section className={band('faq')} id="faq">
           <div className="section-head center reveal">
             <h2 className="display">{p.faqHeading || 'Common questions'}</h2>
           </div>
@@ -543,8 +624,8 @@ export default async function ProcedurePage({params}: Params) {
       ) : null}
 
       {/* RELATED */}
-      {show(p.showRelated) && p.related?.length ? (
-        <section className="section proc-anchor" id="related">
+      {on.related ? (
+        <section className={band('related')} id="related">
           <div className="section-head center reveal">
             <h2 className="display">Related procedures</h2>
           </div>
