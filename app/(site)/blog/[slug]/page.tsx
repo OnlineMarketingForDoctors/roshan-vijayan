@@ -2,6 +2,7 @@ import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {articleLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -58,11 +59,13 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {slug} = await params
   const p = await sanityFetch<any>(blogPostQuery, {slug}, null)
   if (!p) return {}
-  return {
-    alternates: {canonical: absoluteUrl(`/blog/${slug}/`)},
+  return pageMetadata({
+    path: `/blog/${slug}/`,
     title: `${p.title} | RV Plastic Surgery`,
     description: p.excerpt || undefined,
-  }
+    image: p.coverImage ? urlFor(p.coverImage).width(1200).quality(80).url() : undefined,
+    article: {published: p.publishedAt || undefined, section: p.category || undefined},
+  })
 }
 
 export default async function BlogPostPage({params}: Params) {

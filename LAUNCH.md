@@ -17,36 +17,48 @@ _Retiring the old site_, last).
 1. Vercel → project **roshan-vijayan-2** → Settings → Domains → add the domain.
 2. Follow the DNS records Vercel gives you at the registrar.
 3. Pick the canonical host — `www.example.co.uk` **or** `example.co.uk`, not
-   both. Vercel redirects the other one to it. Whichever you choose has to
-   match `NEXT_PUBLIC_SITE_URL` below exactly, or every canonical tag on the
-   site will point at a URL that redirects.
+   both. The site is built for the apex, `vijayan.co.uk`, so add
+   `www.vijayan.co.uk` to the project as well and set it to **redirect** to the
+   apex — Vercel then answers www at the edge with a 308 and never serves a
+   second copy of the site there. `next.config.ts` carries the same redirect as
+   a fallback, for the case where www reaches the application directly.
+
+   Vercel redirects http to https by itself once a domain is attached; there is
+   nothing to configure for that.
 
 ## 2. Set the environment variables
 
 Vercel → Settings → Environment Variables, **Production** scope:
 
-| Variable | Value | What it does |
+**Neither of these is normally needed.** A production deployment already
+resolves to `https://vijayan.co.uk` and already invites indexing; a preview
+already describes itself by its own Vercel URL and already refuses indexing.
+Both follow from `VERCEL_ENV`, in `lib/site.ts`. Set one of these only to
+override that:
+
+| Variable | Value | What it overrides |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | `https://www.example.co.uk` | Optional. Canonical links, Open Graph URLs, the sitemap. No trailing slash. Production already resolves to `https://vijayan.co.uk` from `lib/site.ts`, so set this only to override that — a different domain, or a staging host that should describe itself. |
-| `NEXT_PUBLIC_SITE_LIVE` | `true` | Removes `noindex` and opens robots.txt to crawlers. |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.example.co.uk` | The domain in canonical links, Open Graph URLs, the JSON-LD identifiers, both sitemaps and llms.txt. No trailing slash. |
+| `NEXT_PUBLIC_SITE_LIVE` | `false` | Pulls production back out of the index — `noindex` on every page and `Disallow: /` in robots.txt — without a code change. `true` forces the opposite. |
 
 Both are `NEXT_PUBLIC_`, which means they are **baked in at build time**.
 Setting them is not enough — you must redeploy afterwards, or the site keeps
 serving the old values.
 
-Leave them unset on Preview. Previews then stay `noindex` and describe
-themselves by their own Vercel URL, which is what you want.
-
 ## 3. Redeploy, then check five things
 
 - `https://<domain>/robots.txt` — should say `Allow: /` and list the sitemap.
-  If it still says `Disallow: /`, `NEXT_PUBLIC_SITE_LIVE` did not take.
+  If it still says `Disallow: /`, the deployment is not a Production one, or
+  `NEXT_PUBLIC_SITE_LIVE` is set to `false`.
 - `https://<domain>/sitemap.xml` — every URL should start with your domain,
   and it should list the procedure and blog pages, not just the seven static
   ones. (It falls back to static-only if Sanity is unreachable during the
   build.)
 - View source on the homepage — `<link rel="canonical">` should be your
-  domain, and there should be **no** `<meta name="robots" content="noindex">`.
+  domain, and the robots tag should read `index, follow`.
+- View source on any inner page — `<link rel="canonical">` and
+  `<meta property="og:url">` should both be that page's own URL, not the
+  homepage's.
 - Share a page link into WhatsApp or Slack — the preview card should show the
   photograph of Mr Vijayan.
 - `https://<domain>/llms.txt` — a plain-text summary of the site for language
@@ -56,8 +68,8 @@ themselves by their own Vercel URL, which is what you want.
 ## 4. Submit to Google
 
 Google Search Console → add the domain as a property → submit
-`https://<domain>/sitemap.xml`. Nothing gets indexed until step 2 is done, so
-do this last.
+`https://<domain>/sitemap.xml`. Nothing gets indexed until the domain is
+serving a Production deployment, so do this last.
 
 ## 5. Check the enquiry form
 

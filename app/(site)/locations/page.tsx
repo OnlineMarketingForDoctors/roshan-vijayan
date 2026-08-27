@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {webPageLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {locationsPageQuery} from '@/sanity/lib/queries'
 import {mergeContent} from '@/sanity/lib/pages'
@@ -27,11 +27,7 @@ async function getContent(): Promise<LocationsPageContent> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const {seo} = await getContent()
-  return {
-    alternates: {canonical: absoluteUrl('/locations/')},
-    title: seo.title,
-    description: seo.description,
-  }
+  return pageMetadata({path: '/locations/', title: seo.title, description: seo.description})
 }
 
 export default async function LocationsPage() {

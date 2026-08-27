@@ -2,6 +2,7 @@ import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {medicalProcedureLd, faqLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
@@ -136,11 +137,12 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {category, slug} = await params
   const p = await sanityFetch<any>(procedureQuery, {slug}, null)
   if (!p) return {}
-  return {
-    alternates: {canonical: absoluteUrl(`/procedures/${category}/${slug}/`)},
+  return pageMetadata({
+    path: `/procedures/${category}/${slug}/`,
     title: p.seoTitle || `${p.title} in Hertfordshire | RV Plastic Surgery`,
     description: p.seoDescription || toPlain(p.heroPromise) || undefined,
-  }
+    image: img(p.heroImage, '', 1200),
+  })
 }
 
 export default async function ProcedurePage({params}: Params) {

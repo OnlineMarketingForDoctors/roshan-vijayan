@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {webPageLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {absoluteUrl} from '@/lib/site'
 import PortableTextBody from '@/components/PortableTextBody'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {aboutPageQuery} from '@/sanity/lib/queries'
@@ -16,11 +16,7 @@ async function getContent(): Promise<AboutPageContent> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const {seo} = await getContent()
-  return {
-    alternates: {canonical: absoluteUrl('/about/')},
-    title: seo.title,
-    description: seo.description,
-  }
+  return pageMetadata({path: '/about/', title: seo.title, description: seo.description})
 }
 
 export default async function AboutPage() {

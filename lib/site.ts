@@ -22,12 +22,22 @@
 /** The live domain. No trailing slash. */
 const PRODUCTION_URL = 'https://vijayan.co.uk'
 
-/** True only once the real domain is serving the site. */
-export const isLive = process.env.NEXT_PUBLIC_SITE_LIVE === 'true'
-
 const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim()
 const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 const fromVercel = process.env.NEXT_PUBLIC_VERCEL_URL?.trim()
+const liveFlag = process.env.NEXT_PUBLIC_SITE_LIVE?.trim()
+
+/**
+ * Whether search engines may index this deployment.
+ *
+ * Production is the live site and says so. A preview is a copy of it at a
+ * different URL, and two copies of the same pages competing in the results is
+ * the thing this exists to prevent, so a preview stays out. Setting
+ * NEXT_PUBLIC_SITE_LIVE answers explicitly either way — 'false' pulls
+ * production back out of the index without a code change, should that ever be
+ * needed in a hurry.
+ */
+export const isLive = liveFlag ? liveFlag === 'true' : isProduction
 
 /** No trailing slash: callers append paths that start with one. */
 export const SITE_URL = (

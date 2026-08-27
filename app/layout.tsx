@@ -43,15 +43,16 @@ const TITLE = 'RV Plastic Surgery | Mr Roshan Vijayan, Consultant Plastic Surgeo
 const DESCRIPTION =
   'Natural, balanced aesthetic and reconstructive surgery, consultant-led, in Hertfordshire, by Mr Roshan Vijayan, MBBS FRCS(Plast).'
 
-// Until go-live, keep search engines out of the staging URL. Flip the switch
-// by setting NEXT_PUBLIC_SITE_LIVE=true in Vercel when the real domain goes live.
+// The live site invites indexing; a preview refuses it. Stated either way
+// rather than left to the absence of a tag, so the intent is legible in the
+// markup and a preview can never be mistaken for the real thing.
 export const metadata: Metadata = {
   // resolves the relative image paths below, and every page's canonical link
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
   icons: {icon: '/favicon.svg'},
-  robots: isLive ? undefined : {index: false, follow: false},
+  robots: isLive ? {index: true, follow: true} : {index: false, follow: false},
   openGraph: {
     type: 'website',
     siteName: 'RV Plastic Surgery',

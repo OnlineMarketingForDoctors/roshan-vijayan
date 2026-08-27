@@ -2,8 +2,8 @@ import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {webPageLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {beforeAfterQuery, procedureSlugsQuery} from '@/sanity/lib/queries'
@@ -38,13 +38,13 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {slug} = await params
   const p = (await procedures()).find((x) => x.slug === slug)
   if (!p) return {}
-  return {
-    alternates: {canonical: absoluteUrl(`/gallery/${slug}/`)},
+  return pageMetadata({
+    path: `/gallery/${slug}/`,
     title: `${p.title} Before & After | RV Plastic Surgery`,
     description:
       `${p.title} before and after photographs from Mr Roshan Vijayan’s own patients, ` +
       'shared with written consent. Drag the handle on each image to reveal the result.',
-  }
+  })
 }
 
 export default async function BAProcedurePage({params}: Params) {

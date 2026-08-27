@@ -1,19 +1,19 @@
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {webPageLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {procedureListQuery, blogIndexQuery, beforeAfterQuery} from '@/sanity/lib/queries'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import {procedurePath, categorySegment} from '@/lib/procedurePath'
 
-export const metadata: Metadata = {
-  alternates: {canonical: absoluteUrl('/sitemap/')},
+export const metadata: Metadata = pageMetadata({
+  path: '/sitemap/',
   title: 'Sitemap | RV Plastic Surgery',
   description:
     'Every page on the RV Plastic Surgery website in one place — procedures, before and after results, locations and the full journal archive.',
-}
+})
 
 type Procedure = {_id: string; title: string; slug: string; category?: string}
 type Post = {_id: string; title: string; slug: string; category?: string}

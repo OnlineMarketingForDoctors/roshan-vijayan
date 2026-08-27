@@ -1,19 +1,20 @@
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import {webPageLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {absoluteUrl} from '@/lib/site'
 import {sanityFetch} from '@/sanity/lib/fetch'
 import {procedureListQuery} from '@/sanity/lib/queries'
 import {procedurePath} from '@/lib/procedurePath'
 import {SERVICE_TAGS, type ServiceTag} from '@/lib/serviceCategories'
 
-export const metadata: Metadata = {
-  alternates: {canonical: absoluteUrl('/procedures/')},
+export const metadata: Metadata = pageMetadata({
+  path: '/procedures/',
   title: 'Procedures | RV Plastic Surgery',
   description:
     'Aesthetic and reconstructive procedures by Mr Roshan Vijayan, Consultant Plastic Surgeon in Hertfordshire — body, breast, face & eyes, and skin & reconstruction.',
-}
+  image: '/images/web/procedures-hero.webp',
+})
 
 /** A pill in a category band — see lib/serviceCategories. */
 type Tag = ServiceTag

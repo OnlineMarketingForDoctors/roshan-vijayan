@@ -16,8 +16,8 @@ import {mergeContent} from '@/sanity/lib/pages'
 import {HOME_PAGE, type HomePageContent} from '@/lib/pageContent'
 import PortableTextBody from '@/components/PortableTextBody'
 import {localBusinessLd, websiteLd} from '@/lib/schema'
+import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {absoluteUrl} from '@/lib/site'
 import ServicesCarousel from '@/components/ServicesCarousel'
 import ContactForm from '@/components/ContactForm'
 
@@ -41,11 +41,7 @@ async function getContent(): Promise<HomePageContent> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const {seo} = await getContent()
-  return {
-    alternates: {canonical: absoluteUrl('/')},
-    title: seo.title,
-    description: seo.description,
-  }
+  return pageMetadata({path: '/', title: seo.title, description: seo.description})
 }
 
 export default async function Home() {
