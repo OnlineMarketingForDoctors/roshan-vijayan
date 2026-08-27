@@ -74,10 +74,7 @@ export default async function BlogPage({searchParams}: {searchParams?: Promise<{
   return (
     <>
       <section className="page-hero">
-        <picture>
-          <source media="(max-width: 640px)" srcSet="/images/web/lifestyle-laugh-tall.webp" />
-          <img src="/images/web/lifestyle-laugh.webp" alt="A woman laughing in warm natural light" decoding="async" fetchPriority="high" />
-        </picture>
+        <img src="/images/web/lifestyle-laugh.webp" alt="A woman laughing in warm natural light" decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">The Journal</span>

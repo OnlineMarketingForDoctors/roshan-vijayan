@@ -22,10 +22,7 @@ export default async function GalleryPage() {
   return (
     <>
       <section className="page-hero">
-        <picture>
-          <source media="(max-width: 640px)" srcSet="/images/web/decolletage-tall.webp" />
-          <img src="/images/web/decolletage.webp" alt="Soft editorial portrait" decoding="async" fetchPriority="high" />
-        </picture>
+        <img src="/images/web/decolletage.webp" alt="Soft editorial portrait" decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">Before &amp; After</span>

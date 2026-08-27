@@ -25,10 +25,7 @@ export default async function ContactPage() {
   return (
     <>
       <section className="page-hero">
-        <picture>
-          <source media="(max-width: 640px)" srcSet={c.hero.imageUrlNarrow} />
-          <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
-        </picture>
+        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">{c.hero.eyebrow}</span>
