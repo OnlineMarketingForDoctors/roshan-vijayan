@@ -599,21 +599,30 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
      ivory and fights the image for contrast at every scroll position; below
      it, it is simply dark text on the page. The picture keeps the full width
      and dissolves into that page rather than ending on a line. */
-  .hero{display:block;padding:0;min-height:0}
+  /* The header is fixed and floats over whatever is beneath it. Over a
+     photograph that put the monogram and the buttons across the subject's
+     face, so the hero reserves the header's own height at the top and fills
+     it with the tone the header takes when scrolled. The header then sits on
+     a bar of its own and the picture starts below it — still edge to edge,
+     just no longer underneath the navigation. Measured rather than guessed:
+     102px of monogram plus the header's own padding. */
+  .hero{display:block;padding:115px 0 0;min-height:0;
+    /* the bar, and then the page — a hard stop at the header's height rather
+       than a background on the whole section, which would run on behind the
+       copy and leave dark text on a dark ground */
+    background:linear-gradient(to bottom,rgb(34,26,16) 115px,var(--ivory) 115px)}
   .hero-media{position:relative;inset:auto;z-index:0;height:min(56svh,460px)}
   .hero-media img{object-position:60% center}
-  /* Two jobs in one gradient: darken the top enough for the fixed header to
-     stay legible over it, then carry the foot of the image into the page
-     colour so there is no edge. The middle stop sits at the ivory value with
-     zero alpha — fading to `transparent` would pass through grey and leave a
-     dirty band across the picture. */
+  /* Only one job left. The top of the picture used to be darkened to keep the
+     header readable across it; with the header lifted clear, that is just a
+     shadow over the photograph, so it goes. What remains carries the foot of
+     the image into the page colour. The stops sit at the ivory value with zero
+     alpha — fading to `transparent` would pass through grey and leave a dirty
+     band across the picture. */
   .hero-veil{background:
     linear-gradient(to bottom,
-      rgba(26,19,12,.66) 0%,
-      rgba(26,19,12,.5) 11%,
-      rgba(26,19,12,.12) 30%,
-      rgba(246,240,230,0) 52%,
-      rgba(246,240,230,.55) 82%,
+      rgba(246,240,230,0) 55%,
+      rgba(246,240,230,.5) 83%,
       var(--ivory) 100%)}
   .hero-inner{width:100%;margin:0;
     padding:.4rem clamp(1.2rem,5vw,3.4rem) 2.6rem}
