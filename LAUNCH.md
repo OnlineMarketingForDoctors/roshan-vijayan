@@ -65,6 +65,17 @@ serving the old values.
   models, built from Sanity like the sitemap. Every link in it should start
   with your domain.
 
+## 3b. The old site's URLs
+
+Every address the previous site published is redirected, permanently, in
+`lib/legacyRedirects.ts` — 141 journal posts that moved from the root to
+`/blog/`, `about-me`, `thank-you`, and the four procedure category pages that
+are now bands on `/procedures/`. The nineteen procedure pages kept their exact
+URLs and need nothing.
+
+Spot-check a few after go-live: `/benefits-of-abdominoplasty/` should land on
+`/blog/benefits-of-abdominoplasty/`, and `/about-me/` on `/about/`.
+
 ## 4. Submit to Google
 
 Google Search Console → add the domain as a property → submit

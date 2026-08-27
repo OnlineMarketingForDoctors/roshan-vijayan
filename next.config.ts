@@ -1,4 +1,5 @@
 import type {NextConfig} from 'next'
+import {LEGACY_REDIRECTS} from './lib/legacyRedirects'
 
 const nextConfig: NextConfig = {
   // The old site served every URL with a trailing slash. Matching it keeps the
@@ -28,6 +29,8 @@ const nextConfig: NextConfig = {
         destination: 'https://vijayan.co.uk/:path*',
         permanent: true,
       },
+      // the old site's addresses — see lib/legacyRedirects.ts
+      ...LEGACY_REDIRECTS,
     ]
   },
 }
