@@ -22,6 +22,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {path: '/blog/', priority: 0.6},
     {path: '/contact/', priority: 0.9},
     {path: '/sitemap/', priority: 0.2},
+    {path: '/privacy-policy/', priority: 0.2},
+    {path: '/terms-and-conditions/', priority: 0.2},
+    {path: '/cookies-policy/', priority: 0.2},
     // /thank-you-contact/ is deliberately absent: it is the form's landing
     // page, carries a noindex tag, and should not be offered to crawlers
   ]

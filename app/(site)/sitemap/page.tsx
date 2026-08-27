@@ -30,6 +30,12 @@ const PAGES = [
   {href: '/contact', label: 'Contact'},
 ]
 
+const LEGAL = [
+  {href: '/privacy-policy', label: 'Privacy Policy'},
+  {href: '/terms-and-conditions', label: 'Terms and Conditions'},
+  {href: '/cookies-policy', label: 'Cookies Policy'},
+]
+
 /** Headings for the URL segment each procedure category maps to. */
 const AREAS: {seg: string; title: string}[] = [
   {seg: 'body', title: 'Body'},
@@ -79,6 +85,17 @@ export default async function SitemapPage() {
             <h2>Pages</h2>
             <ul className="sitemap-list">
               {PAGES.map((p) => (
+                <li key={p.href}>
+                  <Link href={p.href}>{p.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="sitemap-block">
+            <h2>Legal</h2>
+            <ul className="sitemap-list">
+              {LEGAL.map((p) => (
                 <li key={p.href}>
                   <Link href={p.href}>{p.label}</Link>
                 </li>

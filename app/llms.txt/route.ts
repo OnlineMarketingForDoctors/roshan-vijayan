@@ -59,6 +59,9 @@ const PAGES: [string, string, string][] = [
   ['Journal', '/blog/', 'Articles on surgery, recovery and aftercare.'],
   ['Contact', '/contact/', 'Enquiry form, telephone number and email address.'],
   ['Sitemap', '/sitemap/', 'Every page on the site in one list.'],
+  ['Privacy Policy', '/privacy-policy/', 'What we do with the information you give us.'],
+  ['Terms and Conditions', '/terms-and-conditions/', 'The terms this website is made available on.'],
+  ['Cookies Policy', '/cookies-policy/', 'What this site stores on your device, and how to stop it.'],
 ]
 
 /** One line of a link list. Newlines in a title would break the format. */

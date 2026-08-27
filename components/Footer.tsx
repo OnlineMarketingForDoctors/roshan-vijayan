@@ -68,6 +68,11 @@ export default function Footer({settings}: {settings: Settings}) {
           ))}
         </div>
       </div>
+      <nav className="foot-legal" aria-label="Legal">
+        <Link href="/privacy-policy">Privacy Policy</Link>
+        <Link href="/terms-and-conditions">Terms and Conditions</Link>
+        <Link href="/cookies-policy">Cookies Policy</Link>
+      </nav>
       <div className="foot-bottom">
         <p>
           © {year} RV Plastic Surgery · Leonie Grace Limited · GMC {gmc}
