@@ -284,6 +284,8 @@ export type HomePageContent = {
   heroCtaLabel: string
   heroLinkLabel: string
   heroImageUrl: string
+  /** The same scene, taller, for narrow screens. See the <picture> in the home page. */
+  heroImageUrlNarrow: string
   heroImageAlt: string
   usps: string[]
   philEyebrow: string
@@ -348,6 +350,7 @@ export const HOME_PAGE: HomePageContent = {
   heroCtaLabel: 'Request a Consultation',
   heroLinkLabel: 'Explore procedures',
   heroImageUrl: '/images/web/hero-2.webp',
+  heroImageUrlNarrow: '/images/web/hero-2-tall.webp',
   heroImageAlt: 'A poised, confident woman in champagne silk',
   usps: [
     'Consultant-led care, first call to final review',

@@ -127,7 +127,8 @@ export const aboutPageQuery = groq`*[_type=="aboutPage"][0]{
 export const homePageQuery = groq`*[_type=="homePage"][0]{
   seo,
   heroEyebrow, heroHeadingTop, heroHeadingEm, heroHeadingBottom, heroBody,
-  heroCtaLabel, heroLinkLabel, heroImageAlt, "heroImageUrl": heroImage.asset->url, usps,
+  heroCtaLabel, heroLinkLabel, heroImageAlt, "heroImageUrl": heroImage.asset->url,
+  "heroImageUrlNarrow": heroImageNarrow.asset->url, usps,
   philEyebrow, philQuote, philBody, philLinkLabel, "philImageUrl": philImage.asset->url,
   resultsEyebrow, resultsHeadingTop, resultsHeadingEm, resultsBody,
   servicesEyebrow, servicesHeadingTop, servicesHeadingEm, servicesBody, servicesLinkLabel,

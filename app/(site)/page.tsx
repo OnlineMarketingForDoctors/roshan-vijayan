@@ -65,7 +65,14 @@ export default async function Home() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-media">
-          <img src={c.heroImageUrl} alt={c.heroImageAlt} decoding="async" fetchPriority="high" />
+          {/* Art direction rather than resolution: the landscape frame has no
+              room above the subject, so on a phone the header would sit on her
+              face. The narrow crop is the same room, extended upward, with
+              wall for the header to rest on. */}
+          <picture>
+            <source media="(max-width: 860px)" srcSet={c.heroImageUrlNarrow} />
+            <img src={c.heroImageUrl} alt={c.heroImageAlt} decoding="async" fetchPriority="high" />
+          </picture>
           <div className="hero-veil" />
         </div>
         <div className="hero-inner">

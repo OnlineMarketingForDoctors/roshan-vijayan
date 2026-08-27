@@ -78,7 +78,15 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   box-shadow:0 6px 22px rgba(0,0,0,.22);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
-.brand{justify-self:center;height:128px;width:auto;display:block;transition:height .45s var(--ease)}
+/* The monogram is white and floats over whatever the hero happens to be. A
+   pale wall gives it almost no contrast, and darkening the header enough to
+   fix that would turn it into the bar it is deliberately not. The shadow does
+   the same job locally: it separates the mark from the picture and disappears
+   once the header takes its own background on scroll. */
+.brand{justify-self:center;height:128px;width:auto;display:block;
+  filter:drop-shadow(0 2px 12px rgba(18,12,6,.55));
+  transition:height .45s var(--ease),filter .45s var(--ease)}
+.site-header.scrolled .brand{filter:none}
 .site-header.scrolled .brand{height:78px}
 .brand-mark{height:100%;width:auto;object-fit:contain;
   filter:drop-shadow(0 3px 16px rgba(0,0,0,.45))}
@@ -587,7 +595,15 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .review{flex:0 0 calc((100% - var(--rev-gap,1.5rem))/2)}
 }
 @media(max-width:860px){
-  .site-header{padding:.4rem clamp(1.2rem,4vw,3.4rem);background:none}
+  /* The scrim the header carries at every other width is kept here too. It is
+     what makes a transparent header readable over a pale wall without being a
+     bar: a soft darkening under the navigation that fades to nothing a little
+     below it. */
+  .site-header{padding:.4rem clamp(1.2rem,4vw,3.4rem)}
+  /* a touch more than the header's own scrim, since a phone hero can be very
+     pale right where the navigation sits */
+  .site-header:not(.scrolled){background:
+    linear-gradient(to bottom,rgba(24,17,10,.5) 0%,rgba(24,17,10,.22) 62%,rgba(24,17,10,0) 100%)}
   .site-header.scrolled{background:rgba(34,26,16,.94);
     box-shadow:0 6px 22px rgba(0,0,0,.22);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -599,20 +615,17 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
      ivory and fights the image for contrast at every scroll position; below
      it, it is simply dark text on the page. The picture keeps the full width
      and dissolves into that page rather than ending on a line. */
-  /* The header is fixed and floats over whatever is beneath it. Over a
-     photograph that put the monogram and the buttons across the subject's
-     face, so the hero reserves the header's own height at the top and fills
-     it with the tone the header takes when scrolled. The header then sits on
-     a bar of its own and the picture starts below it — still edge to edge,
-     just no longer underneath the navigation. Measured rather than guessed:
-     102px of monogram plus the header's own padding. */
-  .hero{display:block;padding:115px 0 0;min-height:0;
-    /* the bar, and then the page — a hard stop at the header's height rather
-       than a background on the whole section, which would run on behind the
-       copy and leave dark text on a dark ground */
-    background:linear-gradient(to bottom,rgb(34,26,16) 115px,var(--ivory) 115px)}
-  .hero-media{position:relative;inset:auto;z-index:0;height:min(56svh,460px)}
-  .hero-media img{object-position:60% center}
+  /* The header stays transparent and floats over the top of the picture, so
+     the picture has to carry room above the subject for it to sit on. See the
+     <picture> in app/(site)/page.tsx: below 640px it is the tall crop, and
+     between there and here the landscape original, whose frame still suits a
+     box this wide. */
+  .hero{display:block;padding:0;min-height:0;background:var(--ivory)}
+  /* Deep enough that the tall crop is not reduced to a band of wall: at this
+     width the picture is wider than the box, so the box's height decides how
+     much of the room is seen. */
+  .hero-media{position:relative;inset:auto;z-index:0;height:min(82svh,900px)}
+  .hero-media img{object-position:center 18%}
   /* Only one job left. The top of the picture used to be darkened to keep the
      header readable across it; with the header lifted clear, that is just a
      shadow over the photograph, so it goes. What remains carries the foot of
@@ -661,6 +674,11 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .bag-grid{grid-template-columns:1fr;max-width:520px}
 }
 @media(max-width:640px){
+  /* On a phone the box is narrower than the picture, so its full height shows
+     and the sides crop instead — the subject seated, wall above her clear for
+     the header. */
+  .hero-media{height:min(72svh,620px)}
+  .hero-media img{object-position:center top}
   .review{flex:0 0 100%}
   /* flatten head wrappers so arrows can drop below the card */
   .reviews{display:flex;flex-direction:column}

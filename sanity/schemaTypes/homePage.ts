@@ -34,6 +34,15 @@ export default defineType({
       description: 'Leave empty to keep the image currently on the page.',
       group: 'hero',
     }),
+    defineField({
+      name: 'heroImageNarrow',
+      title: 'Hero image — tall crop for phones',
+      type: 'image',
+      options: {hotspot: true},
+      description:
+        'A taller version of the same picture, with space above the subject for the menu to sit over. Leave empty to keep the one currently on the page.',
+      group: 'hero',
+    }),
     defineField({name: 'heroImageAlt', title: 'Image description', type: 'string', group: 'hero'}),
     defineField({
       name: 'usps',
