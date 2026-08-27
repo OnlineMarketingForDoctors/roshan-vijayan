@@ -593,16 +593,32 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .brand{height:102px}
   .site-header.scrolled .brand{height:72px}
-  .hero-media img{object-position:70% center}
-  .hero{padding:9rem 0 0;align-items:stretch;flex-direction:column;justify-content:flex-start}
-  .hero-inner{width:100%;margin:0;padding:0 clamp(1.2rem,5vw,3.4rem) 3rem}
-  .hero-copy .eyebrow{color:var(--champagne)}
-  .hero-copy h1,.hero-sub{color:var(--ivory)}
-  .hero-sub{max-width:38ch}
-  .hero-actions .btn-text{color:var(--ivory)}
+  /* The photograph stops being a backdrop and becomes the top of the page: a
+     full-bleed block above the words, rather than something the words are
+     written across. Read over a picture, the copy has to be reversed out in
+     ivory and fights the image for contrast at every scroll position; below
+     it, it is simply dark text on the page. The picture keeps the full width
+     and dissolves into that page rather than ending on a line. */
+  .hero{display:block;padding:0;min-height:0}
+  .hero-media{position:relative;inset:auto;z-index:0;height:min(56svh,460px)}
+  .hero-media img{object-position:60% center}
+  /* Two jobs in one gradient: darken the top enough for the fixed header to
+     stay legible over it, then carry the foot of the image into the page
+     colour so there is no edge. The middle stop sits at the ivory value with
+     zero alpha — fading to `transparent` would pass through grey and leave a
+     dirty band across the picture. */
   .hero-veil{background:
-    linear-gradient(to bottom,rgba(26,19,12,.78) 0%,rgba(26,19,12,.4) 34%,rgba(26,19,12,.08) 54%,rgba(26,19,12,.18) 100%)}
-  .usp{position:static;margin-top:auto;grid-template-columns:repeat(2,1fr)}
+    linear-gradient(to bottom,
+      rgba(26,19,12,.66) 0%,
+      rgba(26,19,12,.5) 11%,
+      rgba(26,19,12,.12) 30%,
+      rgba(246,240,230,0) 52%,
+      rgba(246,240,230,.55) 82%,
+      var(--ivory) 100%)}
+  .hero-inner{width:100%;margin:0;
+    padding:.4rem clamp(1.2rem,5vw,3.4rem) 2.6rem}
+  .hero-sub{max-width:38ch}
+  .usp{position:static;margin-top:0;grid-template-columns:repeat(2,1fr)}
   .philosophy,.about,.gallery,.locations,.difference,.contact-inner{grid-template-columns:1fr}
   .phil-portrait{justify-self:center;margin-bottom:2.5rem}
   .services{grid-template-columns:1fr;gap:2.2rem;
