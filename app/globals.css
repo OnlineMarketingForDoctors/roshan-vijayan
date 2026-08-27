@@ -675,10 +675,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 }
 @media(max-width:640px){
   /* On a phone the box is narrower than the picture, so its full height shows
-     and the sides crop instead — the subject seated, wall above her clear for
-     the header. */
-  .hero-media{height:min(72svh,620px)}
-  .hero-media img{object-position:center top}
+     and the sides crop instead. That makes the box's height the only thing
+     setting how large the subject is drawn — hence a deep one. The horizontal
+     position is biased left of centre because she sits left of centre in the
+     frame; centring would clip the hem of her dress. */
+  .hero-media{height:min(80svh,700px)}
+  .hero-media img{object-position:20% top}
   .review{flex:0 0 100%}
   /* flatten head wrappers so arrows can drop below the card */
   .reviews{display:flex;flex-direction:column}
