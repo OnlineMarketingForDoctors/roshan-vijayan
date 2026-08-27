@@ -1378,3 +1378,66 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .cc-actions .btn{flex:1;min-width:0}
 }
 .legal-prose td code{font-size:.92em;white-space:nowrap}
+
+/* ============================================================
+   STACKED HEROES ON NARROW SCREENS
+   The home hero stopped being a photograph with words written across it and
+   became a photograph with words beneath it. Every other hero follows, for the
+   same reasons: reversed-out copy fights the picture for contrast at every
+   scroll position, and a fixed transparent header lands on whatever the image
+   happens to have at the top.
+
+   The picture and the wash over it are siblings here rather than a wrapper and
+   its child — the markup puts <img> and the veil directly in the section — so
+   both are given the same height from one custom property, and the veil is
+   pinned to the top instead of filling the section.
+   ============================================================ */
+@media(max-width:860px){
+  .page-hero,.proc-hero{--hero-img:min(44svh,380px)}
+  /* a post's hero is a title card, not a landing page, so it takes less */
+  .bp-hero{--hero-img:min(34svh,300px)}
+
+  .page-hero,.proc-hero{display:block;min-height:0;padding:0;background:var(--ivory)}
+  .page-hero>img,.proc-hero>img{position:relative;inset:auto;
+    width:100%;height:var(--hero-img);object-fit:cover}
+  /* carries the foot of the picture into the page. The stops are the ivory
+     value at zero alpha; fading to `transparent` interpolates through grey and
+     leaves a dirty band across the image. */
+  .page-hero-veil,.proc-hero-veil{inset:0 0 auto;height:var(--hero-img);
+    background:linear-gradient(to bottom,
+      rgba(246,240,230,0) 55%,
+      rgba(246,240,230,.5) 83%,
+      var(--ivory) 100%)}
+
+  /* Most of these photographs put their subject near the middle, so a centred
+     crop suits them. This one does not — he stands at the right of the frame,
+     and centring cut him in half. Keyed off the filename rather than a new
+     content field because it is one picture; if a second needs it, the focal
+     point should become something an editor sets. */
+  .page-hero>img[src*="about-hero"]{object-position:82% center}
+
+  .page-hero-inner,.proc-hero-inner{width:100%;max-width:none;
+    padding:.4rem clamp(1.2rem,5vw,3.4rem) 2.8rem;text-align:center;color:var(--charcoal)}
+  .page-hero-inner .eyebrow,.proc-hero-inner .eyebrow{color:var(--gold-deep)}
+  .page-hero-inner h1,.proc-hero-inner h1{color:var(--charcoal)}
+  .page-hero-inner p{color:var(--ink);margin-inline:auto}
+  .proc-hero-sub{color:var(--ink);margin-inline:auto}
+  .page-hero-actions,.proc-hero-actions{justify-content:center}
+  .page-hero .btn-text.light,.proc-hero .btn-text.light{color:var(--charcoal)}
+  /* a bulleted list reads as a list only while its bullets line up, so the
+     block is centred and its contents are not */
+  .proc-benefits{text-align:left;max-width:34ch;margin-inline:auto}
+  .proc-benefits li{color:var(--ink)}
+  /* the trail was written for light text over a photograph */
+  .page-hero .crumbs ol,.proc-hero .crumbs ol{justify-content:center}
+  .page-hero .crumbs li,.proc-hero .crumbs li{color:var(--soft)}
+  .page-hero .crumbs a,.proc-hero .crumbs a{color:var(--charcoal)}
+  .page-hero .crumbs a:hover,.proc-hero .crumbs a:hover{color:var(--gold-deep)}
+  .page-hero .crumbs [aria-current="page"],
+  .proc-hero .crumbs [aria-current="page"]{color:var(--gold-deep)}
+
+  /* a journal post's title card */
+  .bp-back{color:var(--gold-deep)}
+  .bp-meta{color:var(--soft);justify-content:center}
+  .bp-cat{border-color:rgba(154,124,68,.45);color:var(--gold-deep)}
+}
