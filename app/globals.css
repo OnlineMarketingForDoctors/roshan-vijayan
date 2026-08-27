@@ -697,6 +697,23 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .hero-copy h1.display{font-size:clamp(1.95rem,10.4vw,2.7rem)}
 }
 
+/* Below 640px these heroes are the extended crops, whose whole point is the
+   quiet band at the top for the header to sit on. Anchoring to the top means a
+   box wider than the crop takes its excess off the foot, where there is only
+   floor, rather than off the head. */
+@media(max-width:640px){
+  .page-hero>picture>img{object-position:center top}
+}
+
+/* Between there and the breakpoint the landscape originals are still in use,
+   and one of them puts its subject at the right of the frame. Scoped by width
+   rather than by filename alone: an attribute selector reads the src attribute,
+   not the file <picture> actually chose, so it would otherwise bias the
+   extended crop as well. */
+@media(min-width:641px) and (max-width:860px){
+  .page-hero>picture>img[src$="about-hero.webp"]{object-position:82% center}
+}
+
 /* A short screen has the same copy to fit in far less room, so the picture
    gives up proportionally more of it. Keyed on height rather than width: it is
    the vertical space that is scarce, and a wide phone held in landscape has
@@ -741,7 +758,9 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .page-hero{position:relative;min-height:100vh;min-height:100svh;
   display:flex;align-items:center;overflow:hidden;
   background:var(--charcoal);padding:9.5rem clamp(1.2rem,5vw,5rem)}
-.page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.page-hero>picture{display:block}
+.page-hero>img,.page-hero>picture>img{position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;z-index:0}
 /* Weighted to the left, where the copy sits, with a light top wash so the
    header stays legible over a bright image. */
 .page-hero-veil{position:absolute;inset:0;z-index:1;
@@ -1398,7 +1417,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .bp-hero{--hero-img:min(34svh,300px)}
 
   .page-hero,.proc-hero{display:block;min-height:0;padding:0;background:var(--ivory)}
-  .page-hero>img,.proc-hero>img{position:relative;inset:auto;
+  .page-hero>img,.page-hero>picture>img,.proc-hero>img{position:relative;inset:auto;
     width:100%;height:var(--hero-img);object-fit:cover}
   /* carries the foot of the picture into the page. The stops are the ivory
      value at zero alpha; fading to `transparent` interpolates through grey and
@@ -1414,8 +1433,6 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
      and centring cut him in half. Keyed off the filename rather than a new
      content field because it is one picture; if a second needs it, the focal
      point should become something an editor sets. */
-  .page-hero>img[src*="about-hero"]{object-position:82% center}
-
   .page-hero-inner,.proc-hero-inner{width:100%;max-width:none;
     padding:.4rem clamp(1.2rem,5vw,3.4rem) 2.8rem;text-align:center;color:var(--charcoal)}
   .page-hero-inner .eyebrow,.proc-hero-inner .eyebrow{color:var(--gold-deep)}

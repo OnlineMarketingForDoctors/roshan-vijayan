@@ -25,7 +25,10 @@ export default async function AboutPage() {
   return (
     <>
       <section className="page-hero">
-        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
+        <picture>
+          <source media="(max-width: 640px)" srcSet={c.hero.imageUrlNarrow} />
+          <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
+        </picture>
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">{c.hero.eyebrow}</span>

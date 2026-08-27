@@ -16,6 +16,8 @@ export type PageHero = {
   headingEm?: string
   body?: string
   imageUrl?: string
+  /** The same scene, extended upward, for the stacked hero on a phone. */
+  imageUrlNarrow?: string
   imageAlt?: string
   ctaLabel?: string
   ctaHref?: string
@@ -77,6 +79,7 @@ export const CONTACT_PAGE: ContactPageContent = {
     headingEm: 'consultation.',
     body: 'Tell Mr Vijayan a little about what you’d like to achieve. Enquiries are answered personally, usually within a day, with no pressure, only an honest, expert opinion.',
     imageUrl: '/images/web/consultation.webp',
+    imageUrlNarrow: '/images/web/consultation-tall.webp',
     imageAlt: 'An unhurried consultation',
     ctaLabel: 'Request a Consultation',
     ctaHref: '#enquiry',
@@ -111,6 +114,7 @@ export const LOCATIONS_PAGE: LocationsPageContent = {
     headingEm: 'Hertfordshire.',
     body: 'Mr Vijayan sees patients at four trusted private and NHS settings, each calm, modern and easy to reach, with consultations often available within a week or two.',
     imageUrl: '/images/web/clinic-interior.webp',
+    imageUrlNarrow: '/images/web/clinic-interior-tall.webp',
     imageAlt: 'A calm, luxurious clinic interior',
     ctaLabel: 'Request a Consultation',
     ctaHref: '/contact',
@@ -194,6 +198,7 @@ export const ABOUT_PAGE: AboutPageContent = {
     headingEm: 'meets medicine.',
     body: 'A consultant plastic surgeon who treats every operation as a partnership, is honest about what is involved, and devoted to a result that looks entirely, naturally you.',
     imageUrl: '/images/web/about-hero.webp',
+    imageUrlNarrow: '/images/web/about-hero-tall.webp',
     imageAlt: 'Mr Roshan Vijayan, Consultant Plastic Surgeon',
     ctaLabel: 'Request a Consultation',
     ctaHref: '/contact',

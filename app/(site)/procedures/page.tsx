@@ -106,7 +106,10 @@ export default async function ProceduresPage() {
   return (
     <>
       <section className="page-hero">
-        <img src="/images/web/procedures-hero.webp" alt="Serene woman in ivory silk by a window" decoding="async" fetchPriority="high" />
+        <picture>
+          <source media="(max-width: 640px)" srcSet="/images/web/procedures-hero-tall.webp" />
+          <img src="/images/web/procedures-hero.webp" alt="Serene woman in ivory silk by a window" decoding="async" fetchPriority="high" />
+        </picture>
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">Signature Procedures</span>
