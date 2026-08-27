@@ -45,41 +45,56 @@ export default function CookiesPolicyPage() {
           <thead>
             <tr>
               <th scope="col">Set by</th>
+              <th scope="col">Name</th>
               <th scope="col">What for</th>
-              <th scope="col">Kind</th>
+              <th scope="col">Expires</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Google Tag Manager</td>
+              <td>Google Analytics</td>
               <td>
-                Loads the measurement tags the practice has configured, and only once you have
-                accepted. Tag Manager itself is a container; the cookies that result are those of
-                the tags it loads.
+                <code>_ga</code>
               </td>
-              <td>Analytics</td>
+              <td>
+                Tells one browser apart from another, so a person who reads three pages is counted
+                once rather than three times.
+              </td>
+              <td>2 years</td>
             </tr>
             <tr>
               <td>Google Analytics</td>
               <td>
-                Counts visits and pages, roughly where visitors are, and how they reached the site,
-                so we can see which pages are useful. It reports on patterns, not on you by name.
+                <code>_ga_&hellip;</code>
               </td>
-              <td>Analytics</td>
+              <td>
+                Keeps track of the current visit — which pages, in which order, and how the visitor
+                arrived. The rest of the name is the identifier of this site&rsquo;s Analytics
+                property.
+              </td>
+              <td>2 years</td>
             </tr>
             <tr>
               <td>LeadConnector (HighLevel)</td>
+              <td>Varies</td>
               <td>
                 The enquiry form is theirs, displayed within our page. It sets what it needs to
                 present the form and to submit it once, without losing what you typed.
               </td>
-              <td>Functional</td>
+              <td>Session</td>
             </tr>
           </tbody>
         </table>
       </div>
       <p>
-        We do not use advertising cookies, and this site carries no advertising.
+        Google Analytics is loaded through Google Tag Manager, which is a container rather than a
+        tag: it sets no cookies of its own, and Analytics is the only thing in it. Analytics reports
+        on patterns — how many people read a page, roughly where in the world they were, how they
+        found the site — not on you by name.
+      </p>
+      <p>
+        We do not use advertising cookies. This site carries no advertising, and nothing here
+        follows you to other websites.
       </p>
 
       <h2>Your choices</h2>
