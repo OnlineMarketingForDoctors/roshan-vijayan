@@ -66,7 +66,8 @@ export default function PrivacyPolicyPage() {
         <dd>
           Pages you viewed, roughly where in the world you are, the type of device and browser you
           used, and how you arrived at the site. This is collected through Google Analytics, loaded
-          by Google Tag Manager, and is described in our{' '}
+          by Google Tag Manager, and <strong>only if you accept the cookie banner</strong> — refuse
+          it and nothing is collected or sent. It is described in our{' '}
           <Link href="/cookies-policy">Cookies Policy</Link>.
         </dd>
 
@@ -112,9 +113,8 @@ export default function PrivacyPolicyPage() {
             <tr>
               <td>Measuring how the website is used</td>
               <td>
-                Our legitimate interest in understanding which pages are useful and improving the
-                site. These cookies are set when you arrive; how to refuse them is in our{' '}
-                <Link href="/cookies-policy">Cookies Policy</Link>.
+                Your consent, given through the cookie banner and withdrawable at any time from{' '}
+                <Link href="/cookies-policy">Cookie settings</Link> at the foot of any page
               </td>
             </tr>
             <tr>

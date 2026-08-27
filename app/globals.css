@@ -1271,3 +1271,39 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .foot-legal{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;padding-top:1.8rem}
 .foot-legal a{color:rgba(246,240,230,.62);font-size:.84rem;transition:color .3s var(--ease)}
 .foot-legal a:hover{color:var(--gold)}
+
+/* the cookie banner, and the control that brings it back */
+.foot-legal-btn{background:none;border:0;padding:0;cursor:pointer;font:inherit;
+  color:rgba(246,240,230,.62);font-size:.84rem;transition:color .3s var(--ease)}
+.foot-legal-btn:hover{color:var(--gold)}
+.foot-legal-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+.cc{position:fixed;left:0;right:0;bottom:0;z-index:1200;
+  background:var(--charcoal);color:var(--ivory);
+  border-top:1px solid rgba(220,200,166,.22);
+  box-shadow:0 -14px 40px rgba(24,20,16,.28);
+  padding:clamp(1.1rem,2.4vw,1.6rem) clamp(1.2rem,5vw,3rem)}
+.cc-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;
+  gap:clamp(1rem,3vw,2.6rem);flex-wrap:wrap}
+.cc-copy{flex:1 1 420px;min-width:0}
+.cc-title{font-family:var(--serif);font-size:1.12rem;margin:0 0 .3rem;color:var(--champagne)}
+.cc-copy p{margin:0;font-size:.92rem;line-height:1.6;color:rgba(246,240,230,.82)}
+.cc-copy a{color:var(--champagne);text-decoration:underline;text-underline-offset:3px}
+.cc-copy a:hover{color:var(--gold)}
+.cc-actions{display:flex;gap:.7rem;flex:0 0 auto}
+/* both answers the same size and weight: refusing must be no harder than agreeing */
+.cc-actions .btn{padding:.85rem 1.9rem;min-width:132px;justify-content:center}
+/* solid, like Accept: the two answers must read as equally available, not as a
+   preferred one and an afterthought */
+.btn-ghost{background:var(--ivory);color:var(--charcoal);border-color:var(--ivory)}
+.btn-ghost:hover{background:transparent;color:var(--ivory);border-color:rgba(246,240,230,.6)}
+.cc-current{max-width:1180px;margin:.9rem auto 0;font-size:.8rem;color:rgba(246,240,230,.55)}
+/* keep the back-to-top button clear of the banner */
+.cc ~ .to-top,.to-top{transition:opacity .4s var(--ease),visibility .4s,transform .4s var(--ease)}
+@media(max-width:640px){
+  .cc-inner{flex-direction:column;align-items:stretch;gap:1.1rem}
+  /* the basis above is a width; once the axis flips it would become a height */
+  .cc-copy{flex:0 0 auto}
+  .cc-actions{width:100%}
+  .cc-actions .btn{flex:1;min-width:0}
+}

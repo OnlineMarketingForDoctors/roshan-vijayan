@@ -76,6 +76,28 @@ URLs and need nothing.
 Spot-check a few after go-live: `/benefits-of-abdominoplasty/` should land on
 `/blog/benefits-of-abdominoplasty/`, and `/about-me/` on `/about/`.
 
+## 3c. Cookies and consent
+
+Google Tag Manager is not in the page. It is loaded by
+`components/CookieConsent.tsx`, and only once a visitor has accepted the
+banner — refuse it, or ignore it, and nothing is requested from Google at all.
+Consent Mode signals are pushed before Tag Manager loads, so a consent-aware
+tag never runs ahead of the answer.
+
+The choice is kept in the visitor's own browser for a year and is never sent
+to us. **Cookie settings**, at the foot of every page, brings the banner back.
+
+Two consequences worth knowing:
+
+- Analytics will show fewer sessions than before, because visitors who decline
+  are genuinely not counted. That is the point of asking.
+- The Tag Manager noscript fallback has been removed. It fired tags for
+  visitors with JavaScript disabled, who by definition cannot be asked first.
+
+If you add tags to the container — a Meta Pixel, call tracking, LinkedIn —
+add them to the table in `/cookies-policy/` too, and set them to respect
+Consent Mode inside Tag Manager.
+
 ## 4. Submit to Google
 
 Google Search Console → add the domain as a property → submit

@@ -2,6 +2,7 @@ import {existsSync} from 'node:fs'
 import {join} from 'node:path'
 import Link from 'next/link'
 import {locationSummaries} from '@/lib/locations'
+import CookieSettingsLink from '@/components/CookieSettingsLink'
 
 /**
  * The credit mark, shown beside the link when the file is present.
@@ -72,6 +73,7 @@ export default function Footer({settings}: {settings: Settings}) {
         <Link href="/privacy-policy">Privacy Policy</Link>
         <Link href="/terms-and-conditions">Terms and Conditions</Link>
         <Link href="/cookies-policy">Cookies Policy</Link>
+        <CookieSettingsLink />
       </nav>
       <div className="foot-bottom">
         <p>

@@ -31,10 +31,13 @@ export default function CookiesPolicyPage() {
 
       <h2>What this site sets by itself</h2>
       <p>
-        Nothing. This site has no login, no basket and no preferences to remember, so it sets no
-        cookies of its own. Everything below is set by a third party whose service is used on the
-        site.
+        Almost nothing. There is no login, no basket and nothing to remember about you, so the site
+        sets no cookies of its own. It does keep one thing on your device: your answer to the cookie
+        question, so you are not asked again on every page. That is stored in your browser&rsquo;s
+        own storage rather than in a cookie, it is never sent to us, and it holds only the word
+        &ldquo;granted&rdquo; or &ldquo;denied&rdquo; and the date you chose.
       </p>
+      <p>Everything below is set by a third party whose service is used on the site.</p>
 
       <h2>What third parties set</h2>
       <div className="legal-table-wrap">
@@ -50,8 +53,9 @@ export default function CookiesPolicyPage() {
             <tr>
               <td>Google Tag Manager</td>
               <td>
-                Loads the measurement tags the practice has configured. Tag Manager itself is a
-                container; the cookies that result are those of the tags it loads.
+                Loads the measurement tags the practice has configured, and only once you have
+                accepted. Tag Manager itself is a container; the cookies that result are those of
+                the tags it loads.
               </td>
               <td>Analytics</td>
             </tr>
@@ -80,9 +84,16 @@ export default function CookiesPolicyPage() {
 
       <h2>Your choices</h2>
       <p>
-        The analytics tags above load when you arrive, and this site does not currently present a
-        cookie banner asking you first. You can refuse or remove what they set at any time, and
-        nothing on this site stops working if you do.
+        The first time you visit, a banner asks whether the analytics cookies may be used. Nothing
+        is loaded from Google until you accept — if you refuse, or simply ignore the banner, no
+        request is made to them at all. Refusing is one click, in a button the same size as the one
+        that accepts.
+      </p>
+      <p>
+        Your answer is remembered in this browser for a year. It is stored on your own device and
+        never sent to us, which means it does not follow you to another browser or another device,
+        and you will be asked again there. To change your mind, use <strong>Cookie settings</strong>{' '}
+        at the foot of any page.
       </p>
       <p>
         Every browser lets you see the cookies a site has set, delete them, and refuse new ones —

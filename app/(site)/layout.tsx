@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Reveal from '@/components/Reveal'
 import BackToTop from '@/components/BackToTop'
+import CookieConsent from '@/components/CookieConsent'
 
 export const revalidate = 60
 
@@ -45,6 +46,7 @@ export default async function SiteLayout({children}: {children: React.ReactNode}
       <Footer settings={settings} />
       <Reveal />
       <BackToTop />
+      <CookieConsent />
     </>
   )
 }
