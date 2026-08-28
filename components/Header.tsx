@@ -240,6 +240,14 @@ export default function Header({
       </header>
 
       <div className={`mobile-menu${open ? ' open' : ''}`} id="mobileMenu" aria-hidden={!open}>
+        {/* The panel covers the header, so the hamburger that opened it is no
+            longer reachable. This is its counterpart: it sits where the
+            hamburger was and sticks to the top as the menu scrolls. */}
+        <button className="mm-close" type="button" aria-label="Close menu" onClick={close}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
         <nav>
           <Link href="/" onClick={close}>Home</Link>
           <Link href="/about" onClick={close}>About</Link>
