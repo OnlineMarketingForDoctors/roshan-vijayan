@@ -367,16 +367,21 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .ba-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.4rem,3vw,2.4rem);
   max-width:1000px;margin:0 auto}
 .ba-grid-one{grid-template-columns:1fr;max-width:540px}
+/* No touch-action here: a finger on the photograph belongs to the page, so it
+   scrolls. Only the handle below opts out of that. */
 .ba-slider{position:relative;width:100%;aspect-ratio:800/680;border-radius:14px;overflow:hidden;
-  box-shadow:var(--shadow);cursor:ew-resize;user-select:none;touch-action:none;background:var(--cream)}
+  box-shadow:var(--shadow);cursor:ew-resize;user-select:none;background:var(--cream)}
 .ba-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .ba-before{clip-path:inset(0 calc(100% - var(--pos,50%)) 0 0)}
 .ba-tagline{position:absolute;top:14px;z-index:3;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
   color:#fff;background:rgba(22,17,12,.55);padding:.4rem .7rem;border-radius:20px;pointer-events:none;backdrop-filter:blur(2px)}
 .ba-tag-before{left:14px}
 .ba-tag-after{right:14px}
+/* touch-action:none so a drag that starts here moves the divider instead of
+   scrolling the page — the one place on the card where that is what is meant */
 .ba-handle{position:absolute;top:0;bottom:0;left:var(--pos,50%);transform:translateX(-50%);z-index:4;
-  width:46px;border:none;background:none;cursor:ew-resize;display:flex;align-items:center;justify-content:center}
+  width:46px;border:none;background:none;cursor:ew-resize;touch-action:none;
+  display:flex;align-items:center;justify-content:center}
 .ba-handle::before{content:"";position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);
   width:2px;background:rgba(255,255,255,.92);box-shadow:0 0 14px rgba(0,0,0,.45)}
 .ba-grip{position:relative;width:46px;height:46px;border-radius:50%;background:rgba(255,253,248,.96);
