@@ -46,6 +46,8 @@ const asText = (v: unknown): string => {
 // Section image fallbacks (used until an editor sets images in Sanity)
 const DEF = {
   hero: '/images/web/bl-hero.webp',
+  /** the same picture cropped for a phone; see narrowHero */
+  heroNarrow: '/images/web/bl-hero-narrow.webp',
   overview: '/images/web/bl-overview.webp',
   benefits: '/images/web/decolletage.webp',
   candidates: '/images/web/bl-candidates.webp',
@@ -56,6 +58,37 @@ const DEF = {
 function img(src: unknown, fallback: string, w: number, q = 82) {
   if (src && (src as {asset?: unknown}).asset) return urlFor(src as never).width(w).quality(q).url()
   return fallback
+}
+
+/* Every treatment photograph is composed the same way: the model stands at the
+   right of the frame, with the room's empty wall on the left for the desktop
+   overlay to sit on. A phone crops the sides off a centred window, which lands
+   her head under the call and menu buttons — measured across all eighteen,
+   between 68% and 86% of the frame, where the buttons start at 69%.
+
+   So a phone gets a different region of the picture: the right 60% of its
+   width and the top 83% of its height. Anchoring right is what centres her —
+   scaling alone would not, since the right-most faces stay at 67% and still
+   touch the buttons. Anchoring top is what keeps the crop off the top of her
+   head. Together they put every face between 38% and 60% of the frame and
+   leave the model half again as present on a small screen. What it costs is
+   the bottom sixth, which is floor, and which the veil was fading out anyway.
+
+   The region's own ratio is the phone hero's ratio, so nothing is cropped
+   twice. Sanity's asset ref carries the pixel dimensions, so no extra query is
+   needed to work out where to cut. */
+const NARROW_W = 0.598
+const NARROW_RATIO = 390 / 303 // the phone hero box, measured
+
+function narrowHero(src: unknown): string | null {
+  const ref = (src as {asset?: {_ref?: unknown}} | undefined)?.asset?._ref
+  const dims = typeof ref === 'string' ? /-(\d+)x(\d+)-/.exec(ref) : null
+  if (!dims) return null
+  const W = Number(dims[1])
+  const H = Number(dims[2])
+  const w = Math.round(W * NARROW_W)
+  const h = Math.min(H, Math.round(w / NARROW_RATIO))
+  return urlFor(src as never).rect(W - w, 0, w, h).width(1000).quality(78).url()
 }
 
 /** Alt text set on the image in Sanity, falling back to the section's own words. */
@@ -222,14 +255,17 @@ export default async function ProcedurePage({params}: Params) {
     <>
       {/* HERO */}
       <section className="proc-hero">
-        <img
-          src={img(p.heroImage, DEF.hero, 2000, 78)}
-          className={p.heroImageFlip ? 'mirrored' : undefined}
-          alt={altOf(p.heroImage, '')}
-          {...(altOf(p.heroImage, '') ? {} : {'aria-hidden': true as const})}
-          decoding="async"
-          fetchPriority="high"
-        />
+        <picture>
+          <source media="(max-width: 640px)" srcSet={narrowHero(p.heroImage) || DEF.heroNarrow} />
+          <img
+            src={img(p.heroImage, DEF.hero, 2000, 78)}
+            className={p.heroImageFlip ? 'mirrored' : undefined}
+            alt={altOf(p.heroImage, '')}
+            {...(altOf(p.heroImage, '') ? {} : {'aria-hidden': true as const})}
+            decoding="async"
+            fetchPriority="high"
+          />
+        </picture>
         <div className="proc-hero-veil" />
         <div className="proc-hero-inner reveal">
           <span className="eyebrow">{p.category} · Surgery</span>

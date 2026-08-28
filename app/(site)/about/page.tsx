@@ -32,7 +32,7 @@ export default async function AboutPage() {
             above his head. */}
         <picture>
           {c.hero.imageUrlNarrow ? (
-            <source media="(max-width: 860px)" srcSet={c.hero.imageUrlNarrow} />
+            <source media="(max-width: 640px)" srcSet={c.hero.imageUrlNarrow} />
           ) : null}
           <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
         </picture>
