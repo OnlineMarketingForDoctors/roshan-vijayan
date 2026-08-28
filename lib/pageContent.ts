@@ -16,6 +16,8 @@ export type PageHero = {
   headingEm?: string
   body?: string
   imageUrl?: string
+  /** The same subject reframed for narrow screens. See the <picture> on the page. */
+  imageUrlNarrow?: string
   imageAlt?: string
   ctaLabel?: string
   ctaHref?: string
@@ -194,6 +196,7 @@ export const ABOUT_PAGE: AboutPageContent = {
     headingEm: 'meets medicine.',
     body: 'A consultant plastic surgeon who treats every operation as a partnership, is honest about what is involved, and devoted to a result that looks entirely, naturally you.',
     imageUrl: '/images/web/about-hero.webp',
+    imageUrlNarrow: '/images/web/about-hero-narrow.webp',
     imageAlt: 'Mr Roshan Vijayan, Consultant Plastic Surgeon',
     ctaLabel: 'Request a Consultation',
     ctaHref: '/contact',

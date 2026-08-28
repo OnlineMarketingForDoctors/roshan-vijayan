@@ -25,7 +25,17 @@ export default async function AboutPage() {
   return (
     <>
       <section className="page-hero">
-        <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
+        {/* Art direction, not resolution. In the landscape frame he stands at
+            the right, which is where the phone and menu buttons sit, so on a
+            phone they landed on his face. The narrow frame is the same room
+            and the same man, recomposed with him centred and with clear wall
+            above his head. */}
+        <picture>
+          {c.hero.imageUrlNarrow ? (
+            <source media="(max-width: 860px)" srcSet={c.hero.imageUrlNarrow} />
+          ) : null}
+          <img src={c.hero.imageUrl} alt={c.hero.imageAlt} decoding="async" fetchPriority="high" />
+        </picture>
         <div className="page-hero-veil" />
         <div className="page-hero-inner reveal">
           <span className="eyebrow">{c.hero.eyebrow}</span>

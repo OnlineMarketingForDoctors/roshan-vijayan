@@ -38,6 +38,14 @@ export const pageHero = defineType({
       options: {hotspot: true},
       description: 'Leave empty to keep the image currently on the page.',
     }),
+    defineField({
+      name: 'imageNarrow',
+      title: 'Background image, phone',
+      type: 'image',
+      options: {hotspot: true},
+      description:
+        'Optional. A phone crops the sides off the background image, which can cut the subject in half or hide them behind the header buttons. Set a version framed for a narrow screen here and it will be used below 860px. Leave empty to use the same image everywhere.',
+    }),
     defineField({name: 'imageAlt', title: 'Image description', type: 'string'}),
     defineField({name: 'ctaLabel', title: 'Button label', type: 'string'}),
     defineField({name: 'ctaHref', title: 'Button link', type: 'string'}),

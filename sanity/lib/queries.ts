@@ -95,7 +95,7 @@ export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][
 }`
 
 /* ---- Editable pages ---- */
-const HERO = `eyebrow, headingTop, headingEm, body, imageAlt, ctaLabel, ctaHref, "imageUrl": image.asset->url`
+const HERO = `eyebrow, headingTop, headingEm, body, imageAlt, ctaLabel, ctaHref, "imageUrl": image.asset->url, "imageUrlNarrow": imageNarrow.asset->url`
 const BAND = `eyebrow, heading, body, ctaLabel, ctaHref, "imageUrl": image.asset->url`
 
 export const contactPageQuery = groq`*[_type=="contactPage"][0]{
