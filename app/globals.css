@@ -696,17 +696,17 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
      setting how large the subject is drawn.
 
      Height therefore has to follow width, not the viewport. Phones differ far
-     more in small-viewport height than in width — 745px on an iPhone 13 against
-     830px on a Galaxy S24+, at 390px and 412px wide — so a purely svh-based box
-     came out 63px deeper on the Samsung, drew the subject 11% larger, and
-     pushed the copy down with it. 140vw keeps the same crop on every phone:
-     measured across five devices it shows 91% of the picture's width and all of
-     its height in each. The svh and px terms stay on as ceilings so a short or
-     landscape screen still gives the picture up rather than the headline.
+     more in small-viewport height than in width — an iPhone 13 in Safari gives
+     the page 688px of height against a Galaxy S24's 830px in Chrome, at 390px
+     and 412px wide. Sized in svh the Samsung took 70% of the screen where the
+     iPhone took 58%; 103vw is the iPhone's proportion, and it holds on every
+     phone. Measured on both, the crop is now identical: the full width of the
+     picture and 80% of its height. The svh and px terms stay on as ceilings so
+     a short or landscape screen still gives the picture up, not the headline.
 
      The horizontal position is biased left of centre because she sits left of
      centre in the frame; centring would clip the hem of her dress. */
-  .hero-media{height:min(140vw,74svh,660px)}
+  .hero-media{height:min(103vw,74svh,440px)}
   .hero-media img{object-position:20% top}
 
   /* The headline is authored as three lines. At the size the global clamp
@@ -720,9 +720,14 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 /* A short screen has the same copy to fit in far less room, so the picture
    gives up proportionally more of it. Keyed on height rather than width: it is
    the vertical space that is scarce, and a wide phone held in landscape has
-   the same problem as a small one held upright. */
+   the same problem as a small one held upright.
+
+   This threshold falls between an iPhone in Safari and a tall Android in
+   Chrome, which is what made the two look so different before the rule above
+   was sized in vw: one phone got this cap and the other did not. It carries
+   the same vw term now, so crossing the boundary changes little. */
 @media(max-width:860px) and (max-height:700px){
-  .hero-media{height:min(62svh,400px)}
+  .hero-media{height:min(103vw,62svh,400px)}
 }
 
 @media(max-width:640px){
