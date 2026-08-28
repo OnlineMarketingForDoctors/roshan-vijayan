@@ -693,11 +693,20 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 @media(max-width:640px){
   /* On a phone the box is narrower than the picture, so its full height shows
      and the sides crop instead. That makes the box's height the only thing
-     setting how large the subject is drawn — so this is as deep as it can be
-     while the eyebrow and the whole headline still clear the fold. The
-     horizontal position is biased left of centre because she sits left of
+     setting how large the subject is drawn.
+
+     Height therefore has to follow width, not the viewport. Phones differ far
+     more in small-viewport height than in width — 745px on an iPhone 13 against
+     830px on a Galaxy S24+, at 390px and 412px wide — so a purely svh-based box
+     came out 63px deeper on the Samsung, drew the subject 11% larger, and
+     pushed the copy down with it. 140vw keeps the same crop on every phone:
+     measured across five devices it shows 91% of the picture's width and all of
+     its height in each. The svh and px terms stay on as ceilings so a short or
+     landscape screen still gives the picture up rather than the headline.
+
+     The horizontal position is biased left of centre because she sits left of
      centre in the frame; centring would clip the hem of her dress. */
-  .hero-media{height:min(74svh,660px)}
+  .hero-media{height:min(140vw,74svh,660px)}
   .hero-media img{object-position:20% top}
 
   /* The headline is authored as three lines. At the size the global clamp
@@ -1410,9 +1419,14 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
    pinned to the top instead of filling the section.
    ============================================================ */
 @media(max-width:860px){
-  .page-hero,.proc-hero{--hero-img:min(44svh,380px)}
+  /* Sized off width first, for the reason set out on the home hero: phones
+     vary far more in small-viewport height than in width, so an svh-only box
+     is noticeably deeper on a tall Android than on an iPhone and shifts the
+     crop with it. The svh and px terms stay on as ceilings, and above about
+     450px wide the px cap takes over, so tablets are unaffected. */
+  .page-hero,.proc-hero{--hero-img:min(84vw,44svh,380px)}
   /* a post's hero is a title card, not a landing page, so it takes less */
-  .bp-hero{--hero-img:min(34svh,300px)}
+  .bp-hero{--hero-img:min(65vw,34svh,300px)}
 
   .page-hero,.proc-hero{display:block;min-height:0;padding:0;background:var(--ivory)}
   .page-hero>img,.proc-hero>img{position:relative;inset:auto;
