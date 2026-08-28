@@ -614,6 +614,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .brand{height:102px}
   .site-header.scrolled .brand{height:72px}
+  /* At the top of the page the hero carries its own consultation button a few
+     centimetres below, so a second one in a transparent header is just clutter
+     over the photograph. It arrives with the header's background, once the
+     hero's own button has scrolled out of reach. */
+  .header-cta{display:none}
+  .site-header.scrolled .header-cta{display:inline-flex;animation:ctaIn .35s var(--ease) both}
   /* The photograph stops being a backdrop and becomes the top of the page: a
      full-bleed block above the words, rather than something the words are
      written across. Read over a picture, the copy has to be reversed out in
@@ -1225,6 +1231,12 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .to-top:hover{background:var(--gold);color:var(--charcoal);border-color:var(--gold)}
 .to-top:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.to-top{transition:opacity .01s,visibility .01s}}
+
+/* the header's consultation button, arriving on scroll — see the 860px block */
+@keyframes ctaIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .site-header.scrolled .header-cta{animation:none}
+}
 
 /* enquiry form states */
 .form-note{text-align:center;padding:2.4rem 1.6rem}
