@@ -1,6 +1,6 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
 const FORM_ID = 'nJQrEBBPxEMKYWcU0pOR'
 const SRC = `https://api.leadconnectorhq.com/widget/form/${FORM_ID}`
@@ -23,6 +23,16 @@ const AUTHORED_HEIGHT = 682
  * component is listening, and the frame then sits at its authored height for
  * good. The wrapper reserves the space either way, so nothing shifts.
  *
+ * It is also held back until the section comes near the viewport, so a visitor
+ * who never reaches the foot of the home page never pays for the embed. That
+ * used to be `loading="lazy"` on the iframe, which does not work here: this
+ * frame is inserted after load, and on the home page it sits some eight
+ * thousand pixels down, where Chrome defers it and then never resolves the
+ * deferral — the form URL was not requested at all, at any scroll position,
+ * and the card stayed empty. On the contact page the same markup worked,
+ * because there the frame is created already within the viewport. Doing the
+ * deferral here keeps the saving and does not depend on that behaviour.
+ *
  * `withLocation` is kept so the two call sites read as they did; which fields
  * are asked for is now set in LeadConnector rather than here.
  */
@@ -30,6 +40,29 @@ export default function ContactForm({withLocation = false}: {withLocation?: bool
   void withLocation
   const [height, setHeight] = useState(AUTHORED_HEIGHT)
   const [listening, setListening] = useState(false)
+  const [near, setNear] = useState(false)
+  const wrap = useRef<HTMLDivElement>(null)
+
+  // A screen's worth of warning, so the form has begun loading by the time the
+  // section is actually read.
+  useEffect(() => {
+    const el = wrap.current
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setNear(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setNear(true)
+          io.disconnect()
+        }
+      },
+      {rootMargin: '800px 0px'},
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!document.querySelector(`script[src="${EMBED_SCRIPT}"]`)) {
@@ -64,13 +97,12 @@ export default function ContactForm({withLocation = false}: {withLocation?: bool
   }, [])
 
   return (
-    <div className="form-embed" style={{minHeight: height}}>
-      {listening ? (
+    <div className="form-embed" ref={wrap} style={{minHeight: height}}>
+      {listening && near ? (
         <iframe
           src={SRC}
           id={`inline-${FORM_ID}`}
           title="Contact Form"
-          loading="lazy"
           style={{width: '100%', height, border: 'none', borderRadius: 0, display: 'block'}}
           data-layout="{'id':'INLINE'}"
           data-trigger-type="alwaysShow"
