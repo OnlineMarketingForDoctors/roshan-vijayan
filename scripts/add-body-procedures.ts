@@ -535,7 +535,7 @@ const PROCEDURES: Procedure[] = [
         'Relief from back, neck and shoulder pain',
         'A breast size in proportion with your frame',
         'Easier movement and exercise',
-        'Consultant-led care, with two-surgeon safety on complex cases',
+        'Consultant-led care, with two-surgeon safety on more lengthy cases',
       ],
 
       showIntro: true,

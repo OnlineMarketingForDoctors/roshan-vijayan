@@ -255,8 +255,9 @@ export const ABOUT_PAGE: AboutPageContent = {
       body: 'Each plan is studied and drawn up individually, with a thorough written summary after your consultation.',
     },
     {
-      title: 'Two-surgeon safety on complex cases',
-      body: 'For more complex procedures, Mr Vijayan frequently has a senior surgeon assist him, for greater precision, less time under anaesthetic and an added layer of safety.',
+      title: 'Two-surgeon safety on more lengthy cases',
+      body:
+        'Evidence shows better and safer outcomes when time under anaesthesia is reduced. During lengthy procedures, Mr Vijayan frequently has a surgical assistant, for greater efficiency without compromising on quality.',
     },
     {
       title: 'Consultant-led aftercare',
@@ -361,7 +362,7 @@ export const HOME_PAGE: HomePageContent = {
     'Unlimited Consultant follow-up at no extra cost',
     'Appointments often within two weeks',
     'Honest, no-pressure advice, always',
-    'Two-surgeon safety on more complex cases',
+    'Two-surgeon safety on more lengthy cases',
   ],
   philEyebrow: 'Meet Mr Vijayan',
   philQuote:
@@ -404,8 +405,9 @@ export const HOME_PAGE: HomePageContent = {
       body: 'Each plan is studied and drawn up individually, with a thorough written summary after your consultation.',
     },
     {
-      title: 'Two-surgeon safety on complex cases',
-      body: 'For more complex procedures, Mr Vijayan frequently has a senior surgeon assist him, for greater precision, less time under anaesthetic and an added layer of safety.',
+      title: 'Two-surgeon safety on more lengthy cases',
+      body:
+        'Evidence shows better and safer outcomes when time under anaesthesia is reduced. During lengthy procedures, Mr Vijayan frequently has a surgical assistant, for greater efficiency without compromising on quality.',
     },
     {
       title: 'Consultant-led aftercare',

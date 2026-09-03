@@ -41,7 +41,7 @@ const fields = {
     'A naturally lifted, more youthful shape',
     'Repositioned, re-centred nipple and areola',
     'Restored firmness after pregnancy or weight loss',
-    'Consultant-led care, with two-surgeon safety on complex cases',
+    'Consultant-led care, with two-surgeon safety on more lengthy cases',
   ],
 
   // ---- Intro ----

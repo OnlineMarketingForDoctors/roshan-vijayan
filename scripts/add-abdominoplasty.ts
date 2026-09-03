@@ -63,7 +63,7 @@ const fields = {
     'A smoother, flatter abdominal contour',
     'Excess, redundant skin removed',
     'Tightened, better-supported abdominal muscles',
-    'Consultant-led care, with two-surgeon safety on complex cases',
+    'Consultant-led care, with two-surgeon safety on more lengthy cases',
   ],
 
   // ---- Intro (remainder of the original intro paragraph) ----
