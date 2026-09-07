@@ -113,6 +113,11 @@ export const BA_PROCEDURES: BAProcedure[] = [
         beforeUrl: img('upper-lower-bleph-1', 'before'),
         afterUrl: img('upper-lower-bleph-1', 'after'),
       },
+      {
+        caption: 'Upper and lower lid blepharoplasty \u00b7 Patient two',
+        beforeUrl: img('upper-lower-bleph-2', 'before'),
+        afterUrl: img('upper-lower-bleph-2', 'after'),
+      },
     ],
   },
   {
@@ -190,6 +195,56 @@ export const BA_PROCEDURES: BAProcedure[] = [
         caption: 'Cervicofacial flap reconstruction · Shown during surgery and healed',
         beforeUrl: img('cervicofacial-flap-1', 'before'),
         afterUrl: img('cervicofacial-flap-1', 'after'),
+        beforeLabel: 'During',
+      },
+    ],
+  },
+  {
+    slug: 'nasolabial-flap',
+    title: 'Nasolabial Flap',
+    area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
+    patients: [
+      {
+        caption: 'Nasolabial flap reconstruction',
+        beforeUrl: img('nasolabial-flap-1', 'before'),
+        afterUrl: img('nasolabial-flap-1', 'after'),
+      },
+    ],
+  },
+  {
+    // Reconstructive contouring of the nose, not a cosmetic rhinoplasty, so
+    // procedureSlugs deliberately leaves the rhinoplasty page out.
+    slug: 'nose-contouring',
+    title: 'Nose Contouring',
+    area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
+    patients: [
+      {
+        caption: 'Nose contouring \u00b7 Patient one',
+        beforeUrl: img('nose-contouring-1', 'before'),
+        afterUrl: img('nose-contouring-1', 'after'),
+      },
+      {
+        caption: 'Nose contouring \u00b7 Patient two',
+        beforeUrl: img('nose-contouring-2', 'before'),
+        afterUrl: img('nose-contouring-2', 'after'),
+      },
+    ],
+  },
+  {
+    // A skin cancer case that happens to be on the ear; it does not belong on
+    // the prominent ear correction page, which is cosmetic otoplasty.
+    slug: 'skin-tumour-ear',
+    title: 'Skin Tumour \u00b7 Ear',
+    area: 'Skin & Reconstruction',
+    procedureSlugs: ['aesthetic-repair-and-reconstruction-after-skin-cancer-removal'],
+    patients: [
+      {
+        caption:
+          'Skin tumour excision and reconstruction \u00b7 Ear \u00b7 Shown during surgery and after',
+        beforeUrl: img('skin-tumour-ear-1', 'before'),
+        afterUrl: img('skin-tumour-ear-1', 'after'),
         beforeLabel: 'During',
       },
     ],
