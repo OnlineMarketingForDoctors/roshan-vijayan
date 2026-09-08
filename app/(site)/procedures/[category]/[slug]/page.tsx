@@ -357,7 +357,7 @@ export default async function ProcedurePage({params}: Params) {
       {/* OVERVIEW */}
       {on.overview ? (
         <section className={band('overview')} id="overview">
-          <div className="feature-row">
+          <div className={`feature-row${p.overviewOutro?.length ? ' has-outro' : ''}`}>
             <div className="feature-media reveal">
               <div className="fm-frame">
                 <img src={img(p.overviewImage, DEF.overview, 900)} className={p.overviewImageFlip ? 'mirrored' : undefined} alt={altOf(p.overviewImage, p.title)} decoding="async" loading="lazy" />
