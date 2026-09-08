@@ -614,7 +614,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .prose-table tbody tr{padding:1rem 0;border-bottom:1px solid var(--line)}
   .prose-table tbody tr:last-child{border-bottom:0}
   .prose-table th,.prose-table td{border-bottom:0;padding:0}
-  .prose-table tbody th{margin-bottom:.5rem}
+  .prose-table tbody th{width:auto;margin-bottom:.5rem}
   .prose-table td{margin-top:.7rem}
   .prose-table td::before{content:attr(data-label);display:block;font-family:var(--sans);
     font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);
