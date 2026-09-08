@@ -7,7 +7,7 @@ import contactPage from './contactPage'
 import aboutPage from './aboutPage'
 import homePage from './homePage'
 import locationsPage from './locationsPage'
-import {seo, pageHero, ctaBand, labelledItem, richText, titledItem, statItem} from './objects'
+import {seo, pageHero, ctaBand, labelledItem, richText, titledItem, statItem, proseTable} from './objects'
 
 export const schemaTypes = [
   siteSettings,
@@ -27,4 +27,5 @@ export const schemaTypes = [
   richText,
   titledItem,
   statItem,
+  proseTable,
 ]

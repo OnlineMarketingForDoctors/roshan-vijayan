@@ -165,7 +165,7 @@ export default defineType({
     // ---- The procedure ----
     defineField({name: 'showProcedure', title: "Show 'What happens during surgery' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'procedureHeading', title: 'Procedure heading', type: 'string', group: 'content'}),
-    defineField({name: 'procedureBody', title: 'Procedure body', type: 'array', of: [{type: 'block'}], group: 'content'}),
+    defineField({name: 'procedureBody', title: 'Procedure body', type: 'array', of: [{type: 'block'}, {type: 'proseTable'}], group: 'content'}),
     defineField({
       name: 'procedureImage', title: 'Procedure background image', type: 'image', group: 'content',
       components: {input: GenerateImageInput},

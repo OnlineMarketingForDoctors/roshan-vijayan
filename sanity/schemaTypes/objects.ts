@@ -115,3 +115,57 @@ export const statItem = defineType({
   ],
   preview: {select: {title: 'value', subtitle: 'label'}},
 })
+
+/**
+ * A simple table for prose fields.
+ *
+ * Portable text has no table of its own, and the one place that needed one —
+ * the mastopexy incision patterns — is a plain grid of short strings rather
+ * than anything that wants formatting inside a cell. Columns are the headings;
+ * each row is a list of cells read against them in order, and the first cell of
+ * a row is rendered as its heading.
+ */
+export const proseTable = defineType({
+  name: 'proseTable',
+  title: 'Table',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Table title',
+      type: 'string',
+      description: 'Shown above the table, and read out as the table’s name. Optional.',
+    }),
+    defineField({
+      name: 'columns',
+      title: 'Column headings',
+      type: 'array',
+      of: [{type: 'string'}],
+      validation: (r) => r.min(1),
+    }),
+    defineField({
+      name: 'rows',
+      title: 'Rows',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'proseTableRow',
+          title: 'Row',
+          fields: [defineField({name: 'cells', title: 'Cells', type: 'array', of: [{type: 'string'}]})],
+          preview: {
+            select: {cells: 'cells'},
+            prepare: ({cells}: {cells?: string[]}) => ({title: (cells || []).join(' · ') || 'Empty row'}),
+          },
+        },
+      ],
+    }),
+  ],
+  preview: {
+    select: {title: 'title', rows: 'rows'},
+    prepare: ({title, rows}: {title?: string; rows?: unknown[]}) => ({
+      title: title || 'Table',
+      subtitle: `${(rows || []).length} rows`,
+    }),
+  },
+})

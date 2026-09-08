@@ -12,6 +12,53 @@ const components: PortableTextComponents = {
         </figure>
       )
     },
+    /* Portable text has no table, so this renders the proseTable object. The
+       first cell of a row is its heading, and every other cell carries the
+       column it sits under, which a phone shows as a label once the columns
+       are too narrow to keep side by side. */
+    proseTable: ({value}) => {
+      const columns: string[] = Array.isArray(value?.columns) ? value.columns : []
+      const rows: {cells?: string[]}[] = Array.isArray(value?.rows) ? value.rows : []
+      if (!columns.length && !rows.length) return null
+      const titleId = value?.title ? `tbl-${value._key || 'x'}` : undefined
+      return (
+        <figure className="prose-table">
+          {value.title ? <figcaption id={titleId}>{value.title}</figcaption> : null}
+          <div className="pt-scroll">
+            <table {...(titleId ? {'aria-labelledby': titleId} : {})}>
+              {columns.length ? (
+                <thead>
+                  <tr>
+                    {columns.map((c, i) => (
+                      <th key={i} scope="col">
+                        {c}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+              ) : null}
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={i}>
+                    {(r?.cells || []).map((c, j) =>
+                      j === 0 ? (
+                        <th key={j} scope="row">
+                          {c}
+                        </th>
+                      ) : (
+                        <td key={j} data-label={columns[j] || undefined}>
+                          {c}
+                        </td>
+                      ),
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </figure>
+      )
+    },
   },
   marks: {
     // A link out of the site opens in its own tab and is not an endorsement:

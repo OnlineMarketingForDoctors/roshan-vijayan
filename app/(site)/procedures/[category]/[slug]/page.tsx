@@ -97,6 +97,10 @@ const altOf = (src: unknown, fallback: string): string => {
   return typeof a === 'string' && a.trim() ? a : fallback
 }
 
+/** A band with a table in it left-aligns, since centred table cells are unreadable. */
+const hasTable = (body: unknown): boolean =>
+  Array.isArray(body) && body.some((b) => (b as {_type?: string})?._type === 'proseTable')
+
 const captionOf = (src: unknown): string | null => {
   const c = (src as {caption?: unknown})?.caption
   return typeof c === 'string' && c.trim() ? c : null
@@ -494,7 +498,7 @@ export default async function ProcedurePage({params}: Params) {
       {on.procedure ? (
         <section className="proc-band proc-anchor" id="procedure">
           <img src={img(p.procedureImage, DEF.procedure, 1600, 78)} className={p.procedureImageFlip ? 'mirrored' : undefined} alt="" aria-hidden="true" decoding="async" loading="lazy" />
-          <div className="pb-inner reveal">
+          <div className={`pb-inner reveal${hasTable(p.procedureBody) ? ' pb-left' : ''}`}>
             {p.procedureHeading ? <h2 className="display">{p.procedureHeading}</h2> : null}
             <div className="prose">
               <PortableTextBody value={p.procedureBody} />
