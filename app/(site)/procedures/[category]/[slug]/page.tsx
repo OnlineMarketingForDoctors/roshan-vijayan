@@ -372,6 +372,11 @@ export default async function ProcedurePage({params}: Params) {
               </div>
             </div>
           </div>
+          {p.overviewOutro?.length ? (
+            <div className="feature-outro prose reveal">
+              <PortableTextBody value={p.overviewOutro} />
+            </div>
+          ) : null}
         </section>
       ) : null}
 

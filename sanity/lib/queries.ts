@@ -75,7 +75,7 @@ export const procedureQuery = groq`*[_type=="procedure" && slug.current==$slug][
   showRisks, showSurgeon, showWhy, showCost, showFaqs, showRelated,
   medicalReview,
   introHeading, introBody,
-  overviewHeading, overviewBody, overviewImage, overviewImageFlip,
+  overviewHeading, overviewBody, overviewOutro, overviewImage, overviewImageFlip,
   glanceHeading, atAGlance[]{icon, label, value},
   conditionsHeading, conditionsIntro, conditions,
   benefitsHeading, benefitsIntro, benefitsList, benefitsImage, benefitsImageFlip,

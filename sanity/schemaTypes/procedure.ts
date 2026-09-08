@@ -52,6 +52,9 @@ export default defineType({
     defineField({name: 'showOverview', title: "Show 'Overview' section", type: 'boolean', initialValue: true, options: {layout: 'switch'}, group: 'content'}),
     defineField({name: 'overviewHeading', title: 'Overview heading', type: 'string', group: 'content'}),
     defineField({name: 'overviewBody', title: 'Overview body', type: 'array', of: [{type: 'block'}], group: 'content'}),
+    // Sits below the picture and the copy, across both columns, for text that
+    // should not be squeezed into the narrow column beside an image.
+    defineField({name: 'overviewOutro', title: 'Overview body — full width, below the image', type: 'array', of: [{type: 'block'}, {type: 'proseTable'}], group: 'content'}),
     defineField({
       name: 'overviewImage', title: 'Overview image', type: 'image', fields: [{name: 'alt', title: 'Alt text', type: 'string', description: 'Describes the picture for screen readers and search engines.'}, {name: 'caption', title: 'Caption', type: 'string', description: 'Shown under the image.'}], group: 'content',
       components: {input: GenerateImageInput},
