@@ -5,7 +5,7 @@ import {medicalProcedureLd, faqLd} from '@/lib/schema'
 import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
-import {sanityFetch} from '@/sanity/lib/fetch'
+import {sanityFetch, sanityFetchRequired} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {
   procedureQuery,
@@ -172,7 +172,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {category, slug} = await params
-  const p = await sanityFetch<any>(procedureQuery, {slug}, null)
+  const p = await sanityFetchRequired<any>(procedureQuery, {slug})
   if (!p) return {}
   return pageMetadata({
     path: `/procedures/${category}/${slug}/`,
@@ -185,7 +185,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
 export default async function ProcedurePage({params}: Params) {
   const {category, slug} = await params
   const [p, reviews, settings, allBACases] = await Promise.all([
-    sanityFetch<any>(procedureQuery, {slug}, null),
+    sanityFetchRequired<any>(procedureQuery, {slug}),
     sanityFetch<Review[]>(reviewsQuery, {}, []),
     sanityFetch<any>(siteSettingsQuery, {}, null),
     sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),

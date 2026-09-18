@@ -5,7 +5,7 @@ import {articleLd} from '@/lib/schema'
 import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
 import {absoluteUrl} from '@/lib/site'
-import {sanityFetch} from '@/sanity/lib/fetch'
+import {sanityFetch, sanityFetchRequired} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {
   blogPostQuery,
@@ -57,7 +57,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {slug} = await params
-  const p = await sanityFetch<any>(blogPostQuery, {slug}, null)
+  const p = await sanityFetchRequired<any>(blogPostQuery, {slug})
   if (!p) return {}
   return pageMetadata({
     path: `/blog/${slug}/`,
@@ -70,7 +70,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
 
 export default async function BlogPostPage({params}: Params) {
   const {slug} = await params
-  const p = await sanityFetch<any>(blogPostQuery, {slug}, null)
+  const p = await sanityFetchRequired<any>(blogPostQuery, {slug})
   if (!p) notFound()
 
   const [cats, related] = await Promise.all([

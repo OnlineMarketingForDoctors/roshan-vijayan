@@ -4,7 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import {webPageLd} from '@/lib/schema'
 import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
-import {sanityFetch} from '@/sanity/lib/fetch'
+import {sanityFetch, sanityFetchRequired} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {beforeAfterQuery, procedureSlugsQuery} from '@/sanity/lib/queries'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
@@ -22,7 +22,8 @@ type Params = {params: Promise<{slug: string}>}
  * to link and to rank, rather than living behind a tab.
  */
 async function procedures() {
-  return buildBAProcedures(await sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []))
+  // required: this list is what decides whether the treatment has a page
+  return buildBAProcedures(await sanityFetchRequired<SanityBACase[]>(beforeAfterQuery))
 }
 
 export async function generateStaticParams() {
