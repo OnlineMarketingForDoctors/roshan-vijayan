@@ -8,7 +8,14 @@ import Reveal from '@/components/Reveal'
 import BackToTop from '@/components/BackToTop'
 import CookieConsent from '@/components/CookieConsent'
 
-export const revalidate = 60
+/**
+ * An hour, not a minute. The /api/revalidate webhook purges everything tagged
+ * 'sanity' the moment a document is published, so this window is only the
+ * fallback for when that webhook does not fire — it is not what content
+ * editors wait on. A 60s window meant every page refetched from Sanity up to
+ * 60 times an hour under crawl, which is what exhausted the API quota.
+ */
+export const revalidate = 3600
 
 type ProcedureRow = {
   slug: string

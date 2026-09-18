@@ -5,7 +5,7 @@ import {parseBody} from 'next-sanity/webhook'
 // Sanity -> Vercel on-demand revalidation. When a published document changes in
 // Studio, Sanity POSTs here; we verify the signature with SANITY_REVALIDATE_SECRET
 // and purge every page tagged 'sanity' so edits appear immediately rather than
-// waiting for the 60s ISR fallback.
+// waiting for the hourly ISR fallback.
 export async function POST(req: NextRequest) {
   try {
     const {isValidSignature, body} = await parseBody<{_type?: string}>(
