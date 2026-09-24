@@ -43,9 +43,15 @@ export default function Reveal() {
           }
         })
       },
-      // the zero threshold is what makes the pixel test reachable: without it
-      // the observer would not report anything until 12% was already showing
-      {threshold: [0, 0.12], rootMargin: '0px 0px -8% 0px'},
+      // The zero threshold is what makes the pixel test reachable: without it
+      // the observer would not report anything until 12% was already showing.
+      //
+      // No negative bottom margin. Pulling the trigger line up by 8% of the
+      // window left a band at the foot of the screen where an element was
+      // plainly visible and yet counted as off screen, which is how every blog
+      // post came to load blank on anything shorter than about 1090px: the
+      // article began thirteen pixels inside that band.
+      {threshold: [0, 0.12]},
     )
 
     // observing an element twice is a no-op, so this can run as often as it likes

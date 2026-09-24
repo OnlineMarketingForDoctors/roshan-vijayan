@@ -119,7 +119,11 @@ export default async function BlogPostPage({params}: Params) {
       <div className="bp-layout">
         <article className="bp-main">
           {p.excerpt ? <p className="bp-standfirst reveal">{p.excerpt}</p> : null}
-          <div className="bp-body prose reveal">
+          {/* Not a reveal target: the article is the page. A twelve thousand
+              pixel block either fades in whole or not at all, and when it began
+              below the observer's trigger line it stayed at opacity 0 — the post
+              fully rendered and completely invisible until something scrolled. */}
+          <div className="bp-body prose">
             <PortableTextBody value={p.body} />
           </div>
         </article>
