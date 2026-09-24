@@ -180,8 +180,77 @@ const MOVED: [string, string][] = [
   ['/procedures/other/', '/procedures/'],
 ]
 
+/**
+ * Addresses the old site had already retired by the time its final sitemap was
+ * taken, so they appear in neither the blog export nor the page inventory that
+ * the rules above are built from.
+ *
+ * They still matter, because every one of them is linked from the body of a
+ * published article — fifty links across twenty-seven posts, left behind when
+ * their targets were deleted. Those links were broken on the old site too.
+ * This answers them while the articles themselves are corrected.
+ */
+const RETIRED: [string, string][] = [
+  // Procedures whose address changed. The page survived the rebuild; only its slug, or the
+  // category it sits under, did not.
+  ['/procedures/body/abdominoplasty-tummy-tuck/',                                                    '/procedures/body/abdominoplasty/'],
+  ['/procedures/body/tummy-tuck-abdominoplasty/',                                                    '/procedures/body/abdominoplasty/'],
+  ['/procedures/abdominoplasty/',                                                                    '/procedures/body/abdominoplasty/'],
+  ['/procedures/body/liposuction/',                                                                  '/procedures/body/liposuction-contouring/'],
+  ['/procedures/body/arm-lift-brachioplasty/',                                                       '/procedures/body/arm-lift/'],
+  ['/procedures/breast/breast-lift-mastopexy/',                                                      '/procedures/body/breast-lift/'],
+  ['/procedures/body/breast-lift-mastopexy/',                                                        '/procedures/body/breast-lift/'],
+  ['/procedures/breast/breast-reduction-hertfordshire/',                                             '/procedures/body/breast-reduction/'],
+  ['/procedures/breast-reduction/',                                                                  '/procedures/body/breast-reduction/'],
+  ['/procedures/male/gynaecomastia-male-chest-reduction/',                                           '/procedures/body/male-gynaecomastia-reduction/'],
+  ['/procedures/body/scar-revision/',                                                                '/procedures/skin/scar-revision-and-correction/'],
+  ['/procedures/skin/scar-revision/',                                                                '/procedures/skin/scar-revision-and-correction/'],
+  ['/procedures/scar-revision/',                                                                     '/procedures/skin/scar-revision-and-correction/'],
+  ['/procedures/skin/skin-cancer/',                                                                  '/procedures/skin/aesthetic-repair-and-reconstruction-after-skin-cancer-removal/'],
+  ['/reconstructive-surgery/',                                                                       '/procedures/skin/aesthetic-repair-and-reconstruction-after-skin-cancer-removal/'],
+  ['/procedures/body/skin-lesion-removal/',                                                          '/procedures/skin/mole-removal/'],
+
+  // Body contouring after weight loss had a procedure page of its own, which the rebuild
+  // did not carry over. The journal guide is the nearest live equivalent.
+  ['/procedures/body/body-contouring-after-major-weight-loss/',                                      '/blog/body-contouring-after-massive-weight-loss-complete-guide/'],
+  ['/procedures/body/body-contouring-after-massive-weight-loss/',                                    '/blog/body-contouring-after-massive-weight-loss-complete-guide/'],
+
+  // The surgeon's own page, which is now the About page.
+  ['/about/mr-roshan-vijayan/',                                                                      '/about/'],
+
+  // Journal posts retired before the rebuild, so they are missing from the export the
+  // rules above are built from.
+  ['/blog/guide-to-breast-reduction-scars/',                                                         '/blog/breast-reduction-scars-healing-minimizing-and-long-term-care/'],
+  ['/blog/split-earlobe-repair-everything-you-need-to-know/',                                        '/blog/split-earlobe-repair-techniques/'],
+  ['/split-earlobe-repair-everything-you-need-to-know/',                                             '/blog/split-earlobe-repair-techniques/'],
+  ['/breast-reduction-recovery-timeline/',                                                           '/blog/breast-reduction-recovery-timeline-what-to-expect-week-by-week/'],
+  ['/blog/preparing-for-your-cosmetic-surgery/',                                                     '/blog/preparing-for-body-contouring-surgery-complete-checklist/'],
+  ['/blog/understanding-surgical-scars/',                                                            '/blog/when-to-consider-scar-revision-surgery/'],
+  ['/blog/scar-management-after-plastic-surgery/',                                                   '/blog/when-to-consider-scar-revision-surgery/'],
+  ['/blog/radiant-results-how-to-get-the-most-from-your-breast-shape-before-and-after-weight-loss/', '/blog/body-contouring-after-massive-weight-loss-complete-guide/'],
+  ['/blog/guide-to-recovering-from-plastic-surgery/',                                                '/blog/'],
+  ['/blog/your-guide-to-a-smooth-recovery-after-plastic-surgery/',                                   '/blog/'],
+
+  // Nothing on the new site answers these. Aftercare and the consultation process are no
+  // longer pages of their own — that material sits inside each procedure's journey and
+  // recovery sections — and no mummy makeover page was rebuilt. They go to the home page
+  // rather than to a section that only half answers them.
+  ['/procedures/body/mummy-makeover/',                                                               '/'],
+  ['/aftercare/',                                                                                    '/'],
+  ['/aftercare-and-faqs/',                                                                           '/'],
+  ['/your-journey/aftercare/',                                                                       '/'],
+  ['/information/post-operative-care/',                                                              '/'],
+  ['/your-journey/',                                                                                 '/'],
+  ['/your-journey/consultation-process/',                                                            '/'],
+  ['/information/consultation-process/',                                                             '/'],
+]
+
 export const LEGACY_REDIRECTS: LegacyRedirect[] = [
-  ...MOVED.map(([source, destination]) => ({source, destination, permanent: true as const})),
+  ...[...MOVED, ...RETIRED].map(([source, destination]) => ({
+    source,
+    destination,
+    permanent: true as const,
+  })),
   ...BLOG_SLUGS.map((slug) => ({
     source: `/${slug}/`,
     destination: `/blog/${slug}/`,
