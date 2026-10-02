@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         has: [{type: 'host', value: '(?:www\\.)vijayan\\.co\\.uk'}],
         destination: 'https://vijayan.co.uk/:path*',
-        permanent: true,
+        statusCode: 301,
       },
       // the old site's addresses — see lib/legacyRedirects.ts
       ...LEGACY_REDIRECTS,

@@ -4,7 +4,7 @@
  * Every address the previous site published is answered here rather than left
  * to 404, so a link from a directory, a referral letter or a search result
  * still arrives at the right page, and the ranking those pages earned carries
- * across. All of them are permanent (308): the old addresses are not coming
+ * across. All of them are permanent (301): the old addresses are not coming
  * back.
  *
  * Two thirds of the old site needed nothing — all nineteen procedure pages
@@ -17,7 +17,12 @@
  * static on purpose, so a build cannot quietly lose it when the CMS is slow.
  */
 
-export type LegacyRedirect = {source: string; destination: string; permanent: true}
+/**
+ * 301, not the 308 that `permanent: true` would emit. Search engines treat the
+ * two the same, but the migration map is written as a 301 map and the auditing
+ * tools around it expect to read one back.
+ */
+export type LegacyRedirect = {source: string; destination: string; statusCode: 301}
 
 /**
  * Journal posts. The old site served all of these at the root — /tummy-tuck-
@@ -285,11 +290,11 @@ export const LEGACY_REDIRECTS: LegacyRedirect[] = [
   ...[...MOVED, ...RETIRED].map(([source, destination]) => ({
     source,
     destination,
-    permanent: true as const,
+    statusCode: 301 as const,
   })),
   ...BLOG_SLUGS.map((slug) => ({
     source: `/${slug}/`,
     destination: `/blog/${slug}/`,
-    permanent: true as const,
+    statusCode: 301 as const,
   })),
 ]

@@ -64,9 +64,15 @@ const components: PortableTextComponents = {
     // A link out of the site opens in its own tab and is not an endorsement:
     // nofollow keeps this site's ranking to itself, noopener/noreferrer keep
     // the new tab from reaching back into this one.
+    //
+    // Our own address is not "out of the site" merely for being written in
+    // full. Five hundred and eighty links inside the articles carry the whole
+    // https://vijayan.co.uk/... form, inherited from the WordPress editor, and
+    // testing the protocol alone sent every one of them to a new tab under a
+    // nofollow — the site declining to follow its own links.
     link: ({value, children}) => {
       const href = value?.href || '#'
-      const ext = /^https?:/.test(href)
+      const ext = /^https?:/.test(href) && !/^https?:\/\/(www\.)?vijayan\.co\.uk(\/|$)/.test(href)
       return (
         <a
           href={href}
