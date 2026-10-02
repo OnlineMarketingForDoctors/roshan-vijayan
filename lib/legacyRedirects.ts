@@ -182,67 +182,103 @@ const MOVED: [string, string][] = [
 
 /**
  * Addresses the old site had already retired by the time its final sitemap was
- * taken, so they appear in neither the blog export nor the page inventory that
- * the rules above are built from.
+ * taken, together with the malformed variants of live addresses that circulate
+ * in directories and referral links.
  *
- * They still matter, because every one of them is linked from the body of a
- * published article — fifty links across twenty-seven posts, left behind when
- * their targets were deleted. Those links were broken on the old site too.
- * This answers them while the articles themselves are corrected.
+ * None of these appear in the blog export or the page inventory the rules above
+ * are built from, so none of them were answered by those rules. They matter
+ * because they are reachable: some are linked from the body of published
+ * articles, the rest from outside the site entirely.
  */
 const RETIRED: [string, string][] = [
-  // Procedures whose address changed. The page survived the rebuild; only its slug, or the
-  // category it sits under, did not.
-  ['/procedures/body/abdominoplasty-tummy-tuck/',                                                    '/procedures/body/abdominoplasty/'],
-  ['/procedures/body/tummy-tuck-abdominoplasty/',                                                    '/procedures/body/abdominoplasty/'],
+  // Addresses the old site published that the rebuild changed or dropped: a procedure
+  // whose slug or category moved, a page that is no longer a page, a journal post retired
+  // before the export was taken.
+  ['/about/mr-roshan-vijayan/',                                                                      '/about/'],
+  ['/blog/guide-to-breast-reduction-scars/',                                                         '/blog/breast-reduction-scars-healing-minimizing-and-long-term-care/'],
+  ['/blog/preparing-for-your-cosmetic-surgery/',                                                     '/blog/preparing-for-body-contouring-surgery-complete-checklist/'],
+  ['/blog/radiant-results-how-to-get-the-most-from-your-breast-shape-before-and-after-weight-loss/', '/blog/breast-lift-surgery-restoring-youthful-breast-shape/'],
+  ['/blog/scar-management-after-plastic-surgery/',                                                   '/procedures/skin/scar-revision-and-correction/'],
+  ['/blog/understanding-surgical-scars/',                                                            '/blog/when-to-consider-scar-revision-surgery/'],
+  ['/breast-reduction-recovery-timeline/',                                                           '/blog/breast-reduction-recovery-timeline-what-to-expect-week-by-week/'],
+  ['/information/consultation-process/',                                                             '/contact/'],
   ['/procedures/abdominoplasty/',                                                                    '/procedures/body/abdominoplasty/'],
-  ['/procedures/body/liposuction/',                                                                  '/procedures/body/liposuction-contouring/'],
+  ['/procedures/body/abdominoplasty-tummy-tuck/',                                                    '/procedures/body/abdominoplasty/'],
   ['/procedures/body/arm-lift-brachioplasty/',                                                       '/procedures/body/arm-lift/'],
-  ['/procedures/breast/breast-lift-mastopexy/',                                                      '/procedures/body/breast-lift/'],
-  ['/procedures/body/breast-lift-mastopexy/',                                                        '/procedures/body/breast-lift/'],
-  ['/procedures/breast/breast-reduction-hertfordshire/',                                             '/procedures/body/breast-reduction/'],
-  ['/procedures/breast-reduction/',                                                                  '/procedures/body/breast-reduction/'],
-  ['/procedures/male/gynaecomastia-male-chest-reduction/',                                           '/procedures/body/male-gynaecomastia-reduction/'],
-  ['/procedures/body/scar-revision/',                                                                '/procedures/skin/scar-revision-and-correction/'],
-  ['/procedures/skin/scar-revision/',                                                                '/procedures/skin/scar-revision-and-correction/'],
-  ['/procedures/scar-revision/',                                                                     '/procedures/skin/scar-revision-and-correction/'],
-  ['/procedures/skin/skin-cancer/',                                                                  '/procedures/skin/aesthetic-repair-and-reconstruction-after-skin-cancer-removal/'],
-  ['/reconstructive-surgery/',                                                                       '/procedures/skin/aesthetic-repair-and-reconstruction-after-skin-cancer-removal/'],
-  ['/procedures/body/skin-lesion-removal/',                                                          '/procedures/skin/mole-removal/'],
-
-  // Body contouring after weight loss had a procedure page of its own, which the rebuild
-  // did not carry over. The journal guide is the nearest live equivalent.
   ['/procedures/body/body-contouring-after-major-weight-loss/',                                      '/blog/body-contouring-after-massive-weight-loss-complete-guide/'],
   ['/procedures/body/body-contouring-after-massive-weight-loss/',                                    '/blog/body-contouring-after-massive-weight-loss-complete-guide/'],
+  ['/procedures/body/breast-lift-mastopexy/',                                                        '/procedures/body/breast-lift/'],
+  ['/procedures/body/liposuction/',                                                                  '/procedures/body/liposuction-contouring/'],
+  ['/procedures/body/mummy-makeover/',                                                               '/blog/post-pregnancy-body-contouring-restoring-your-figure/'],
+  ['/procedures/body/scar-revision/',                                                                '/procedures/skin/scar-revision-and-correction/'],
+  ['/procedures/body/skin-lesion-removal/',                                                          '/blog/skin-lesion-excision-and-repair-surgery/'],
+  ['/procedures/body/tummy-tuck-abdominoplasty/',                                                    '/procedures/body/abdominoplasty/'],
+  ['/procedures/breast-reduction/',                                                                  '/procedures/body/breast-reduction/'],
+  ['/procedures/breast/breast-lift-mastopexy/',                                                      '/procedures/body/breast-lift/'],
+  ['/procedures/breast/breast-reduction-hertfordshire/',                                             '/procedures/body/breast-reduction/'],
+  ['/procedures/male/gynaecomastia-male-chest-reduction/',                                           '/procedures/body/male-gynaecomastia-reduction/'],
+  ['/procedures/scar-revision/',                                                                     '/procedures/skin/scar-revision-and-correction/'],
+  ['/procedures/skin/scar-revision/',                                                                '/procedures/skin/scar-revision-and-correction/'],
+  ['/procedures/skin/skin-cancer/',                                                                  '/procedures/skin/aesthetic-repair-and-reconstruction-after-skin-cancer-removal/'],
+  ['/reconstructive-surgery/',                                                                       '/procedures/skin/scar-revision-and-correction/'],
+  ['/split-earlobe-repair-everything-you-need-to-know/',                                             '/procedures/face/split-ear-lobe-correction/'],
+  ['/your-journey/',                                                                                 '/contact/'],
+  ['/your-journey/consultation-process/',                                                            '/contact/'],
 
-  // The surgeon's own page, which is now the About page.
-  ['/about/mr-roshan-vijayan/',                                                                      '/about/'],
-
-  // Journal posts retired before the rebuild, so they are missing from the export the
-  // rules above are built from.
-  ['/blog/guide-to-breast-reduction-scars/',                                                         '/blog/breast-reduction-scars-healing-minimizing-and-long-term-care/'],
-  ['/blog/split-earlobe-repair-everything-you-need-to-know/',                                        '/blog/split-earlobe-repair-techniques/'],
-  ['/split-earlobe-repair-everything-you-need-to-know/',                                             '/blog/split-earlobe-repair-techniques/'],
-  ['/breast-reduction-recovery-timeline/',                                                           '/blog/breast-reduction-recovery-timeline-what-to-expect-week-by-week/'],
-  ['/blog/preparing-for-your-cosmetic-surgery/',                                                     '/blog/preparing-for-body-contouring-surgery-complete-checklist/'],
-  ['/blog/understanding-surgical-scars/',                                                            '/blog/when-to-consider-scar-revision-surgery/'],
-  ['/blog/scar-management-after-plastic-surgery/',                                                   '/blog/when-to-consider-scar-revision-surgery/'],
-  ['/blog/radiant-results-how-to-get-the-most-from-your-breast-shape-before-and-after-weight-loss/', '/blog/body-contouring-after-massive-weight-loss-complete-guide/'],
-  ['/blog/guide-to-recovering-from-plastic-surgery/',                                                '/blog/'],
-  ['/blog/your-guide-to-a-smooth-recovery-after-plastic-surgery/',                                   '/blog/'],
-
-  // Nothing on the new site answers these. Aftercare and the consultation process are no
-  // longer pages of their own — that material sits inside each procedure's journey and
-  // recovery sections — and no mummy makeover page was rebuilt. They go to the home page
-  // rather than to a section that only half answers them.
-  ['/procedures/body/mummy-makeover/',                                                               '/'],
-  ['/aftercare/',                                                                                    '/'],
+  // The same, found in article bodies rather than in the migration map.
   ['/aftercare-and-faqs/',                                                                           '/'],
-  ['/your-journey/aftercare/',                                                                       '/'],
+  ['/aftercare/',                                                                                    '/'],
+  ['/blog/guide-to-recovering-from-plastic-surgery/',                                                '/blog/'],
+  ['/blog/split-earlobe-repair-everything-you-need-to-know/',                                        '/blog/split-earlobe-repair-techniques/'],
+  ['/blog/your-guide-to-a-smooth-recovery-after-plastic-surgery/',                                   '/blog/'],
   ['/information/post-operative-care/',                                                              '/'],
-  ['/your-journey/',                                                                                 '/'],
-  ['/your-journey/consultation-process/',                                                            '/'],
-  ['/information/consultation-process/',                                                             '/'],
+  ['/your-journey/aftercare/',                                                                       '/'],
+
+  // Malformed addresses seen in the wild — truncated, misspelt or mistyped links from
+  // directories, referrals and search results. Each one is a real address someone is
+  // following, so each gets the page it was reaching for.
+  ['/arm-lift-surgery-cost-in-the-uk/',                                                              '/blog/how-much-does-arm-lift-surgery-cost-in-the-uk/'],
+  ['/blog/abdominoplasty-revision-when-needed/',                                                     '/blog/abdominoplasty-revision-when-additional-surgery-is-needed/'],
+  ['/blog/arm-lift-complete-recovery-guide-and-timeline/',                                           '/blog/arm-lift-surgery-complete-recovery-guide-and-timeline/'],
+  ['/blog/arm-lift-surgery-complete-recovery-guide-and/',                                            '/blog/arm-lift-surgery-complete-recovery-guide-and-timeline/'],
+  ['/blog/arm-lift-surgery-recovery-guide-and-timeline/',                                            '/blog/arm-lift-surgery-complete-recovery-guide-and-timeline/'],
+  ['/blog/breast-lift-and-augmentations-combining-procedures-for-best-results/',                     '/blog/breast-lift-and-augmentation-combining-procedures-for-best-results/'],
+  ['/blog/breast-lift-scar-healing-types-and-scar-minimization/',                                    '/blog/breast-lift-scars-types-healing-and-scar-minimization/'],
+  ['/blog/breast-reduction-cost-pricing-insurance-and-financing-options/',                           '/blog/breast-reduction-cost-uk-pricing-insurance-and-financing-options/'],
+  ['/blog/breast-reduction-recovery-timeline-week-by-week/',                                         '/blog/breast-reduction-recovery-timeline-what-to-expect-week-by-week/'],
+  ['/blog/breast-reduction-recovery-timeline/',                                                      '/blog/breast-reduction-recovery/'],
+  ['/blog/breast-reduction-risks-and-complications/',                                                '/blog/breast-reduction-risks-and-complications-what-you-should-know/'],
+  ['/blog/breast-reduction-scars-healing-minimizing-and-long/',                                      '/blog/breast-reduction-scars-healing-minimizing-and-long-term-care/'],
+  ['/blog/cyst-removal-surgery-aftercare/',                                                          '/blog/cyst-removal-surgery-types-procedure-and-aftercare/'],
+  ['/blog/cyst-removal-surgery-types-procedure-aftercare/',                                          '/blog/cyst-removal-surgery-types-procedure-and-aftercare/'],
+  ['/blog/dermatofibroma-excision-when-recommend/',                                                  '/blog/dermatofibroma-excision-when-removal-is-recommended/'],
+  ['/blog/dermatofibroma-excision-when-removal-risks/',                                              '/blog/dermatofibroma-excision-when-removal-is-recommended/'],
+  ['/blog/excisional-blopsy-diagnostic-skin-lesion-removal/',                                        '/blog/excisional-biopsy-diagnostic-skin-lesion-removal/'],
+  ['/blog/exercise-and-high-impact-sports-after-breast-reduction/',                                  '/blog/exercise-after-breast-reduction/'],
+  ['/blog/exercise-and-physical-activity-after-breast-reduction/',                                   '/blog/exercise-after-breast-reduction/'],
+  ['/blog/exercise-high-impact-sports-after-breast-reduction/',                                      '/blog/exercise-after-breast-reduction/'],
+  ['/blog/fleur-de-lis-tummy-trust-360-degree-abdominal-transformation/',                            '/blog/fleur-de-lis-tummy-tuck-360-degree-abdominal-transformation/'],
+  ['/blog/hidradenitis-suppurativa-surgery-wide-enter/',                                             '/blog/hidradenitis-suppurativa-surgery-wide-excision-treatment/'],
+  ['/blog/hidradenitis-suppurativa-surgery-wide-treatment/',                                         '/blog/hidradenitis-suppurativa-surgery-wide-excision-treatment/'],
+  ['/blog/mastopexy-recovery-timeline-what-to-expect-your-week-by-week-healing-roadmap/',            '/blog/breast-reduction-recovery-timeline-what-to-expect-week-by-week/'],
+  ['/blog/page/2/',                                                                                  '/blog/'],
+  ['/blog/pinnaplasty-surgery-complete-guide-to-ear-correction-/',                                   '/blog/pinnaplasty-surgery-complete-guide-to-ear-correction/'],
+  ['/blog/pyogenic-granuloma-excision-fast-growth-lesion-treatment/',                                '/blog/pyogenic-granuloma-excision-fast-growing-lesion-treatment/'],
+  ['/blog/pyogenic-granuloma-excison-fast-growing-lesion-treatment/',                                '/blog/pyogenic-granuloma-excision-fast-growing-lesion-treatment/'],
+  ['/blog/swelling-and-bruising-after-breast-reduction/',                                            '/blog/swelling-after-breast-reduction-guide/'],
+  ['/blog/thigh-lift-and-losuction-combined-treatment-benefits/',                                    '/blog/thigh-lift-and-liposuction-combined-treatment-benefits/'],
+  ['/blog/thigh-lift-scars-to-expect-and-how-to-minimize/',                                          '/blog/thigh-lift-scars-what-to-expect-and-how-to-minimize/'],
+  ['/blog/thigh-lift-scars-what-to-minimize/',                                                       '/blog/thigh-lift-scars-what-to-expect-and-how-to-minimize/'],
+  ['/blog/tummy-th-scars-healing-placement-and-minimization/',                                       '/blog/tummy-tuck-scars-healing-placement-and-minimization/'],
+  ['/blog/tummy_tuck-scars-healing-placement-and-minimization/',                                     '/blog/tummy-tuck-scars-healing-placement-and-minimization/'],
+  ['/breast-lift-scar-types-healing-and-scar-minimization/',                                         '/blog/breast-lift-scars-types-healing-and-scar-minimization/'],
+  ['/breast-reduction-revision/when-additional-surgery-is-needed/',                                  '/blog/breast-reduction-revision-when-additional-surgery-is-needed/'],
+  ['/pilonidal-sinus-surgery-treatment-and-reference-guide/',                                        '/blog/pilonidal-sinus-surgery-treatment-and-recovery-guide/'],
+  ['/pyogenic-granuloma-excision-fast-growing-leion-treatment/',                                     '/blog/pyogenic-granuloma-excision-fast-growing-lesion-treatment/'],
+  ['/pyogenic-granuloma-excision-fast-growing-skin-bumps/',                                          '/blog/pyogenic-granuloma-excision-fast-growing-lesion-treatment/'],
+  ['/pyogenic-granuloma-excison-fast-growing-lesion-treatment/',                                     '/blog/pyogenic-granuloma-excision-fast-growing-lesion-treatment/'],
+  ['/skin-surgery/cyst-removal/',                                                                    '/procedures/skin/cyst-removal/'],
+  ['/thigh-lift-recovery-week-by-week-healing-timeline-i-roshan-vijayan/',                           '/blog/thigh-lift-recovery-week-by-week-healing-timeline/'],
 ]
 
 export const LEGACY_REDIRECTS: LegacyRedirect[] = [
