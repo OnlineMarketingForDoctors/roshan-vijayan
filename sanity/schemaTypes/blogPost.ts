@@ -34,6 +34,7 @@ export default defineType({
           {title: 'Body Lift Surgery', value: 'Body Lift Surgery'},
           {title: 'Breast Contouring Surgery', value: 'Breast Contouring Surgery'},
           {title: 'Minor Surgical Procedures', value: 'Minor Surgical Procedures'},
+          {title: 'Tummy Tuck Surgery', value: 'Tummy Tuck Surgery'},
         ],
       },
     }),
