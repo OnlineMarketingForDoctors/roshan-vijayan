@@ -27,18 +27,28 @@ export default defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'string',
+      type: 'reference',
+      to: [{type: 'blogCategory'}],
       description: 'Groups the post in the journal and drives the related posts shown beside it.',
-      options: {
-        list: [
-          {title: 'Body Lift Surgery', value: 'Body Lift Surgery'},
-          {title: 'Breast Contouring Surgery', value: 'Breast Contouring Surgery'},
-          {title: 'Minor Surgical Procedures', value: 'Minor Surgical Procedures'},
-          {title: 'Tummy Tuck Surgery', value: 'Tummy Tuck Surgery'},
-        ],
-      },
     }),
     defineField({name: 'publishedAt', title: 'Published at', type: 'datetime', initialValue: () => new Date().toISOString()}),
+    // Falls back to the title and the excerpt, which is what the pages used
+    // before these existed, so an empty field changes nothing.
+    defineField({
+      name: 'seoTitle',
+      title: 'Meta title',
+      type: 'string',
+      description: 'The browser tab and the search result heading. Leave empty to use the Title.',
+      validation: (r) => r.max(70).warning('Over about 60 characters is usually cut short in search results.'),
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'Meta description',
+      type: 'text',
+      rows: 3,
+      description: 'The search result summary. Leave empty to use the Excerpt.',
+      validation: (r) => r.max(180).warning('Over about 155 characters is usually cut short in search results.'),
+    }),
     defineField({
       name: 'body',
       title: 'Body',
@@ -53,10 +63,11 @@ export default defineType({
             {name: 'caption', title: 'Caption', type: 'string', description: 'Shown under the image.'},
           ],
         },
+        {type: 'htmlEmbed'},
       ],
     }),
     defineField({name: 'featured', title: 'Featured', type: 'boolean', initialValue: false}),
   ],
   orderings: [{title: 'Newest first', name: 'newest', by: [{field: 'publishedAt', direction: 'desc'}]}],
-  preview: {select: {title: 'title', subtitle: 'category', media: 'coverImage'}},
+  preview: {select: {title: 'title', subtitle: 'category.title', media: 'coverImage'}},
 })

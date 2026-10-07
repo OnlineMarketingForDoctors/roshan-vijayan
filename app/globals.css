@@ -1024,6 +1024,17 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .prose a:hover{color:var(--charcoal);border-color:var(--charcoal)}
 .prose ul,.prose ol{margin:0 0 1.3rem;padding-left:1.4rem}
 .prose li{margin-bottom:.5rem}
+/* A pasted HTML block sits in the prose and inherits it; a table inside one
+   scrolls rather than widening the page. */
+.prose-html{margin:1.6rem 0}
+.prose-html>:first-child{margin-top:0}
+.prose-html>:last-child{margin-bottom:0}
+.prose-html table{width:100%;border-collapse:collapse;font-size:.94rem;margin:1.2rem 0}
+.prose-html th,.prose-html td{text-align:left;vertical-align:top;padding:.7rem .8rem;
+  border-bottom:1px solid var(--line)}
+.prose-html th{font-weight:600;color:var(--charcoal)}
+.prose-html img,.prose-html iframe,.prose-html video{max-width:100%}
+.prose-html iframe{width:100%;border:0;border-radius:6px}
 .prose blockquote{margin:1.8rem 0;padding:.4rem 0 .4rem 1.6rem;border-left:3px solid var(--gold);
   font-family:var(--serif);font-style:italic;font-size:1.25rem;line-height:1.5;color:var(--charcoal)}
 .prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;

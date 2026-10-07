@@ -169,3 +169,35 @@ export const proseTable = defineType({
     }),
   },
 })
+
+/**
+ * A block of raw HTML, for the occasions the editor cannot express: an embed,
+ * a table pasted from elsewhere, markup a client has supplied.
+ *
+ * It is written into the page as given. Sanity has no way to edit a whole
+ * article as HTML — the body is portable text, not markup — so this is the
+ * shape that works: an ordinary block you drop in among the paragraphs and
+ * edit as source.
+ */
+export const htmlEmbed = defineType({
+  name: 'htmlEmbed',
+  title: 'HTML',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'html',
+      title: 'HTML',
+      type: 'text',
+      rows: 10,
+      description:
+        'Written into the page exactly as typed, so only paste markup you trust. Scripts are not run.',
+    }),
+  ],
+  preview: {
+    select: {html: 'html'},
+    prepare: ({html}: {html?: string}) => ({
+      title: 'HTML',
+      subtitle: (html || '').replace(/\s+/g, ' ').trim().slice(0, 72) || 'empty',
+    }),
+  },
+})

@@ -12,6 +12,14 @@ const components: PortableTextComponents = {
         </figure>
       )
     },
+    /* Written into the page as the editor typed it. Only people with Studio
+       access can author one, which is the same trust already placed in every
+       other field; nothing here is reachable by a site visitor. */
+    htmlEmbed: ({value}) => {
+      const html = typeof value?.html === 'string' ? value.html.trim() : ''
+      if (!html) return null
+      return <div className="prose-html" dangerouslySetInnerHTML={{__html: html}} />
+    },
     /* Portable text has no table, so this renders the proseTable object. The
        first cell of a row is its heading, and every other cell carries the
        column it sits under, which a phone shows as a label once the columns

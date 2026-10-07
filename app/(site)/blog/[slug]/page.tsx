@@ -61,8 +61,8 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
   if (!p) return {}
   return pageMetadata({
     path: `/blog/${slug}/`,
-    title: `${p.title} | RV Plastic Surgery`,
-    description: p.excerpt || undefined,
+    title: p.seoTitle || `${p.title} | RV Plastic Surgery`,
+    description: p.seoDescription || p.excerpt || undefined,
     image: p.coverImage ? urlFor(p.coverImage).width(1200).quality(80).url() : undefined,
     article: {published: p.publishedAt || undefined, section: p.category || undefined},
   })

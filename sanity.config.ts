@@ -43,6 +43,7 @@ export default defineConfig({
             S.divider(),
             S.documentTypeListItem('procedure').title('Procedures'),
             S.documentTypeListItem('blogPost').title('Blog posts'),
+            S.documentTypeListItem('blogCategory').title('Blog categories'),
             S.documentTypeListItem('review').title('Reviews'),
             S.documentTypeListItem('beforeAfterCase').title('Before & After'),
           ]),
