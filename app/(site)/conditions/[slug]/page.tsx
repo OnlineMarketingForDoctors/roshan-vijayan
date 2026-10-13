@@ -19,6 +19,28 @@ const DEF_HERO = '/images/web/procedures-hero.webp'
 const heroSrc = (img: unknown) =>
   (img as {asset?: unknown})?.asset ? urlFor(img as never).width(2000).quality(78).url() : DEF_HERO
 
+/**
+ * Splits the body into bands, one per H2, so the page alternates its ground
+ * instead of running as a single column of text. Anything before the first
+ * heading — the opening paragraphs — joins the first band rather than becoming
+ * a band of its own, which keeps the second heading on the tinted ground.
+ */
+type Block = {_type?: string; style?: string}
+
+function bands(body: unknown): Block[][] {
+  if (!Array.isArray(body)) return []
+  const out: Block[][] = []
+  const lead: Block[] = []
+  for (const block of body as Block[]) {
+    const heading = block?._type === 'block' && block?.style === 'h2'
+    if (heading) out.push(out.length ? [block] : [...lead, block])
+    else if (out.length) out[out.length - 1].push(block)
+    else lead.push(block)
+  }
+  // a body with no headings at all is still one band
+  return out.length ? out : lead.length ? [lead] : []
+}
+
 export async function generateStaticParams() {
   try {
     const rows = await client.fetch<{slug: string}[]>(conditionSlugsQuery)
@@ -79,13 +101,13 @@ export default async function ConditionPage({params}: Params) {
         </section>
       ) : null}
 
-      {c.body?.length ? (
-        <section className="section">
+      {bands(c.body).map((band, i) => (
+        <section className={`section${i % 2 ? ' bg-ivory2' : ''}`} key={i}>
           <div className="narrow prose reveal">
-            <PortableTextBody value={c.body} />
+            <PortableTextBody value={band} />
           </div>
         </section>
-      ) : null}
+      ))}
 
       {c.procedures?.length ? (
         <section className="section bg-ivory2">
