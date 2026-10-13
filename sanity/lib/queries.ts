@@ -83,8 +83,7 @@ export const conditionQuery = groq`*[_type=="condition" && slug.current==$slug][
   title, eyebrow, heroHeading, heroPromise, heroImage, medicalReview, body,
   whyHeading, whyIntro, whyPoints, ctaHeading, ctaBody,
   faqHeading, faqs[]{question, answer},
-  seoTitle, seoDescription,
-  procedures[]->{title, "slug": slug.current, category, overviewImage}
+  seoTitle, seoDescription
 }`
 
 /* ---- Procedures ---- */

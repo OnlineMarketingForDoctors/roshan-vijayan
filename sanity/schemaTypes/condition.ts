@@ -51,11 +51,6 @@ export default defineType({
         {type: 'htmlEmbed'},
       ],
     }),
-    defineField({
-      name: 'procedures', title: 'Related procedures', type: 'array', group: 'content',
-      of: [{type: 'reference', to: [{type: 'procedure'}]}],
-      description: 'Shown at the foot of the page as the way on from the condition.',
-    }),
     defineField({name: 'whyHeading', title: 'Why choose — heading', type: 'string', group: 'content'}),
     defineField({name: 'whyIntro', title: 'Why choose — intro', type: 'richText', group: 'content'}),
     defineField({

@@ -9,7 +9,6 @@ import {sanityFetch, sanityFetchRequired} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {conditionQuery, conditionSlugsQuery, conditionListQuery} from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
-import {procedurePath} from '@/lib/procedurePath'
 import GlanceIcon from '@/components/GlanceIcon'
 
 type Params = {params: Promise<{slug: string}>}
@@ -26,6 +25,12 @@ const heroSrc = (img: unknown) =>
  * a band of its own, which keeps the second heading on the tinted ground.
  */
 type Block = {_type?: string; style?: string}
+type ImageBlock = Block & {asset?: unknown; alt?: string; caption?: string}
+
+/** How many picture-carrying bands precede this one, so the sides alternate. */
+function pictureIndex(all: Block[][], i: number): number {
+  return all.slice(0, i).filter((b) => b.some((x) => x?._type === 'image')).length
+}
 
 function bands(body: unknown): Block[][] {
   if (!Array.isArray(body)) return []
@@ -101,29 +106,42 @@ export default async function ConditionPage({params}: Params) {
         </section>
       ) : null}
 
-      {bands(c.body).map((band, i) => (
-        <section className={`section${i % 2 ? ' bg-ivory2' : ''}`} key={i}>
-          <div className="narrow prose reveal">
-            <PortableTextBody value={band} />
-          </div>
-        </section>
-      ))}
-
-      {c.procedures?.length ? (
-        <section className="section bg-ivory2">
-          <div className="section-head center reveal">
-            <h2 className="display">How it is treated</h2>
-            <p>The procedures Mr Vijayan uses to address this, each explained in full.</p>
-          </div>
-          <div className="why-grid reveal">
-            {c.procedures.map((p: any) => (
-              <Link className="why-card" key={p.slug} href={procedurePath(p.category, p.slug)}>
-                <h4>{p.title}</h4>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      {bands(c.body).map((band, i) => {
+        // A band with a picture in it reads as a feature row — picture one
+        // side, the section's words the other — rather than an image dropped
+        // into the middle of a column. Sides alternate down the page.
+        const picture = band.find((b) => b?._type === 'image') as ImageBlock | undefined
+        const words = band.filter((b) => b !== picture)
+        const flip = pictureIndex(bands(c.body), i) % 2 === 1
+        return (
+          <section className={`section${i % 2 ? ' bg-ivory2' : ''}`} key={i}>
+            {picture?.asset ? (
+              <div className={`feature-row${flip ? ' flip' : ''}`}>
+                <div className="feature-media reveal">
+                  <div className="fm-frame">
+                    <img
+                      src={urlFor(picture as never).width(900).quality(82).url()}
+                      alt={picture.alt || ''}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  {picture.caption ? <p className="fm-caption">{picture.caption}</p> : null}
+                </div>
+                <div className="feature-copy reveal">
+                  <div className="prose">
+                    <PortableTextBody value={words} />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="narrow prose reveal">
+                <PortableTextBody value={band} />
+              </div>
+            )}
+          </section>
+        )
+      })}
 
       {c.whyPoints?.length ? (
         <section className="section bg-cream" id="why">
