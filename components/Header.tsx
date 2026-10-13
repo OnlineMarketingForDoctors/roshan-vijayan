@@ -183,9 +183,6 @@ export default function Header({
                     {c.title}
                   </Link>
                 ))}
-                <Link className="nav-menu-all" href="/conditions">
-                  All conditions
-                </Link>
               </span>
             ) : null}
           </span>

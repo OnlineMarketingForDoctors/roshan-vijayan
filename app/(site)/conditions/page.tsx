@@ -16,7 +16,10 @@ type Row = {
   heroPromise?: unknown
 }
 
-const DEF_HERO = '/images/web/procedures-hero.webp'
+// Mirrored from the home-page portrait so the subject sits right of centre,
+// clear of the veil that weights the left of a page hero — and so the hub
+// does not open on the same picture the procedures hub does.
+const DEF_HERO = '/images/web/conditions-hero.webp'
 
 export const metadata: Metadata = pageMetadata({
   path: '/conditions/',
