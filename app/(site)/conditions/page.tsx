@@ -16,9 +16,9 @@ type Row = {
   heroPromise?: unknown
 }
 
-// Mirrored from the home-page portrait so the subject sits right of centre,
-// clear of the veil that weights the left of a page hero — and so the hub
-// does not open on the same picture the procedures hub does.
+// Made for this page rather than borrowed from the procedures hub. The
+// subject sits right of centre and the left two thirds is open wall, which
+// is where the veil darkens and the headline sits.
 const DEF_HERO = '/images/web/conditions-hero.webp'
 
 export const metadata: Metadata = pageMetadata({
