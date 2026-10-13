@@ -7,9 +7,17 @@ import {pageMetadata} from '@/lib/meta'
 import {faqLd} from '@/lib/schema'
 import {sanityFetch, sanityFetchRequired} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
-import {conditionQuery, conditionSlugsQuery, conditionListQuery} from '@/sanity/lib/queries'
+import {
+  conditionQuery,
+  conditionSlugsQuery,
+  conditionListQuery,
+  reviewsQuery,
+  siteSettingsQuery,
+} from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
 import GlanceIcon from '@/components/GlanceIcon'
+import ReviewsCarousel, {type Review} from '@/components/ReviewsCarousel'
+import {FALLBACK_REVIEWS} from '@/sanity/lib/fallbacks'
 
 type Params = {params: Promise<{slug: string}>}
 
@@ -72,11 +80,15 @@ export default async function ConditionPage({params}: Params) {
   const c = await sanityFetchRequired<any>(conditionQuery, {slug})
   if (!c) notFound()
 
-  const others = (await sanityFetch<{_id: string; title: string; slug: string}[]>(
-    conditionListQuery,
-    {},
-    [],
-  )).filter((x) => x.slug !== slug)
+  const [all, reviews, settings] = await Promise.all([
+    sanityFetch<{_id: string; title: string; slug: string}[]>(conditionListQuery, {}, []),
+    sanityFetch<Review[]>(reviewsQuery, {}, []),
+    sanityFetch<any>(siteSettingsQuery, {}, null),
+  ])
+  const others = all.filter((x) => x.slug !== slug)
+  // the same fallback the procedure pages use, so an empty CMS never leaves a
+  // carousel with nothing in it
+  const reviewList = reviews.length ? reviews : FALLBACK_REVIEWS
 
   return (
     <>
@@ -97,6 +109,14 @@ export default async function ConditionPage({params}: Params) {
           />
         </div>
       </section>
+
+      {/* REVIEWS — between the hero and the byline, as on a procedure page */}
+      <ReviewsCarousel
+        reviews={reviewList}
+        reviewScore={settings?.reviewScore || '5.0'}
+        reviewCount={settings?.reviewCount ?? 45}
+        reviewSource={settings?.reviewSource || 'iWantGreatCare'}
+      />
 
       {c.medicalReview ? (
         <section className="section" style={{paddingTop: '2.6rem', paddingBottom: 0}}>
