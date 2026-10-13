@@ -32,6 +32,9 @@ export default defineType({
       description: 'Falls back to the Title if empty.',
     }),
     defineField({name: 'heroPromise', title: 'Hero promise (one line)', type: 'richText', group: 'content'}),
+    // The named clinician taking responsibility for the medical content, shown
+    // above the article exactly as it is on a procedure page.
+    defineField({name: 'medicalReview', title: 'Medically reviewed by', type: 'richText', group: 'content'}),
     defineField({
       name: 'heroImage', title: 'Hero image', type: 'image', options: {hotspot: true}, group: 'content',
       fields: [{name: 'alt', title: 'Alt text', type: 'string'}],
@@ -52,6 +55,28 @@ export default defineType({
       name: 'procedures', title: 'Related procedures', type: 'array', group: 'content',
       of: [{type: 'reference', to: [{type: 'procedure'}]}],
       description: 'Shown at the foot of the page as the way on from the condition.',
+    }),
+    defineField({name: 'whyHeading', title: 'Why choose — heading', type: 'string', group: 'content'}),
+    defineField({name: 'whyIntro', title: 'Why choose — intro', type: 'richText', group: 'content'}),
+    defineField({
+      name: 'whyPoints', title: 'Why choose — points', type: 'array', of: [{type: 'string'}],
+      group: 'content',
+    }),
+    defineField({name: 'ctaHeading', title: 'Closing call to action — heading', type: 'string', group: 'content'}),
+    defineField({name: 'ctaBody', title: 'Closing call to action — body', type: 'richText', group: 'content'}),
+    defineField({name: 'faqHeading', title: 'FAQ heading', type: 'string', group: 'content'}),
+    defineField({
+      name: 'faqs', title: 'FAQs', type: 'array', group: 'content',
+      // declared here rather than shared, as the procedure pages declare theirs
+      of: [{
+        type: 'object', name: 'faq',
+        fields: [
+          {name: 'question', title: 'Question', type: 'string'},
+          {name: 'answer', title: 'Answer', type: 'richText'},
+        ],
+        preview: {select: {title: 'question'}},
+      }],
+      description: 'Also published as FAQPage structured data, from these same words.',
     }),
     defineField({
       name: 'order', title: 'Order', type: 'number', group: 'content',

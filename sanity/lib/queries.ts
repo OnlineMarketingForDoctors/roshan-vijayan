@@ -80,7 +80,10 @@ export const conditionListQuery = groq`*[_type=="condition" && defined(slug.curr
 export const conditionSlugsQuery = groq`*[_type=="condition" && defined(slug.current)]{"slug": slug.current}`
 
 export const conditionQuery = groq`*[_type=="condition" && slug.current==$slug][0]{
-  title, eyebrow, heroHeading, heroPromise, heroImage, body, seoTitle, seoDescription,
+  title, eyebrow, heroHeading, heroPromise, heroImage, medicalReview, body,
+  whyHeading, whyIntro, whyPoints, ctaHeading, ctaBody,
+  faqHeading, faqs[]{question, answer},
+  seoTitle, seoDescription,
   procedures[]->{title, "slug": slug.current, category, overviewImage}
 }`
 

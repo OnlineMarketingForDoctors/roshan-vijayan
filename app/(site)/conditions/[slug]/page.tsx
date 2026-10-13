@@ -4,11 +4,13 @@ import type {Metadata} from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import PortableTextBody, {toPlain} from '@/components/PortableTextBody'
 import {pageMetadata} from '@/lib/meta'
+import {faqLd} from '@/lib/schema'
 import {sanityFetch, sanityFetchRequired} from '@/sanity/lib/fetch'
 import {client} from '@/sanity/lib/client'
 import {conditionQuery, conditionSlugsQuery, conditionListQuery} from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
 import {procedurePath} from '@/lib/procedurePath'
+import GlanceIcon from '@/components/GlanceIcon'
 
 type Params = {params: Promise<{slug: string}>}
 
@@ -69,6 +71,14 @@ export default async function ConditionPage({params}: Params) {
         </div>
       </section>
 
+      {c.medicalReview ? (
+        <section className="section" style={{paddingTop: '2.6rem', paddingBottom: 0}}>
+          <div className="narrow med-review reveal">
+            <PortableTextBody value={c.medicalReview} />
+          </div>
+        </section>
+      ) : null}
+
       {c.body?.length ? (
         <section className="section">
           <div className="narrow prose reveal">
@@ -89,6 +99,61 @@ export default async function ConditionPage({params}: Params) {
                 <h4>{p.title}</h4>
               </Link>
             ))}
+          </div>
+        </section>
+      ) : null}
+
+      {c.whyPoints?.length ? (
+        <section className="section bg-cream" id="why">
+          <div className="section-head center reveal">
+            <h2 className="display">{c.whyHeading || 'Why choose Mr Roshan Vijayan'}</h2>
+            <PortableTextBody value={c.whyIntro} />
+          </div>
+          <div className="why-grid reveal">
+            {c.whyPoints.map((point: string, i: number) => (
+              <div className="why-card" key={i}>
+                <GlanceIcon icon="check" className="wc-icon" />
+                <h4>{point}</h4>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {c.faqs?.length ? (
+        <section className="section bg-ivory2" id="faq">
+          <div className="section-head center reveal">
+            <h2 className="display">{c.faqHeading || 'Frequently asked questions'}</h2>
+          </div>
+          <div className="faq-list reveal">
+            {c.faqs.map((f: any, i: number) => (
+              <details className="faq-item" key={i}>
+                <summary>
+                  <h3>{f.question}</h3>
+                </summary>
+                <PortableTextBody value={f.answer} />
+              </details>
+            ))}
+          </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                faqLd(c.faqs.map((f: any) => ({question: f.question, answer: toPlain(f.answer)}))),
+              ),
+            }}
+          />
+        </section>
+      ) : null}
+
+      {c.ctaHeading || c.ctaBody ? (
+        <section className="section center" id="book">
+          <div className="narrow reveal">
+            <h2 className="display">{c.ctaHeading || 'Book your consultation'}</h2>
+            <PortableTextBody value={c.ctaBody} />
+            <Link className="btn btn-pill btn-gold" href="/contact" style={{marginTop: '1.6rem'}}>
+              Request a Consultation
+            </Link>
           </div>
         </section>
       ) : null}
