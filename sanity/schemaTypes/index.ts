@@ -1,5 +1,6 @@
 import siteSettings from './siteSettings'
 import procedure from './procedure'
+import condition from './condition'
 import blogPost from './blogPost'
 import blogCategory from './blogCategory'
 import review from './review'
@@ -13,6 +14,7 @@ import {seo, pageHero, ctaBand, labelledItem, richText, titledItem, statItem, pr
 export const schemaTypes = [
   siteSettings,
   procedure,
+  condition,
   blogPost,
   blogCategory,
   review,

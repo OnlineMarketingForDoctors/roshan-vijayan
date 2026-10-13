@@ -1,6 +1,6 @@
 import type {MetadataRoute} from 'next'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {procedureSlugsQuery, blogSlugsQuery, beforeAfterQuery} from '@/sanity/lib/queries'
+import {procedureSlugsQuery, blogSlugsQuery, beforeAfterQuery, conditionListQuery} from '@/sanity/lib/queries'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import {absoluteUrl} from '@/lib/site'
 
@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {path: '/', priority: 1},
     {path: '/about/', priority: 0.8},
     {path: '/procedures/', priority: 0.9},
+    {path: '/conditions/', priority: 0.8},
     {path: '/gallery/', priority: 0.8},
     {path: '/locations/', priority: 0.7},
     {path: '/blog/', priority: 0.6},
@@ -29,10 +30,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // page, carries a noindex tag, and should not be offered to crawlers
   ]
 
-  const [procedures, posts, baCases] = await Promise.all([
+  const [procedures, posts, baCases, conditions] = await Promise.all([
     sanityFetch<{slug: string; category?: string}[]>(procedureSlugsQuery, {}, []),
     sanityFetch<{slug: string}[]>(blogSlugsQuery, {}, []),
     sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
+    sanityFetch<{slug: string}[]>(conditionListQuery, {}, []),
   ])
 
   return [
@@ -48,6 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: absoluteUrl(`/gallery/${p.slug}/`),
       priority: 0.7,
     })),
+    ...conditions.map((c) => ({url: absoluteUrl(`/conditions/${c.slug}/`), priority: 0.8})),
     ...posts
       .filter((p) => p.slug)
       .map((p) => ({url: absoluteUrl(`/blog/${p.slug}/`), priority: 0.5})),

@@ -42,6 +42,7 @@ export default defineConfig({
               .child(S.document().schemaType('locationsPage').documentId('locationsPage')),
             S.divider(),
             S.documentTypeListItem('procedure').title('Procedures'),
+            S.documentTypeListItem('condition').title('Conditions'),
             S.documentTypeListItem('blogPost').title('Blog posts'),
             S.documentTypeListItem('blogCategory').title('Blog categories'),
             S.documentTypeListItem('review').title('Reviews'),

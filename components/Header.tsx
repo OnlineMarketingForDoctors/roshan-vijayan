@@ -7,6 +7,8 @@ import {procedurePath} from '@/lib/procedurePath'
 type Procedure = {slug: string; title: string; category?: string; image?: string | null}
 /** A before & after treatment, one per page under /gallery. */
 type Result = {slug: string; title: string}
+/** A condition, one per page under /conditions. */
+type Condition = {slug: string; title: string}
 type Settings = {phone?: string} | null
 
 /** Menu columns, in display order. Headings link to the matching band on /procedures. */
@@ -29,10 +31,12 @@ export default function Header({
   settings,
   procedures,
   results = [],
+  conditions = [],
 }: {
   settings: Settings
   procedures: Procedure[]
   results?: Result[]
+  conditions?: Condition[]
 }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -164,6 +168,28 @@ export default function Header({
             )}
           </span>
           <span className="nav-drop">
+            <Link href="/conditions">
+              Conditions
+              {conditions.length ? (
+                <span className="nav-caret" aria-hidden="true">
+                  ▾
+                </span>
+              ) : null}
+            </Link>
+            {conditions.length ? (
+              <span className="nav-menu">
+                {conditions.map((c) => (
+                  <Link key={c.slug} href={`/conditions/${c.slug}`}>
+                    {c.title}
+                  </Link>
+                ))}
+                <Link className="nav-menu-all" href="/conditions">
+                  All conditions
+                </Link>
+              </span>
+            ) : null}
+          </span>
+          <span className="nav-drop">
             <Link href="/gallery">
               Before &amp; After
               {results.length ? (
@@ -264,6 +290,19 @@ export default function Header({
               </div>
             </details>
           ))}
+          <Link href="/conditions" onClick={close}>Conditions</Link>
+          {conditions.length ? (
+            <details className="mm-group">
+              <summary className="mm-head">Browse conditions</summary>
+              <div className="mm-items">
+                {conditions.map((c) => (
+                  <Link key={c.slug} href={`/conditions/${c.slug}`} onClick={close}>
+                    {c.title}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          ) : null}
           <Link href="/gallery" onClick={close}>Before &amp; After</Link>
           {results.length ? (
             <details className="mm-group">

@@ -1,5 +1,5 @@
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {siteSettingsQuery, procedureListQuery, beforeAfterQuery} from '@/sanity/lib/queries'
+import {siteSettingsQuery, procedureListQuery, beforeAfterQuery, conditionListQuery} from '@/sanity/lib/queries'
 import {urlFor} from '@/sanity/lib/image'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import Header from '@/components/Header'
@@ -25,10 +25,11 @@ type ProcedureRow = {
 }
 
 export default async function SiteLayout({children}: {children: React.ReactNode}) {
-  const [settings, procedures, baCases] = await Promise.all([
+  const [settings, procedures, baCases, conditions] = await Promise.all([
     sanityFetch(siteSettingsQuery, {}, null),
     sanityFetch<ProcedureRow[]>(procedureListQuery, {}, []),
     sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
+    sanityFetch<{title: string; slug: string}[]>(conditionListQuery, {}, []),
   ])
 
   // Build the menu thumbnails here rather than in the header, so the client
@@ -48,7 +49,12 @@ export default async function SiteLayout({children}: {children: React.ReactNode}
   return (
     <>
       <div className="grain" aria-hidden="true" />
-      <Header settings={settings} procedures={navProcedures} results={baTreatments} />
+      <Header
+        settings={settings}
+        procedures={navProcedures}
+        results={baTreatments}
+        conditions={(conditions || []).map((c) => ({slug: c.slug, title: c.title}))}
+      />
       <main>{children}</main>
       <Footer settings={settings} />
       <Reveal />

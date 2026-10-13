@@ -24,20 +24,23 @@ export const beforeAfterQuery = groq`*[_type=="beforeAfterCase" && defined(befor
 
 /* ---- Blog ---- */
 /*
- * Category reads through coalesce for the length of the migration: it was a
- * string on the post and is now a reference to a blogCategory, and this returns
- * the name either way. Dereferencing a string yields null rather than an error,
- * so the old shape falls through to itself. Everything downstream still receives
- * a plain name and none of it had to change.
+ * Category is a reference to a blogCategory, read as its name so everything
+ * downstream still receives a plain string and none of it had to change.
+ *
+ * It is dereferenced outright rather than coalesced back to the raw field. A
+ * coalesce was useful while posts still held the old string, but it returns the
+ * reference object itself whenever the dereference comes back empty — a stale
+ * CDN view was enough — and an object reaching the page is a render error, not
+ * a missing category.
  */
 export const blogListQuery = groq`*[_type=="blogPost" && defined(publishedAt)]
   | order(featured desc, publishedAt desc){
-    _id, title, "slug": slug.current, excerpt, publishedAt, featured, "category": coalesce(category->title, category),
+    _id, title, "slug": slug.current, excerpt, publishedAt, featured, "category": category->title,
     coverImage, "plain": pt::text(body)
   }`
 
 /** Category names with their post counts, for the journal sidebar. */
-export const blogCategoriesQuery = groq`*[_type=="blogPost" && defined(category)]{"category": coalesce(category->title, category)}`
+export const blogCategoriesQuery = groq`*[_type=="blogPost" && defined(category)]{"category": category->title}`
 
 export const blogSlugsQuery = groq`*[_type=="blogPost" && defined(slug.current)]{"slug": slug.current}`
 
@@ -48,11 +51,11 @@ export const blogSlugsQuery = groq`*[_type=="blogPost" && defined(slug.current)]
  */
 export const blogIndexQuery = groq`*[_type=="blogPost" && defined(slug.current)]
   | order(title asc){
-    _id, title, "slug": slug.current, "category": coalesce(category->title, category), excerpt
+    _id, title, "slug": slug.current, "category": category->title, excerpt
   }`
 
 export const blogPostQuery = groq`*[_type=="blogPost" && slug.current==$slug][0]{
-  title, excerpt, publishedAt, coverImage, body, seoTitle, seoDescription, "category": coalesce(category->title, category)
+  title, excerpt, publishedAt, coverImage, body, seoTitle, seoDescription, "category": category->title
 }`
 
 /**
@@ -61,10 +64,24 @@ export const blogPostQuery = groq`*[_type=="blogPost" && slug.current==$slug][0]
  * current one without coming up short.
  */
 export const relatedPostsQuery = groq`{
-  "sameCategory": *[_type=="blogPost" && defined(publishedAt) && coalesce(category->title, category)==$category && slug.current!=$slug]
-    | order(publishedAt desc)[0...6]{title, "slug": slug.current, publishedAt, coverImage, "category": coalesce(category->title, category)},
+  "sameCategory": *[_type=="blogPost" && defined(publishedAt) && category->title==$category && slug.current!=$slug]
+    | order(publishedAt desc)[0...6]{title, "slug": slug.current, publishedAt, coverImage, "category": category->title},
   "recent": *[_type=="blogPost" && defined(publishedAt) && slug.current!=$slug]
-    | order(publishedAt desc)[0...6]{title, "slug": slug.current, publishedAt, coverImage, "category": coalesce(category->title, category)}
+    | order(publishedAt desc)[0...6]{title, "slug": slug.current, publishedAt, coverImage, "category": category->title}
+}`
+
+/* ---- Conditions ---- */
+/** Menu and index: enough to list them, nothing heavier. */
+export const conditionListQuery = groq`*[_type=="condition" && defined(slug.current)]
+  | order(order asc, title asc){
+    _id, title, "slug": slug.current, eyebrow, heroImage, heroPromise
+  }`
+
+export const conditionSlugsQuery = groq`*[_type=="condition" && defined(slug.current)]{"slug": slug.current}`
+
+export const conditionQuery = groq`*[_type=="condition" && slug.current==$slug][0]{
+  title, eyebrow, heroHeading, heroPromise, heroImage, body, seoTitle, seoDescription,
+  procedures[]->{title, "slug": slug.current, category, overviewImage}
 }`
 
 /* ---- Procedures ---- */
