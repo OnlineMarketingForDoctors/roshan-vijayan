@@ -4,7 +4,7 @@ import {webPageLd} from '@/lib/schema'
 import {pageMetadata} from '@/lib/meta'
 import type {Metadata} from 'next'
 import {sanityFetch} from '@/sanity/lib/fetch'
-import {procedureListQuery, blogIndexQuery, beforeAfterQuery} from '@/sanity/lib/queries'
+import {procedureListQuery, blogIndexQuery, beforeAfterQuery, conditionListQuery} from '@/sanity/lib/queries'
 import {buildBAProcedures, type SanityBACase} from '@/sanity/lib/ba'
 import {procedurePath, categorySegment} from '@/lib/procedurePath'
 
@@ -17,6 +17,7 @@ export const metadata: Metadata = pageMetadata({
 
 type Procedure = {_id: string; title: string; slug: string; category?: string}
 type Post = {_id: string; title: string; slug: string; category?: string}
+type Condition = {_id: string; title: string; slug: string}
 
 // The pages a reader would look for. /thank-you-contact is left out on
 // purpose — it is where the form lands, not somewhere to navigate to.
@@ -24,6 +25,7 @@ const PAGES = [
   {href: '/', label: 'Home'},
   {href: '/about', label: 'About Mr Vijayan'},
   {href: '/procedures', label: 'Procedures'},
+  {href: '/conditions', label: 'Conditions'},
   {href: '/gallery', label: 'Before & After'},
   {href: '/locations', label: 'Locations'},
   {href: '/blog', label: 'Journal'},
@@ -45,10 +47,11 @@ const AREAS: {seg: string; title: string}[] = [
 ]
 
 export default async function SitemapPage() {
-  const [procedures, posts, baCases] = await Promise.all([
+  const [procedures, posts, baCases, conditions] = await Promise.all([
     sanityFetch<Procedure[]>(procedureListQuery, {}, []),
     sanityFetch<Post[]>(blogIndexQuery, {}, []),
     sanityFetch<SanityBACase[]>(beforeAfterQuery, {}, []),
+    sanityFetch<Condition[]>(conditionListQuery, {}, []),
   ])
   const results = buildBAProcedures(baCases)
 
@@ -118,6 +121,19 @@ export default async function SitemapPage() {
                   </ul>
                 </div>
               ))}
+            </section>
+          ) : null}
+
+          {conditions.length ? (
+            <section className="sitemap-block">
+              <h2>Conditions</h2>
+              <ul className="sitemap-list">
+                {conditions.map((c) => (
+                  <li key={c._id}>
+                    <Link href={`/conditions/${c.slug}`}>{c.title}</Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 
