@@ -270,6 +270,27 @@ export const BA_PROCEDURES: BAProcedure[] = [
       },
     ],
   },
+  {
+    // Gallery only, as above: procedureSlugs stays empty so these two views
+    // never reach the facelift procedure page.
+    slug: 'face-and-neck-lift',
+    title: 'Face and Neck Lift',
+    area: 'Face',
+    procedureSlugs: [],
+    patients: [
+      {
+        caption: 'Face and Neck Lift \u00b7 Patient one',
+        beforeUrl: img('face-and-neck-lift-1', 'before'),
+        afterUrl: img('face-and-neck-lift-1', 'after'),
+      },
+      {
+        // the same woman at a three-quarter angle, not a second patient
+        caption: 'Face and Neck Lift \u00b7 Patient one \u00b7 Right 3/4',
+        beforeUrl: img('face-and-neck-lift-2', 'before'),
+        afterUrl: img('face-and-neck-lift-2', 'after'),
+      },
+    ],
+  },
 ]
 
 /** cases to show on a given Sanity procedure page, in BA_PROCEDURES order */
