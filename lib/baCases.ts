@@ -249,6 +249,27 @@ export const BA_PROCEDURES: BAProcedure[] = [
       },
     ],
   },
+  {
+    // Gallery only. procedureSlugs is deliberately empty, which is what keeps
+    // these two views off the male gynaecomastia reduction procedure page.
+    slug: 'gynaecomastia-reduction',
+    title: 'Gynaecomastia Reduction',
+    area: 'Body',
+    procedureSlugs: [],
+    patients: [
+      {
+        caption: 'Gynaecomastia Reduction \u00b7 Patient one',
+        beforeUrl: img('gynaecomastia-reduction-1', 'before'),
+        afterUrl: img('gynaecomastia-reduction-1', 'after'),
+      },
+      {
+        // the same man at a three-quarter angle, not a second patient
+        caption: 'Gynaecomastia Reduction \u00b7 Patient one \u00b7 Oblique',
+        beforeUrl: img('gynaecomastia-reduction-2', 'before'),
+        afterUrl: img('gynaecomastia-reduction-2', 'after'),
+      },
+    ],
+  },
 ]
 
 /** cases to show on a given Sanity procedure page, in BA_PROCEDURES order */
