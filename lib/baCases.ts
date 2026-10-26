@@ -230,6 +230,17 @@ export const BA_PROCEDURES: BAProcedure[] = [
         beforeUrl: img('nose-contouring-2', 'before'),
         afterUrl: img('nose-contouring-2', 'after'),
       },
+      {
+        caption: 'Nose contouring \u00b7 Patient three',
+        beforeUrl: img('nose-contouring-3', 'before'),
+        afterUrl: img('nose-contouring-3', 'after'),
+      },
+      {
+        // the same man in profile, not a fourth patient
+        caption: 'Nose contouring \u00b7 Patient three \u00b7 Left profile',
+        beforeUrl: img('nose-contouring-4', 'before'),
+        afterUrl: img('nose-contouring-4', 'after'),
+      },
     ],
   },
   {
