@@ -289,6 +289,12 @@ export const BA_PROCEDURES: BAProcedure[] = [
         beforeUrl: img('face-and-neck-lift-2', 'before'),
         afterUrl: img('face-and-neck-lift-2', 'after'),
       },
+      {
+        // and the opposite side, still the same woman
+        caption: 'Face and Neck Lift \u00b7 Patient one \u00b7 Left profile',
+        beforeUrl: img('face-and-neck-lift-3', 'before'),
+        afterUrl: img('face-and-neck-lift-3', 'after'),
+      },
     ],
   },
 ]
