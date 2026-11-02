@@ -25,6 +25,13 @@ type Settings = {
 
 const FALLBACK_LOCATIONS: Location[] = locationSummaries()
 
+/** Digits only, with a leading UK 0 swapped for +44, as the header does. */
+function telHref(phone: string) {
+  let d = phone.replace(/[^\d+]/g, '')
+  if (d.charAt(0) === '0') d = '+44' + d.slice(1)
+  return 'tel:' + d
+}
+
 export default function Footer({settings}: {settings: Settings}) {
   const phone = settings?.phone || '01727 221799'
   const email = settings?.email || 'enquiries@vijayan.co.uk'
@@ -51,8 +58,12 @@ export default function Footer({settings}: {settings: Settings}) {
         </nav>
         <div className="foot-contact">
           <h5>Contact</h5>
-          <p>{phone}</p>
-          <p>{email}</p>
+          <p>
+            <a href={telHref(phone)}>{phone}</a>
+          </p>
+          <p>
+            <a href={`mailto:${email}`}>{email}</a>
+          </p>
         </div>
         <div className="foot-locations">
           <h5>Locations</h5>

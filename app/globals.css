@@ -526,6 +526,9 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .foot-nav a{color:rgba(246,240,230,.78);font-size:.92rem;transition:.3s}
 .foot-nav a:hover{color:var(--gold)}
 .foot-contact p,.foot-locations p{color:rgba(246,240,230,.78);font-size:.92rem;line-height:1.5}
+/* the phone and email are links; they read as the text around them until hovered */
+.foot-contact a{transition:.3s}
+.foot-contact a:hover{color:var(--gold)}
 .foot-locations strong{color:var(--ivory);font-weight:500}
 .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:1.6rem;
   font-size:.78rem;letter-spacing:.06em;color:rgba(246,240,230,.5)}
