@@ -84,6 +84,7 @@ export default function BeforeAfterGallery({procedures}: {procedures: BAProcedur
               ? 'Drag the handle on the image to reveal the result.'
               : 'Drag the handle on each image to reveal the result.'}
           </p>
+          {current.note ? <p className="ba-note">{current.note}</p> : null}
         </div>
         <div
           className={`bag-grid${current.patients.length === 1 ? ' bag-grid-one' : ''}`}

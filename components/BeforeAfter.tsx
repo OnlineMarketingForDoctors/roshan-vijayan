@@ -35,18 +35,34 @@ export default function BeforeAfter({
   )
   const [active, setActive] = useState(areas[0] ?? '')
 
+  // each patient keeps a handle on its group's note, so a note can be shown
+  // once for the group rather than under every frame
   const casesFor = (area: string) =>
-    procedures.filter((p) => p.area === area).flatMap((p) => p.patients)
+    procedures
+      .filter((p) => p.area === area)
+      .flatMap((p) => p.patients.map((c) => ({c, note: p.note})))
+
+  /** the distinct notes belonging to the groups actually on show */
+  const notesOf = (shown: {note?: string}[]) =>
+    shown.reduce<string[]>(
+      (acc, e) => (e.note && !acc.includes(e.note) ? [...acc, e.note] : acc),
+      [],
+    )
 
   if (!tabs) {
-    const all = procedures.flatMap((p) => p.patients)
+    const all = procedures.flatMap((p) => p.patients.map((c) => ({c, note: p.note})))
     const shown = all.slice(0, perTab)
     if (!shown.length) return null
     return (
       <div className="ba-panels reveal">
+        {notesOf(shown).map((n) => (
+          <p className="ba-note" key={n}>
+            {n}
+          </p>
+        ))}
         <div className={`ba-grid${shown.length === 1 ? ' ba-grid-one' : ''}`}>
-          {shown.map((c, i) => (
-            <BASlider key={i} c={c} />
+          {shown.map((e, i) => (
+            <BASlider key={i} c={e.c} />
           ))}
         </div>
         <p className="ba-more">
@@ -84,9 +100,14 @@ export default function BeforeAfter({
           const isActive = active === area
           return (
             <div key={area} className={`ba-panel${isActive ? ' active' : ''}`} hidden={!isActive}>
+              {notesOf(shown).map((n) => (
+                <p className="ba-note" key={n}>
+                  {n}
+                </p>
+              ))}
               <div className={`ba-grid${shown.length === 1 ? ' ba-grid-one' : ''}`}>
-                {shown.map((c, i) => (
-                  <BASlider key={`${area}-${i}`} c={c} />
+                {shown.map((e, i) => (
+                  <BASlider key={`${area}-${i}`} c={e.c} />
                 ))}
               </div>
               <p className="ba-more">

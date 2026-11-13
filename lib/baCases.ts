@@ -39,6 +39,12 @@ export type BAProcedure = {
    */
   procedureSlugs: string[]
   patients: BAPatient[]
+  /**
+   * One note about the patient, shown once beside their cases rather than
+   * under each frame. Several entries here are different views of one person,
+   * so what is true of them is true of the whole group, not of one slider.
+   */
+  note?: string
 }
 
 const img = (slug: string, kind: 'before' | 'after') => `/images/ba/${slug}-${kind}.jpg`
@@ -288,6 +294,8 @@ export const BA_PROCEDURES: BAProcedure[] = [
     title: 'Face and Neck Lift',
     area: 'Face',
     procedureSlugs: [],
+    note:
+      'This patient underwent facelift surgery many years ago, elsewhere. For this revision face and neck lift she wanted a very natural, subtle result with more cheek fullness, and not to look overly \'done\'.',
     patients: [
       {
         caption: 'Face and Neck Lift \u00b7 Patient one',

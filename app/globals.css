@@ -444,6 +444,13 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
 .bag-head{margin-bottom:clamp(1.3rem,3vw,1.9rem)}
 .bag-head h2{font-size:clamp(1.6rem,3vw,2.3rem);margin:0 0 .5rem}
 .bag-head p{color:var(--soft);font-size:.95rem;max-width:44rem}
+/* One note about the patient, shown once beside their cases. Several entries
+   under a treatment can be views of one person, so this belongs to the set,
+   not to a single frame. */
+.ba-note{color:var(--soft);font-size:.95rem;line-height:1.65;max-width:44rem;
+  margin:.9rem 0 0;padding-left:.9rem;border-left:2px solid var(--gold)}
+.ba-panels .ba-note{margin:0 auto clamp(1.2rem,2.5vw,1.8rem)}
+.ba-page-note{margin:0 auto clamp(1.6rem,3vw,2.2rem)}
 .bag-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.4rem,3vw,2.2rem);
   animation:baFade .5s var(--ease)}
 .bag-grid-one{grid-template-columns:1fr;max-width:560px}

@@ -56,6 +56,12 @@ export default defineType({
       description: 'Only when the result is at a stated point, e.g. 1 week after. Leave empty for After.',
     }),
     defineField({
+      name: 'patientNote', title: 'Note about this patient', type: 'text', rows: 3,
+      description:
+        'Shown once beside every case sharing this Treatment, not under each image. ' +
+        'Where several cases are views of one person, fill this in on one of them only.',
+    }),
+    defineField({
       name: 'procedures',
       title: 'Procedure pages',
       type: 'array',

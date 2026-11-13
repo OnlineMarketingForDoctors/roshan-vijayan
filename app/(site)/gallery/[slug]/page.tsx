@@ -81,6 +81,9 @@ export default async function BAProcedurePage({params}: Params) {
       </section>
 
       <section className="section">
+        {p.note ? (
+          <p className="ba-note ba-page-note reveal">{p.note}</p>
+        ) : null}
         <div className={`bag-grid ba-page-grid${one ? ' bag-grid-one' : ''}`}>
           {p.patients.map((c, i) => (
             <BASlider key={`${p.slug}-${i}`} c={c} />

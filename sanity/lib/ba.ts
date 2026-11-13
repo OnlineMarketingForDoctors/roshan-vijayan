@@ -10,6 +10,7 @@ export type SanityBACase = {
   afterImage?: unknown
   beforeLabel?: string
   afterLabel?: string
+  patientNote?: string
   procedureSlugs?: string[]
 }
 
@@ -55,6 +56,11 @@ export function buildBAProcedures(cases: SanityBACase[] | null | undefined): BAP
     for (const s of c.procedureSlugs || []) {
       if (s && !group.procedureSlugs.includes(s)) group.procedureSlugs.push(s)
     }
+
+    // The note belongs to the person, not the frame, so it is written on one
+    // case and shown once for the group. The first one found wins, which keeps
+    // it to a single note even if a second case is filled in by mistake.
+    if (!group.note && c.patientNote?.trim()) group.note = c.patientNote.trim()
 
     const patient: BAPatient = {
       caption: c.caption,
