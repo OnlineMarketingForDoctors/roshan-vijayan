@@ -1619,12 +1619,16 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
    land on the breadcrumbs. It shrinks and the hero takes a strip of bottom
    padding for it to sit in, which keeps the copy clear. */
 @media(max-width:860px){
+  /* the copy is centred at this width, so the badge is centred under it
+     rather than left hanging off one corner */
   .hero::after,
   .page-hero::after,
   .proc-hero::after,
   .page-head::after{
     width:86px;
-    right:clamp(1.2rem,5vw,3.4rem);
+    right:auto;
+    left:50%;
+    transform:translateX(-50%);
     bottom:1.1rem;
     padding:.5rem;
     box-shadow:0 6px 18px rgba(28,20,11,.14);
@@ -1638,7 +1642,8 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .hero-inner::after{
     content:"";
     position:absolute;
-    right:clamp(1.2rem,5vw,3.4rem);
+    left:50%;
+    transform:translateX(-50%);
     bottom:1.1rem;
     z-index:3;
     width:86px;
