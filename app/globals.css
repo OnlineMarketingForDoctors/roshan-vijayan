@@ -1391,7 +1391,7 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
    carry a full .page-hero. The site header is fixed, ivory, and unreadable
    over a pale background until it scrolls, so a page without a hero needs a
    dark band of its own to sit under. */
-.page-head{background:var(--charcoal);color:var(--ivory);text-align:center;
+.page-head{position:relative;background:var(--charcoal);color:var(--ivory);text-align:center;
   padding:clamp(10rem,15vw,13rem) clamp(1.2rem,5vw,5rem) clamp(3.4rem,6vw,5rem)}
 .page-head .eyebrow{color:var(--champagne)}
 .page-head h1{font-size:clamp(2.4rem,5vw,4.2rem)}
@@ -1585,4 +1585,52 @@ h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);l
   .bp-back{color:var(--gold-deep)}
   .bp-meta{color:var(--soft);justify-content:center}
   .bp-cat{border-color:rgba(154,124,68,.45);color:var(--gold-deep)}
+}
+
+/* iWantGreatCare Certificate of Excellence, bottom right of every hero band.
+   Drawn as a pseudo-element on the four hero containers rather than placed in
+   each page, so no route can be missed and a new one picks it up for free. */
+.hero::after,
+.page-hero::after,
+.proc-hero::after,
+.page-head::after{
+  content:"";
+  position:absolute;
+  right:clamp(1.2rem,5vw,5rem);
+  bottom:clamp(1.4rem,3.5vw,3rem);
+  z-index:3;
+  width:clamp(104px,11vw,148px);
+  aspect-ratio:360 / 276;
+  padding:clamp(.6rem,1vw,.9rem);
+  box-sizing:content-box;
+  background:#fff url("/images/certificate-of-excellence-2026.png") center/contain no-repeat;
+  background-origin:content-box;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(28,20,11,.18);
+  pointer-events:none;
+}
+/* the text band heroes are short, so the badge sits tighter to the corner */
+.page-head::after{bottom:clamp(1.2rem,2.5vw,2rem)}
+/* the home page hero ends in the USP strip, which is pinned to its foot, so
+   the badge clears that rather than sitting on top of it */
+.hero::after{bottom:calc(118px + clamp(1.4rem,2.5vw,2.2rem))}
+
+/* On a phone the hero stacks and its copy is centred, so a corner badge would
+   land on the breadcrumbs. It shrinks and the hero takes a strip of bottom
+   padding for it to sit in, which keeps the copy clear. */
+@media(max-width:860px){
+  .hero::after,
+  .page-hero::after,
+  .proc-hero::after,
+  .page-head::after{
+    width:86px;
+    right:clamp(1.2rem,5vw,3.4rem);
+    bottom:1.1rem;
+    padding:.5rem;
+    box-shadow:0 6px 18px rgba(28,20,11,.14);
+  }
+  .hero::after{bottom:1.1rem}
+  .hero-inner{padding-bottom:7.4rem}
+  .page-hero-inner,.proc-hero-inner{padding-bottom:7.6rem}
+  .page-head{padding-bottom:8.4rem}
 }
